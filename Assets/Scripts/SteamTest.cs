@@ -105,30 +105,75 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void GUISteamApps() {
-		GUILayout.Label("SteamApps.BIsSubscribed : " + SteamApps.BIsSubscribed());
-		GUILayout.Label("SteamApps.BIsLowViolence : " + SteamApps.BIsLowViolence());
-		GUILayout.Label("SteamApps.BIsCybercafe : " + SteamApps.BIsCybercafe());
-		GUILayout.Label("SteamApps.BIsVACBanned : " + SteamApps.BIsVACBanned());
-		GUILayout.Label("SteamApps.GetCurrentGameLanguage : " + SteamApps.GetCurrentGameLanguage());
-		GUILayout.Label("SteamApps.GetAvailableGameLanguages : " + SteamApps.GetAvailableGameLanguages());
+		GUILayout.Label("SteamApps.BIsSubscribed() : " + SteamApps.BIsSubscribed());
+		GUILayout.Label("SteamApps.BIsLowViolence() : " + SteamApps.BIsLowViolence());
+		GUILayout.Label("SteamApps.BIsCybercafe() : " + SteamApps.BIsCybercafe());
+		GUILayout.Label("SteamApps.BIsVACBanned() : " + SteamApps.BIsVACBanned());
+		GUILayout.Label("SteamApps.GetCurrentGameLanguage() : " + SteamApps.GetCurrentGameLanguage());
+		GUILayout.Label("SteamApps.GetAvailableGameLanguages() : " + SteamApps.GetAvailableGameLanguages());
 		GUILayout.Label("SteamApps.BIsSubscribedApp(480) : " + SteamApps.BIsSubscribedApp(480)); // SpaceWar
-		GUILayout.Label("SteamApps.BIsDlcInstalled(459) : " + SteamApps.BIsDlcInstalled(459)); // TF2 Premium DLC
+		GUILayout.Label("SteamApps.BIsDlcInstalled(110902) : " + SteamApps.BIsDlcInstalled(110902)); // pieterw test DLC
 		GUILayout.Label("SteamApps.GetEarliestPurchaseUnixTime(480) : " + SteamApps.GetEarliestPurchaseUnixTime(480)); // SpaceWar
-		GUILayout.Label("SteamApps.BIsSubscribedFromFreeWeekend : " + SteamApps.BIsSubscribedFromFreeWeekend());
-		GUILayout.Label("SteamApps.GetDLCCount : " + SteamApps.GetDLCCount());
-		//GUILayout.Label("SteamApps.BGetDLCDataByIndex : " + SteamApps.BGetDLCDataByIndex()); // ??
-		//GUILayout.Label("SteamApps.InstallDLC : " + SteamApps.InstallDLC()); // Button
-		//GUILayout.Label("SteamApps.UninstallDLC : " + SteamApps.UninstallDLC()); // Button
-		//GUILayout.Label("SteamApps.RequestAppProofOfPurchaseKey : " + SteamApps.RequestAppProofOfPurchaseKey()); // Button
-		//GUILayout.Label("SteamApps.GetCurrentBetaName : " + SteamApps.GetCurrentBetaName()); // Todo
-		//GUILayout.Label("SteamApps.MarkContentCorrupt : " + SteamApps.MarkContentCorrupt()); // Don't do this.
-		//GUILayout.Label("SteamApps.GetInstalledDepots : " + SteamApps.GetInstalledDepots()); // Button
-		//GUILayout.Label("SteamApps.GetAppInstallDir : " + SteamApps.GetAppInstallDir()); // Button
-		GUILayout.Label("SteamApps.BIsAppInstalled : " + SteamApps.BIsAppInstalled(480));
-		GUILayout.Label("SteamApps.GetAppOwner : " + SteamApps.GetAppOwner());
-		//GUILayout.Label("SteamApps.GetLaunchQueryParam : " + SteamApps.GetLaunchQueryParam()); // ??
+		GUILayout.Label("SteamApps.BIsSubscribedFromFreeWeekend() : " + SteamApps.BIsSubscribedFromFreeWeekend());
+		GUILayout.Label("SteamApps.GetDLCCount() : " + SteamApps.GetDLCCount());
+
+		for (int iDLC = 0; iDLC < SteamApps.GetDLCCount(); ++iDLC) {
+			uint AppID;
+			bool Available;
+			string Name;
+			bool ret = SteamApps.BGetDLCDataByIndex(iDLC, out AppID, out Available, out Name, 128);
+			GUILayout.Label("SteamApps.BGetDLCDataByIndex(" + iDLC + ", [...]) : " + ret + " -- " + AppID + " -- " + Available + " -- " + Name); // ??
+		}
+
+		if (GUILayout.Button("SteamApps.InstallDLC(110902)")) {
+			SteamApps.InstallDLC(110902); // pieterw test DLC
+		}
+
+		if (GUILayout.Button("SteamApps.UninstallDLC(110902)")) {
+			SteamApps.UninstallDLC(110902); // pieterw test DLC
+		}
+
+		if (GUILayout.Button("SteamApps.RequestAppProofOfPurchaseKey(480)")) {
+			SteamApps.RequestAppProofOfPurchaseKey(480); // SpaceWar
+		}
+
+		{
+			string Name;
+			bool ret = SteamApps.GetCurrentBetaName(out Name, 128);
+			if (Name == null) {
+				Name = "";
+			}
+			GUILayout.Label("SteamApps.GetCurrentBetaName(out Name, 128) : " + ret + " -- " + Name);
+		}
+
+		if (GUILayout.Button("SteamApps.MarkContentCorrupt(true)")) {
+			print("SteamApps.MarkContentCorrupt(true) : " + SteamApps.MarkContentCorrupt(true));
+		}
+
+		if (GUILayout.Button("SteamApps.GetInstalledDepots(480, Depots, 32)")) {
+			uint[] Depots = new uint[32];
+			uint ret = SteamApps.GetInstalledDepots(480, Depots, 32); // SpaceWar
+			for (int i = 0; i < ret; ++i) {
+				print("SteamApps.GetInstalledDepots(480, Depots, 32) : " + ret + " -- #" + i + " -- " + Depots[i]);
+			}
+		}
+
+		{
+			string Folder;
+			uint ret = SteamApps.GetAppInstallDir(480, out Folder, 260); // SpaceWar
+			if (Folder == null) {
+				Folder = "";
+			}
+
+			GUILayout.Label("SteamApps.GetAppInstallDir(480, out Folder, 260) : " + ret + " -- " + Folder);
+		}
+
+		GUILayout.Label("SteamApps.BIsAppInstalled(480) : " + SteamApps.BIsAppInstalled(480)); // SpaceWar
+		GUILayout.Label("SteamApps.GetAppOwner() : " + SteamApps.GetAppOwner());
+
+		GUILayout.Label("SteamApps.GetLaunchQueryParam(\"test\") : " + SteamApps.GetLaunchQueryParam("test"));
 #if _PS3
-		GUILayout.Label("SteamApps.RegisterActivationCode : " + SteamApps.RegisterActivationCode());
+		//GUILayout.Label("SteamApps.RegisterActivationCode : " + SteamApps.RegisterActivationCode()); // ??
 #endif
 	}
 
