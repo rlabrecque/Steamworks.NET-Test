@@ -12,15 +12,15 @@ public class SteamTest : MonoBehaviour {
 
 		MAX_STATES
 	}
-	EGUIState state = EGUIState.SteamUser;
+	EGUIState state = EGUIState.SteamApps;
 
 	private bool m_bInitialized = false;
 
 	void Awake() {
-		DontDestroyOnLoad(gameObject); // We want our Steam Instance to persist between scenes.
+		DontDestroyOnLoad(gameObject); // We want our Steam Instance to persist across scenes.
 
 		if (SteamAPI.RestartAppIfNecessary(Constants.k_uAppIdInvalid)) {
-			// if Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
+			// If Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
 			// local Steam client and also launches this game again.
 
 			// Once you get a public Steam AppID assigned for this game, you need to replace k_uAppIdInvalid with it and
@@ -65,7 +65,7 @@ public class SteamTest : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			state++;
+			++state;
 			if (state == EGUIState.MAX_STATES)
 				state = EGUIState.SteamApps;
 		}
