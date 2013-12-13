@@ -5,10 +5,8 @@ using Steamworks;
 class SteamAppsTest : MonoBehaviour {
 	public static void RegisterCallbacks() {
 		new Callback<DlcInstalled_t>(OnDlcInstalled);
-#if _PS3
 		new Callback<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse);
 		new Callback<AppProofOfPurchaseKeyResponse_t>(OnAppProofOfPurchaseKeyResponse);
-#endif
 		new Callback<NewLaunchQueryParameters_t>(OnNewLaunchQueryParameters);
 	}
 
@@ -94,7 +92,6 @@ class SteamAppsTest : MonoBehaviour {
 		Debug.Log("[" + DlcInstalled_t.k_iCallback + " - DlcInstalled] - " + pCallback.m_nAppID);
 	}
 
-#if _PS3
 	static void OnRegisterActivationCodeResponse(RegisterActivationCodeResponse_t pCallback) {
 		Debug.Log("[" + RegisterActivationCodeResponse_t.k_iCallback + " - RegisterActivationCodeResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_unPackageRegistered);
 	}
@@ -102,7 +99,6 @@ class SteamAppsTest : MonoBehaviour {
 	static void OnAppProofOfPurchaseKeyResponse(AppProofOfPurchaseKeyResponse_t pCallback) {
 		Debug.Log("[" + AppProofOfPurchaseKeyResponse_t.k_iCallback + " - AppProofOfPurchaseKeyResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_rgchKey);
 	}
-#endif
 
 	static void OnNewLaunchQueryParameters(NewLaunchQueryParameters_t pCallback) {
 		Debug.Log("[" + NewLaunchQueryParameters_t.k_iCallback + " - NewLaunchQueryParameters]");
