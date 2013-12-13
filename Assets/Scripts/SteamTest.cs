@@ -47,6 +47,7 @@ public class SteamTest : MonoBehaviour {
 
 		// Register our Steam Callbacks
 		SteamAppsTest.RegisterCallbacks();
+		SteamClientTest.RegisterCallbacks();
 
 		new Callback<UserStatsReceived_t>(OnUserStatsRecieved);
 		m_NumberOfCurrentPlayers = new CallResult<NumberOfCurrentPlayers_t>(OnNumberOfCurrentPlayers);
@@ -92,7 +93,7 @@ public class SteamTest : MonoBehaviour {
 				SteamAppsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamClient:
-				GUISteamClient();
+				SteamClientTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
 				GUISteamFriends();
@@ -104,20 +105,6 @@ public class SteamTest : MonoBehaviour {
 				GUISteamUtils();
 				break;
 		}
-	}
-
-	void GUISteamClient() {
-		// TODO: GetISteam*
-		//GUILayout.Label("SteamClient.CreateSteamPipe : " + SteamClient.CreateSteamPipe()); // Don't do this.
-		//GUILayout.Label("SteamClient.BReleaseSteamPipe : " + SteamClient.BReleaseSteamPipe()); // Don't do this.
-		//GUILayout.Label("SteamClient.ConnectToGlobalUser : " + SteamClient.ConnectToGlobalUser()); // Don't do this.
-		//GUILayout.Label("SteamClient.CreateLocalUser : " + SteamClient.CreateLocalUser()); // Don't do this.
-		//GUILayout.Label("SteamClient.ReleaseUser : " + SteamClient.ReleaseUser()); // Don't do this.
-		//GUILayout.Label("SteamClient.SetLocalIPBinding : " + SteamClient.SetLocalIPBinding()); // Don't do this.
-		//GUILayout.Label("SteamClient.RunFrame : " + SteamClient.RunFrame()); // N/A
-		GUILayout.Label("SteamClient.GetIPCCallCount : " + SteamClient.GetIPCCallCount());
-		//GUILayout.Label("SteamClient.SetWarningMessageHook : " + SteamClient.SetWarningMessageHook()); // N/A
-		//GUILayout.Label("SteamClient.BShutdownIfAllPipesClosed : " + SteamClient.BShutdownIfAllPipesClosed()); // Don't do this.
 	}
 
 	void GUISteamFriends() {
