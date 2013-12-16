@@ -48,6 +48,7 @@ public class SteamTest : MonoBehaviour {
 		// Register our Steam Callbacks
 		SteamAppsTest.RegisterCallbacks();
 		SteamClientTest.RegisterCallbacks();
+		SteamFriendsTest.RegisterCallbacks();
 	}
 
 	void OnDestroy() {
@@ -91,7 +92,7 @@ public class SteamTest : MonoBehaviour {
 				SteamClientTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
-				GUISteamFriends();
+				SteamFriendsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUser:
 				GUISteamUser();
@@ -101,74 +102,7 @@ public class SteamTest : MonoBehaviour {
 				break;
 		}
 	}
-
-	void GUISteamFriends() {
-		GUILayout.Label("SteamFriends.GetPersonaName : " + SteamFriends.GetPersonaName());
-		//GUILayout.Label("SteamFriends.SetPersonaName : " + SteamFriends.SetPersonaName()); // Button
-		GUILayout.Label("SteamFriends.GetPersonaState : " + SteamFriends.GetPersonaState());
-		GUILayout.Label("SteamFriends.GetFriendCount : " + SteamFriends.GetFriendCount((int)EFriendFlags.k_EFriendFlagImmediate));
-		GUILayout.Label("SteamFriends.GetFriendByIndex : " + SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate)); // Todo: Loop this
-		GUILayout.Label("SteamFriends.GetFriendRelationship : " + SteamFriends.GetFriendRelationship(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate)));
-		GUILayout.Label("SteamFriends.GetFriendPersonaState : " + SteamFriends.GetFriendPersonaState(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate)));
-		GUILayout.Label("SteamFriends.GetFriendPersonaName : " + SteamFriends.GetFriendPersonaName(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate)));
-		//GUILayout.Label("SteamFriends.GetFriendGamePlayed : " + SteamFriends.GetFriendGamePlayed()); // Todo
-		GUILayout.Label("SteamFriends.GetFriendPersonaNameHistory : " + SteamFriends.GetFriendPersonaNameHistory(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate), 0));
-		GUILayout.Label("SteamFriends.GetPlayerNickname : " + SteamFriends.GetPlayerNickname(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate)));
-		//GUILayout.Label("SteamFriends.HasFriend : " + SteamFriends.HasFriend()); // N/A
-		GUILayout.Label("SteamFriends.GetClanCount : " + SteamFriends.GetClanCount());
-		GUILayout.Label("SteamFriends.GetClanByIndex : " + SteamFriends.GetClanByIndex(0)); // Todo: Loop this
-		GUILayout.Label("SteamFriends.GetClanName : " + SteamFriends.GetClanName(SteamFriends.GetClanByIndex(0)));
-		GUILayout.Label("SteamFriends.GetClanTag : " + SteamFriends.GetClanTag(SteamFriends.GetClanByIndex(0)));
-		//GUILayout.Label("SteamFriends.GetClanActivityCounts : " + SteamFriends.GetClanActivityCounts()); // Todo
-		//GUILayout.Label("SteamFriends.DownloadClanActivityCounts : " + SteamFriends.DownloadClanActivityCounts()); // Todo
-		GUILayout.Label("SteamFriends.GetFriendCountFromSource : " + SteamFriends.GetFriendCountFromSource(SteamFriends.GetClanByIndex(0)));
-		GUILayout.Label("SteamFriends.GetFriendFromSourceByIndex : " + SteamFriends.GetFriendFromSourceByIndex(SteamFriends.GetClanByIndex(0), 0));
-		GUILayout.Label("SteamFriends.IsUserInSource : " + SteamFriends.IsUserInSource(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate), SteamFriends.GetClanByIndex(0)));
-		//GUILayout.Label("SteamFriends.SetInGameVoiceSpeaking : " + SteamFriends.SetInGameVoiceSpeaking()); N/A
-		//GUILayout.Label("SteamFriends.ActivateGameOverlay : " + SteamFriends.ActivateGameOverlay("Friends")); // Button
-		//GUILayout.Label("SteamFriends.ActivateGameOverlayToUser : " + SteamFriends.ActivateGameOverlayToUser()); // Button
-		//GUILayout.Label("SteamFriends.ActivateGameOverlayToWebPage : " + SteamFriends.ActivateGameOverlayToWebPage()); // Button
-		//GUILayout.Label("SteamFriends.ActivateGameOverlayToStore : " + SteamFriends.ActivateGameOverlayToStore()); // Button
-		//GUILayout.Label("SteamFriends.SetPlayedWith : " + SteamFriends.SetPlayedWith()); // N/A
-		//GUILayout.Label("SteamFriends.ActivateGameOverlayInviteDialog : " + SteamFriends.ActivateGameOverlayInviteDialog()); // N/A
-		//GUILayout.Label("SteamFriends.GetSmallFriendAvatar : " + SteamFriends.GetSmallFriendAvatar()); // Image
-		//GUILayout.Label("SteamFriends.GetMediumFriendAvatar : " + SteamFriends.GetMediumFriendAvatar()); // Image
-		//GUILayout.Label("SteamFriends.GetLargeFriendAvatar : " + SteamFriends.GetLargeFriendAvatar()); // Image
-		GUILayout.Label("SteamFriends.RequestUserInformation : " + SteamFriends.RequestUserInformation(SteamFriends.GetFriendByIndex(0, (int)EFriendFlags.k_EFriendFlagImmediate), false));
-		//GUILayout.Label("SteamFriends.RequestClanOfficerList : " + SteamFriends.RequestClanOfficerList()); Button
-		GUILayout.Label("SteamFriends.GetClanOwner : " + SteamFriends.GetClanOwner(SteamFriends.GetClanByIndex(0)));
-		GUILayout.Label("SteamFriends.GetClanOfficerCount : " + SteamFriends.GetClanOfficerCount(SteamFriends.GetClanByIndex(0)));
-		GUILayout.Label("SteamFriends.GetClanOfficerByIndex : " + SteamFriends.GetClanOfficerByIndex(SteamFriends.GetClanByIndex(0), 0));
-		GUILayout.Label("SteamFriends.GetUserRestrictions : " + SteamFriends.GetUserRestrictions());
-		//GUILayout.Label("SteamFriends.SetRichPresence : " + SteamFriends.SetRichPresence()); // N/A
-		//GUILayout.Label("SteamFriends.ClearRichPresence : " + SteamFriends.ClearRichPresence()); // N/A
-		//GUILayout.Label("SteamFriends.GetFriendRichPresence : " + SteamFriends.GetFriendRichPresence()); // N/A
-		//GUILayout.Label("SteamFriends.GetFriendRichPresenceKeyCount : " + SteamFriends.GetFriendRichPresenceKeyCount()); // N/A
-		//GUILayout.Label("SteamFriends.GetFriendRichPresenceKeyByIndex : " + SteamFriends.GetFriendRichPresenceKeyByIndex()); // N/A
-		//GUILayout.Label("SteamFriends.RequestFriendRichPresence : " + SteamFriends.RequestFriendRichPresence()); // N/A
-		//GUILayout.Label("SteamFriends.InviteUserToGame : " + SteamFriends.InviteUserToGame()); // N/A
-		GUILayout.Label("SteamFriends.GetCoplayFriendCount : " + SteamFriends.GetCoplayFriendCount());
-		GUILayout.Label("SteamFriends.GetCoplayFriend : " + SteamFriends.GetCoplayFriend(0));
-		GUILayout.Label("SteamFriends.GetFriendCoplayTime : " + SteamFriends.GetFriendCoplayTime(SteamFriends.GetCoplayFriend(0)));
-		GUILayout.Label("SteamFriends.GetFriendCoplayGame : " + SteamFriends.GetFriendCoplayGame(SteamFriends.GetCoplayFriend(0)));
-		//GUILayout.Label("SteamFriends.JoinClanChatRoom : " + SteamFriends.JoinClanChatRoom()); // N/A
-		//GUILayout.Label("SteamFriends.LeaveClanChatRoom : " + SteamFriends.LeaveClanChatRoom()); //  N/A
-		//GUILayout.Label("SteamFriends.GetClanChatMemberCount : " + SteamFriends.GetClanChatMemberCount()); // N/A
-		//GUILayout.Label("SteamFriends.GetChatMemberByIndex : " + SteamFriends.GetChatMemberByIndex()); // N/A
-		//GUILayout.Label("SteamFriends.SendClanChatMessage : " + SteamFriends.SendClanChatMessage()); // N/A
-		//GUILayout.Label("SteamFriends.GetClanChatMessage : " + SteamFriends.GetClanChatMessage()); // N/A
-		//GUILayout.Label("SteamFriends.IsClanChatAdmin : " + SteamFriends.IsClanChatAdmin()); // N/A
-		//GUILayout.Label("SteamFriends.IsClanChatWindowOpenInSteam : " + SteamFriends.IsClanChatWindowOpenInSteam()); // N/A
-		//GUILayout.Label("SteamFriends.OpenClanChatWindowInSteam : " + SteamFriends.OpenClanChatWindowInSteam()); // N/A
-		//GUILayout.Label("SteamFriends.CloseClanChatWindowInSteam : " + SteamFriends.CloseClanChatWindowInSteam()); // N/A
-		//GUILayout.Label("SteamFriends.SetListenForFriendsMessages : " + SteamFriends.SetListenForFriendsMessages()); // N/A
-		//GUILayout.Label("SteamFriends.ReplyToFriendMessage : " + SteamFriends.ReplyToFriendMessage()); // N/A
-		//GUILayout.Label("SteamFriends.GetFriendMessage : " + SteamFriends.GetFriendMessage()); // N/A
-		//GUILayout.Label("SteamFriends.GetFollowerCount : " + SteamFriends.GetFollowerCount()); // N/A
-		//GUILayout.Label("SteamFriends.IsFollowing : " + SteamFriends.IsFollowing()); // N/A
-		//GUILayout.Label("SteamFriends.EnumerateFollowingList : " + SteamFriends.EnumerateFollowingList()); // N/A
-	}
-
+	
 	void GUISteamUser() {
 		GUILayout.Label("SteamUser.GetHSteamUser : " + SteamUser.GetHSteamUser());
 		GUILayout.Label("SteamUser.BLoggedOn : " + SteamUser.BLoggedOn());
