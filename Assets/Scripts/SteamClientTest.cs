@@ -119,6 +119,7 @@ class SteamClientTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamClient.RunFrame()")) {
 			SteamClient.RunFrame();
+			print("SteamClient.RunFrame()");
 		}
 
 		GUILayout.Label("SteamClient.GetIPCCallCount : " + SteamClient.GetIPCCallCount());

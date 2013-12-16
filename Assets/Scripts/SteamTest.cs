@@ -30,7 +30,7 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for lots of stuff.
+		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for everything.
 		// You don't necessarily have to though if you write your code to check whether all the Steam
 		// interfaces are NULL before using them and provide alternate paths when they are unavailable.
 		//
@@ -48,11 +48,6 @@ public class SteamTest : MonoBehaviour {
 		// Register our Steam Callbacks
 		SteamAppsTest.RegisterCallbacks();
 		SteamClientTest.RegisterCallbacks();
-
-		new Callback<UserStatsReceived_t>(OnUserStatsRecieved);
-		m_NumberOfCurrentPlayers = new CallResult<NumberOfCurrentPlayers_t>(OnNumberOfCurrentPlayers);
-		ulong handle = SteamUserStats.GetNumberOfCurrentPlayers();
-		m_NumberOfCurrentPlayers.SetAPICallHandle(handle);
 	}
 
 	void OnDestroy() {
@@ -238,14 +233,5 @@ public class SteamTest : MonoBehaviour {
 		GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength : " + SteamUtils.GetEnteredGamepadTextLength());
 		//GUILayout.Label("SteamUtils.GetEnteredGamepadTextInput : " + SteamUtils.GetEnteredGamepadTextInput()); // Todo
 		GUILayout.Label("SteamUtils.GetSteamUILanguage : " + SteamUtils.GetSteamUILanguage());
-	}
-	
-	void OnUserStatsRecieved(UserStatsReceived_t pCallback) {
-		Debug.Log("RequestStats - " + pCallback.m_eResult);
-	}
-
-	public CallResult<NumberOfCurrentPlayers_t> m_NumberOfCurrentPlayers;
-	void OnNumberOfCurrentPlayers(ulong handle, NumberOfCurrentPlayers_t pCallback) {
-		Debug.Log("NumberOfCurrentPlayers " + pCallback.m_bSuccess + " " + pCallback.m_cPlayers);
 	}
 }
