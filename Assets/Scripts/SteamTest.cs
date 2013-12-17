@@ -49,6 +49,7 @@ public class SteamTest : MonoBehaviour {
 		SteamAppsTest.RegisterCallbacks();
 		SteamClientTest.RegisterCallbacks();
 		SteamFriendsTest.RegisterCallbacks();
+		SteamUtilsTest.RegisterCallbacks();
 	}
 
 	void OnDestroy() {
@@ -84,6 +85,7 @@ public class SteamTest : MonoBehaviour {
 		}
 
 		GUILayout.Label(state.ToString());
+
 		switch (state) {
 			case EGUIState.SteamApps:
 				SteamAppsTest.RenderOnGUI();
@@ -98,7 +100,7 @@ public class SteamTest : MonoBehaviour {
 				GUISteamUser();
 				break;
 			case EGUIState.SteamUtils:
-				GUISteamUtils();
+				SteamUtilsTest.RenderOnGUI();
 				break;
 		}
 	}
@@ -134,38 +136,5 @@ public class SteamTest : MonoBehaviour {
 		//GUILayout.Label("SteamUser.LogOnAndCreateNewSteamAccountIfNeeded : " + SteamUser.LogOnAndCreateNewSteamAccountIfNeeded()); // N/A
 		//GUILayout.Label("SteamUser.GetConsoleSteamID : " + SteamUser.GetConsoleSteamID());
 #endif
-	}
-
-	void GUISteamUtils() {
-		GUILayout.Label("SteamUtils.GetSecondsSinceAppActive : " + SteamUtils.GetSecondsSinceAppActive());
-		GUILayout.Label("SteamUtils.GetConnectedUniverse : " + SteamUtils.GetConnectedUniverse());
-		GUILayout.Label("SteamUtils.GetServerRealTime : " + SteamUtils.GetServerRealTime());
-		GUILayout.Label("SteamUtils.GetIPCountry : " + SteamUtils.GetIPCountry());
-		//GUILayout.Label("SteamUtils.GetImageSize : " + SteamUtils.GetImageSize()); // ??
-		//GUILayout.Label("SteamUtils.GetImageRGBA : " + SteamUtils.GetImageRGBA()); // ??
-		//GUILayout.Label("SteamUtils.GetCSERIPPort : " + SteamUtils.GetCSERIPPort()); // ??
-		GUILayout.Label("SteamUtils.GetCurrentBatteryPower : " + SteamUtils.GetCurrentBatteryPower());
-		GUILayout.Label("SteamUtils.GetAppID : " + SteamUtils.GetAppID());
-		//GUILayout.Label("SteamUtils.SetOverlayNotificationPosition : " + SteamUtils.SetOverlayNotificationPosition()); // Button
-		//GUILayout.Label("SteamUtils.IsAPICallCompleted : " + SteamUtils.IsAPICallCompleted()); // N/A
-		//GUILayout.Label("SteamUtils.GetAPICallFailureReason : " + SteamUtils.GetAPICallFailureReason()); // N/A
-		//GUILayout.Label("SteamUtils.GetAPICallResult : " + SteamUtils.GetAPICallResult()); // N/A
-		//GUILayout.Label("SteamUtils.RunFrame : " + SteamUtils.RunFrame()); // N/A
-		GUILayout.Label("SteamUtils.GetIPCCallCount : " + SteamUtils.GetIPCCallCount());
-		//GUILayout.Label("SteamUtils.SetWarningMessageHook : " + SteamUtils.SetWarningMessageHook()); // N/A
-		GUILayout.Label("SteamUtils.IsOverlayEnabled : " + SteamUtils.IsOverlayEnabled());
-		GUILayout.Label("SteamUtils.BOverlayNeedsPresent : " + SteamUtils.BOverlayNeedsPresent());
-#if !_PS3
-		//GUILayout.Label("SteamUtils.CheckFileSignature : " + SteamUtils.CheckFileSignature()); // Button + CallResult?
-#else
-		//GUILayout.Label("SteamUtils.PostPS3SysutilCallback : " + SteamUtils.PostPS3SysutilCallback());
-		GUILayout.Label("SteamUtils.BIsReadyToShutdown : " + SteamUtils.BIsReadyToShutdown());
-		GUILayout.Label("SteamUtils.BIsPSNOnline : " + SteamUtils.BIsPSNOnline());
-		//GUILayout.Label("SteamUtils.SetPSNGameBootInviteStrings : " + SteamUtils.SetPSNGameBootInviteStrings());
-#endif
-		//GUILayout.Label("SteamUtils.ShowGamepadTextInput : " + SteamUtils.ShowGamepadTextInput()); // Button
-		GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength : " + SteamUtils.GetEnteredGamepadTextLength());
-		//GUILayout.Label("SteamUtils.GetEnteredGamepadTextInput : " + SteamUtils.GetEnteredGamepadTextInput()); // Todo
-		GUILayout.Label("SteamUtils.GetSteamUILanguage : " + SteamUtils.GetSteamUILanguage());
 	}
 }
