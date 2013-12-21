@@ -16,9 +16,22 @@ public class SteamTest : MonoBehaviour {
 
 	private bool m_bInitialized = false;
 
-	void Awake() {
-		DontDestroyOnLoad(gameObject); // We want our Steam Instance to persist across scenes.
+	// serialize this across script reloads somehow?
+	private static SteamTest m_SteamTest = null;
 
+	private SteamAppsTest AppsTest;
+	private SteamClientTest ClientTest;
+	private SteamFriendsTest FriendsTest;
+	private SteamUserTest UserTest;
+	private SteamUtilsTest UtilsTest;
+
+	void Awake() {
+		// Only one instance of Steamworks at a time!
+		if (m_SteamTest != null) {
+			Destroy(gameObject);
+			return;
+		}
+		
 		if (SteamAPI.RestartAppIfNecessary(Constants.k_uAppIdInvalid)) {
 			// If Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
 			// local Steam client and also launches this game again.
@@ -46,11 +59,15 @@ public class SteamTest : MonoBehaviour {
 		//todo: Check SteamUser.BLoggedOn(); ?
 
 		// Register our Steam Callbacks
-		SteamAppsTest.RegisterCallbacks();
-		SteamClientTest.RegisterCallbacks();
-		SteamFriendsTest.RegisterCallbacks();
-		SteamUserTest.RegisterCallbacks();
-		SteamUtilsTest.RegisterCallbacks();
+		AppsTest = gameObject.AddComponent<SteamAppsTest>();
+		ClientTest = gameObject.AddComponent<SteamClientTest>();
+		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
+		UserTest = gameObject.AddComponent<SteamUserTest>();
+		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
+
+		// We want our Steam Instance to persist across scenes.
+		DontDestroyOnLoad(gameObject);
+		m_SteamTest = this;
 	}
 
 	void OnDestroy() {
@@ -89,19 +106,19 @@ public class SteamTest : MonoBehaviour {
 
 		switch (state) {
 			case EGUIState.SteamApps:
-				SteamAppsTest.RenderOnGUI();
+				AppsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamClient:
-				SteamClientTest.RenderOnGUI();
+				ClientTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
-				SteamFriendsTest.RenderOnGUI();
+				FriendsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUser:
-				SteamUserTest.RenderOnGUI();
+				UserTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUtils:
-				SteamUtilsTest.RenderOnGUI();
+				UtilsTest.RenderOnGUI();
 				break;
 		}
 	}

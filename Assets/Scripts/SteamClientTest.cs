@@ -3,16 +3,16 @@ using System.Collections;
 using Steamworks;
 
 class SteamClientTest : MonoBehaviour {
-	static int m_Pipe;
-	static int m_GlobalUser;
-	static int m_LocalPipe;
-	static int m_LocalUser;
+	int m_Pipe;
+	int m_GlobalUser;
+	int m_LocalPipe;
+	int m_LocalUser;
 
-	public static void RegisterCallbacks() {
+	public void Awake() {
 		// No Callbacks!
 	}
 
-	public static void RenderOnGUI() {
+	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Pipe: " + m_Pipe);

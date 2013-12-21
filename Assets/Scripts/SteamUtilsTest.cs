@@ -4,11 +4,11 @@ using Steamworks;
 
 
 class SteamUtilsTest : MonoBehaviour {
-	static Texture2D m_Image;
+	Texture2D m_Image;
 
-	static CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
+	CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
-	public static void RegisterCallbacks() {
+	public void Awake() {
 		new Callback<IPCountry_t>(OnIPCountry);
 		new Callback<LowBatteryPower_t>(OnLowBatteryPower);
 		//new Callback<SteamAPICallCompleted_t>(OnSteamAPICallCompleted); // N/A - CallbackDispatcher already uses this and the current impl only allows one callback at a time!
@@ -25,7 +25,7 @@ class SteamUtilsTest : MonoBehaviour {
 		new Callback<GamepadTextInputDismissed_t>(OnGamepadTextInputDismissed);
 	}
 
-	public static void RenderOnGUI() {
+	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Image:");
@@ -115,49 +115,49 @@ class SteamUtilsTest : MonoBehaviour {
 		GUILayout.Label("SteamUtils.GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
 	}
 
-	static void OnIPCountry(IPCountry_t pCallback) {
+	void OnIPCountry(IPCountry_t pCallback) {
 		Debug.Log("[" + IPCountry_t.k_iCallback + " - IPCountry]");
 	}
 
-	static void OnLowBatteryPower(LowBatteryPower_t pCallback) {
+	void OnLowBatteryPower(LowBatteryPower_t pCallback) {
 		Debug.Log("[" + LowBatteryPower_t.k_iCallback + " - LowBatteryPower] - " + pCallback.m_nMinutesBatteryLeft);
 	}
 
-	static void OnSteamShutdown(SteamShutdown_t pCallback) {
+	void OnSteamShutdown(SteamShutdown_t pCallback) {
 		Debug.Log("[" + SteamShutdown_t.k_iCallback + " - SteamShutdown]");
 	}
 
-	static void OnCheckFileSignature(ulong handle, CheckFileSignature_t pCallback) {
+	void OnCheckFileSignature(ulong handle, CheckFileSignature_t pCallback) {
 		Debug.Log("[" + CheckFileSignature_t.k_iCallback + " - CheckFileSignature] - " + pCallback.m_eCheckFileSignature);
 	}
 
 #if _PS3
-	static void OnNetStartDialogFinished(NetStartDialogFinished_t pCallback) {
+	void OnNetStartDialogFinished(NetStartDialogFinished_t pCallback) {
 		Debug.Log("[" + NetStartDialogFinished_t.k_iCallback + " - NetStartDialogFinished]");
 	}
 
-	static void OnNetStartDialogUnloaded(NetStartDialogUnloaded_t pCallback) {
+	void OnNetStartDialogUnloaded(NetStartDialogUnloaded_t pCallback) {
 		Debug.Log("[" + NetStartDialogUnloaded_t.k_iCallback + " - NetStartDialogUnloaded]");
 	}
 
-	static void OnPS3SystemMenuClosed(PS3SystemMenuClosed_t pCallback) {
+	void OnPS3SystemMenuClosed(PS3SystemMenuClosed_t pCallback) {
 		Debug.Log("[" + PS3SystemMenuClosed_t.k_iCallback + " - PS3SystemMenuClosed]");
 	}
 
-	static void OnPS3NPMessageSelected(PS3NPMessageSelected_t pCallback) {
+	void OnPS3NPMessageSelected(PS3NPMessageSelected_t pCallback) {
 		Debug.Log("[" + PS3NPMessageSelected_t.k_iCallback + " - PS3NPMessageSelected] - " + pCallback.dataid);
 	}
 
-	static void OnPS3KeyboardDialogFinished(PS3KeyboardDialogFinished_t pCallback) {
+	void OnPS3KeyboardDialogFinished(PS3KeyboardDialogFinished_t pCallback) {
 		Debug.Log("[" + PS3KeyboardDialogFinished_t.k_iCallback + " - PS3KeyboardDialogFinished]");
 	}
 
-	static void OnPS3PSNStatusChange(PS3PSNStatusChange_t pCallback) {
+	void OnPS3PSNStatusChange(PS3PSNStatusChange_t pCallback) {
 		Debug.Log("[" + PS3PSNStatusChange_t.k_iCallback + " - PS3PSNStatusChange] - " + pCallback.m_bPSNOnline);
 	}
 #endif
 
-	static void OnGamepadTextInputDismissed(GamepadTextInputDismissed_t pCallback) {
+	void OnGamepadTextInputDismissed(GamepadTextInputDismissed_t pCallback) {
 		Debug.Log("[" + GamepadTextInputDismissed_t.k_iCallback + " - GamepadTextInputDismissed] - " + pCallback.m_bSubmitted + " -- " + pCallback.m_unSubmittedText);
 	}
 }

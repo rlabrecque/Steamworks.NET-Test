@@ -10,22 +10,22 @@ enum Page {
 }
 
 class SteamFriendsTest : MonoBehaviour {
-	static Page m_Page = Page.One;
-	static ulong m_Friend;
-	static ulong m_Clan;
-	static ulong m_CoPlayFriend;
-	static Texture2D m_SmallAvatar;
-	static Texture2D m_MediumAvatar;
-	static Texture2D m_LargeAvatar;
+	Page m_Page = Page.One;
+	ulong m_Friend;
+	ulong m_Clan;
+	ulong m_CoPlayFriend;
+	Texture2D m_SmallAvatar;
+	Texture2D m_MediumAvatar;
+	Texture2D m_LargeAvatar;
 
-	static CallResult<ClanOfficerListResponse_t> OnFriendRichPresenceCallResult;
-	static CallResult<JoinClanChatRoomCompletionResult_t> OnJoinClanChatRoomCompletionResultCallResult;
-	static CallResult<FriendsGetFollowerCount_t> OnFriendsGetFollowerCountCallResult;
-	static CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
-	static CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
-	static CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
+	CallResult<ClanOfficerListResponse_t> OnFriendRichPresenceCallResult;
+	CallResult<JoinClanChatRoomCompletionResult_t> OnJoinClanChatRoomCompletionResultCallResult;
+	CallResult<FriendsGetFollowerCount_t> OnFriendsGetFollowerCountCallResult;
+	CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
+	CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
+	CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
 
-	public static void RegisterCallbacks() {
+	public void Awake() {
 		new Callback<PersonaStateChange_t>(OnPersonaStateChange);
 		new Callback<GameOverlayActivated_t>(OnGameOverlayActivated);
 		new Callback<GameServerChangeRequested_t>(OnGameServerChangeRequested);
@@ -46,7 +46,7 @@ class SteamFriendsTest : MonoBehaviour {
 		OnSetPersonaNameResponseCallResult = new CallResult<SetPersonaNameResponse_t>(OnSetPersonaNameResponse);
 	}
 
-	public static void RenderOnGUI() {
+	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		if(GUILayout.Button("Switch Page")) {
 			m_Page++;
@@ -336,39 +336,39 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 	}
 
-	static void OnPersonaStateChange(PersonaStateChange_t pCallback) {
+	void OnPersonaStateChange(PersonaStateChange_t pCallback) {
 		Debug.Log("[" + PersonaStateChange_t.k_iCallback + " - PersonaStateChange] - " + pCallback.m_ulSteamID + " -- " + pCallback.m_nChangeFlags);
 	}
 
-	static void OnGameOverlayActivated(GameOverlayActivated_t pCallback) {
+	void OnGameOverlayActivated(GameOverlayActivated_t pCallback) {
 		Debug.Log("[" + GameOverlayActivated_t.k_iCallback + " - GameOverlayActivated] - " + pCallback.m_bActive);
 	}
 
-	static void OnGameServerChangeRequested(GameServerChangeRequested_t pCallback) {
+	void OnGameServerChangeRequested(GameServerChangeRequested_t pCallback) {
 		Debug.Log("[" + GameServerChangeRequested_t.k_iCallback + " - GameServerChangeRequested] - " + pCallback.m_rgchServer + " -- " + pCallback.m_rgchPassword);
 	}
 
-	static void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t pCallback) {
+	void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t pCallback) {
 		Debug.Log("[" + GameLobbyJoinRequested_t.k_iCallback + " - GameLobbyJoinRequested] - " + pCallback.m_steamIDLobby + " -- " + pCallback.m_steamIDFriend);
 	}
 
-	static void OnAvatarImageLoaded(AvatarImageLoaded_t pCallback) {
+	void OnAvatarImageLoaded(AvatarImageLoaded_t pCallback) {
 		Debug.Log("[" + AvatarImageLoaded_t.k_iCallback + " - AvatarImageLoaded] - " + pCallback.m_steamID + " -- " + pCallback.m_iImage + " -- " + pCallback.m_iWide + " -- " + pCallback.m_iTall);
 	}
 
-	static void OnClanOfficerListResponse(ulong handle, ClanOfficerListResponse_t pCallback) {
+	void OnClanOfficerListResponse(ulong handle, ClanOfficerListResponse_t pCallback) {
 		Debug.Log("[" + ClanOfficerListResponse_t.k_iCallback + " - ClanOfficerListResponse] - " + pCallback.m_steamIDClan + " -- " + pCallback.m_cOfficers + " -- " + pCallback.m_bSuccess);
 	}
 
-	static void OnFriendRichPresenceUpdate(FriendRichPresenceUpdate_t pCallback) {
+	void OnFriendRichPresenceUpdate(FriendRichPresenceUpdate_t pCallback) {
 		Debug.Log("[" + FriendRichPresenceUpdate_t.k_iCallback + " - FriendRichPresenceUpdate] - " + pCallback.m_steamIDFriend + " -- " + pCallback.m_nAppID);
 	}
 
-	static void OnGameRichPresenceJoinRequested(GameRichPresenceJoinRequested_t pCallback) {
+	void OnGameRichPresenceJoinRequested(GameRichPresenceJoinRequested_t pCallback) {
 		Debug.Log("[" + GameRichPresenceJoinRequested_t.k_iCallback + " - GameRichPresenceJoinRequested] - " + pCallback.m_steamIDFriend + " -- " + pCallback.m_rgchConnect);
 	}
 
-	static void OnGameConnectedClanChatMsg(GameConnectedClanChatMsg_t pCallback) {
+	void OnGameConnectedClanChatMsg(GameConnectedClanChatMsg_t pCallback) {
 		Debug.Log("[" + GameConnectedClanChatMsg_t.k_iCallback + " - GameConnectedClanChatMsg] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_steamIDUser + " -- " + pCallback.m_iMessageID);
 
 		string Text;
@@ -378,23 +378,23 @@ class SteamFriendsTest : MonoBehaviour {
 		print(ret + " " + Chatter + ": " + Text);
 	}
 
-	static void OnGameConnectedChatJoin(GameConnectedChatJoin_t pCallback) {
+	void OnGameConnectedChatJoin(GameConnectedChatJoin_t pCallback) {
 		Debug.Log("[" + GameConnectedChatJoin_t.k_iCallback + " - GameConnectedChatJoin] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_steamIDUser);
 	}
 
-	static void OnGameConnectedChatLeave(GameConnectedChatLeave_t pCallback) {
+	void OnGameConnectedChatLeave(GameConnectedChatLeave_t pCallback) {
 		Debug.Log("[" + GameConnectedChatLeave_t.k_iCallback + " - GameConnectedChatLeave] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_steamIDUser + " -- " + pCallback.m_bKicked + " -- " + pCallback.m_bDropped);
 	}
 
-	static void OnDownloadClanActivityCountsResult(DownloadClanActivityCountsResult_t pCallback) {
+	void OnDownloadClanActivityCountsResult(DownloadClanActivityCountsResult_t pCallback) {
 		Debug.Log("[" + DownloadClanActivityCountsResult_t.k_iCallback + " - DownloadClanActivityCountsResult] - " + pCallback.m_bSuccess);
 	}
 
-	static void OnJoinClanChatRoomCompletionResult(ulong handle, JoinClanChatRoomCompletionResult_t pCallback) {
+	void OnJoinClanChatRoomCompletionResult(ulong handle, JoinClanChatRoomCompletionResult_t pCallback) {
 		Debug.Log("[" + JoinClanChatRoomCompletionResult_t.k_iCallback + " - JoinClanChatRoomCompletionResult] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_eChatRoomEnterResponse);
 	}
 
-	static void OnGameConnectedFriendChatMsg(GameConnectedFriendChatMsg_t pCallback) {
+	void OnGameConnectedFriendChatMsg(GameConnectedFriendChatMsg_t pCallback) {
 		Debug.Log("[" + GameConnectedFriendChatMsg_t.k_iCallback + " - GameConnectedFriendChatMsg] - " + pCallback.m_steamIDUser + " -- " + pCallback.m_iMessageID);
 
 		string Text;
@@ -403,19 +403,19 @@ class SteamFriendsTest : MonoBehaviour {
 		print(ret + " " + pCallback.m_steamIDUser + ": " + Text);
 	}
 
-	static void OnFriendsGetFollowerCount(ulong handle, FriendsGetFollowerCount_t pCallback) {
+	void OnFriendsGetFollowerCount(ulong handle, FriendsGetFollowerCount_t pCallback) {
 		Debug.Log("[" + FriendsGetFollowerCount_t.k_iCallback + " - FriendsGetFollowerCount] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_nCount);
 	}
 
-	static void OnFriendsIsFollowing(ulong handle, FriendsIsFollowing_t pCallback) {
+	void OnFriendsIsFollowing(ulong handle, FriendsIsFollowing_t pCallback) {
 		Debug.Log("[" + FriendsIsFollowing_t.k_iCallback + " - FriendsIsFollowing] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_bIsFollowing);
 	}
 
-	static void OnFriendsEnumerateFollowingList(ulong handle, FriendsEnumerateFollowingList_t pCallback) {
+	void OnFriendsEnumerateFollowingList(ulong handle, FriendsEnumerateFollowingList_t pCallback) {
 		Debug.Log("[" + FriendsEnumerateFollowingList_t.k_iCallback + " - FriendsEnumerateFollowingList] - " + pCallback.m_eResult + " -- " + pCallback.m_rgSteamID + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount);
 	}
 
-	static void OnSetPersonaNameResponse(ulong handle, SetPersonaNameResponse_t pCallback) {
+	void OnSetPersonaNameResponse(ulong handle, SetPersonaNameResponse_t pCallback) {
 		Debug.Log("[" + SetPersonaNameResponse_t.k_iCallback + " - SetPersonaNameResponse] - " + pCallback.m_bSuccess + " -- " + pCallback.m_bLocalSuccess + " -- " + pCallback.m_result);
 	}
 

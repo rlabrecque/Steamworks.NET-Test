@@ -4,14 +4,14 @@ using Steamworks;
 
 
 class SteamUserTest : MonoBehaviour {
-	static byte[] m_Ticket;
-	static uint m_pcbTicket;
-	static uint m_HAuthTicket;
-	static GameObject m_VoiceLoopback;
+	byte[] m_Ticket;
+	uint m_pcbTicket;
+	uint m_HAuthTicket;
+	GameObject m_VoiceLoopback;
 
-	static CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
+	CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 
-	public static void RegisterCallbacks() {
+	public void Awake() {
 		new Callback<SteamServersConnected_t>(OnSteamServersConnected);
 		new Callback<SteamServerConnectFailure_t>(OnSteamServerConnectFailure);
 		new Callback<SteamServersDisconnected_t>(OnSteamServersDisconnected);
@@ -24,7 +24,7 @@ class SteamUserTest : MonoBehaviour {
 		new Callback<GameWebCallback_t>(OnGameWebCallback);
 	}
 
-	public static void RenderOnGUI() {
+	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("m_HAuthTicket: " + m_HAuthTicket);
 		GUILayout.Label("m_pcbTicket: " + m_pcbTicket);
@@ -158,35 +158,35 @@ class SteamUserTest : MonoBehaviour {
 #endif
 	}
 	
-	static void OnSteamServersConnected(SteamServersConnected_t pCallback) {
+	void OnSteamServersConnected(SteamServersConnected_t pCallback) {
 		Debug.Log("[" + SteamServersConnected_t.k_iCallback + " - SteamServersConnected]");
 	}
 
-	static void OnSteamServerConnectFailure(SteamServerConnectFailure_t pCallback) {
+	void OnSteamServerConnectFailure(SteamServerConnectFailure_t pCallback) {
 		Debug.Log("[" + SteamServerConnectFailure_t.k_iCallback + " - SteamServerConnectFailure] - " + pCallback.m_eResult);
 	}
 
-	static void OnSteamServersDisconnected(SteamServersDisconnected_t pCallback) {
+	void OnSteamServersDisconnected(SteamServersDisconnected_t pCallback) {
 		Debug.Log("[" + SteamServersDisconnected_t.k_iCallback + " - SteamServersDisconnected] - " + pCallback.m_eResult);
 	}
 
-	static void OnClientGameServerDeny(ClientGameServerDeny_t pCallback) {
+	void OnClientGameServerDeny(ClientGameServerDeny_t pCallback) {
 		Debug.Log("[" + ClientGameServerDeny_t.k_iCallback + " - ClientGameServerDeny] - " + pCallback.m_uAppID + " -- " + pCallback.m_unGameServerIP + " -- " + pCallback.m_usGameServerPort + " -- " + pCallback.m_bSecure + " -- " + pCallback.m_uReason);
 	}
 
-	static void OnIPCFailure(IPCFailure_t pCallback) {
+	void OnIPCFailure(IPCFailure_t pCallback) {
 		Debug.Log("[" + IPCFailure_t.k_iCallback + " - IPCFailure] - " + pCallback.m_eFailureType);
 	}
 
-	static void OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t pCallback) {
+	void OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t pCallback) {
 		Debug.Log("[" + ValidateAuthTicketResponse_t.k_iCallback + " - ValidateAuthTicketResponse] - " + pCallback.m_SteamID + " -- " + pCallback.m_eAuthSessionResponse + " -- " + pCallback.m_OwnerSteamID);
 	}
 
-	static void OnMicroTxnAuthorizationResponse(MicroTxnAuthorizationResponse_t pCallback) {
+	void OnMicroTxnAuthorizationResponse(MicroTxnAuthorizationResponse_t pCallback) {
 		Debug.Log("[" + MicroTxnAuthorizationResponse_t.k_iCallback + " - MicroTxnAuthorizationResponse] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulOrderID + " -- " + pCallback.m_bAuthorized);
 	}
 
-	static void OnEncryptedAppTicketResponse(ulong handle, EncryptedAppTicketResponse_t pCallback) {
+	void OnEncryptedAppTicketResponse(ulong handle, EncryptedAppTicketResponse_t pCallback) {
 		Debug.Log("[" + EncryptedAppTicketResponse_t.k_iCallback + " - EncryptedAppTicketResponse] - " + pCallback.m_eResult);
 
 		// This code is taken directly from SteamworksExample/SpaceWar
@@ -234,11 +234,11 @@ class SteamUserTest : MonoBehaviour {
 		}
 	}
 
-	static void OnGetAuthSessionTicketResponse(GetAuthSessionTicketResponse_t pCallback) {
+	void OnGetAuthSessionTicketResponse(GetAuthSessionTicketResponse_t pCallback) {
 		Debug.Log("[" + GetAuthSessionTicketResponse_t.k_iCallback + " - GetAuthSessionTicketResponse] - " + pCallback.m_hAuthTicket + " -- " + pCallback.m_eResult);
 	}
 
-	static void OnGameWebCallback(GameWebCallback_t pCallback) {
+	void OnGameWebCallback(GameWebCallback_t pCallback) {
 		Debug.Log("[" + GameWebCallback_t.k_iCallback + " - GameWebCallback] - " + pCallback.m_szURL);
 	}
 
