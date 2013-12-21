@@ -60,10 +60,15 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyDown(KeyCode.Space)) {
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
 			++state;
 			if (state == EGUIState.MAX_STATES)
 				state = EGUIState.SteamApps;
+		}
+		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+			--state;
+			if (state == (EGUIState)(-1))
+				state = EGUIState.MAX_STATES - 1;
 		}
 	}
 
@@ -80,7 +85,7 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		GUILayout.Label(state.ToString());
+		GUILayout.Label("[" + ((int)state + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + state.ToString());
 
 		switch (state) {
 			case EGUIState.SteamApps:
