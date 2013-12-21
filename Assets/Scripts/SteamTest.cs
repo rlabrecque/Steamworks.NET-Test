@@ -49,6 +49,7 @@ public class SteamTest : MonoBehaviour {
 		SteamAppsTest.RegisterCallbacks();
 		SteamClientTest.RegisterCallbacks();
 		SteamFriendsTest.RegisterCallbacks();
+		SteamUserTest.RegisterCallbacks();
 		SteamUtilsTest.RegisterCallbacks();
 	}
 
@@ -97,44 +98,11 @@ public class SteamTest : MonoBehaviour {
 				SteamFriendsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUser:
-				GUISteamUser();
+				SteamUserTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUtils:
 				SteamUtilsTest.RenderOnGUI();
 				break;
 		}
-	}
-	
-	void GUISteamUser() {
-		GUILayout.Label("SteamUser.GetHSteamUser : " + SteamUser.GetHSteamUser());
-		GUILayout.Label("SteamUser.BLoggedOn : " + SteamUser.BLoggedOn());
-		GUILayout.Label("SteamUser.GetSteamID : " + SteamUser.GetSteamID());
-		//GUILayout.Label("SteamUser.InitiateGameConnection : " + SteamUser.InitiateGameConnection()); // N/A
-		//GUILayout.Label("SteamUser.TerminateGameConnection : " + SteamUser.TerminateGameConnection()); // N/A
-		//GUILayout.Label("SteamUser.TrackAppUsageEvent : " + SteamUser.TrackAppUsageEvent()); // N/A
-		//GUILayout.Label("SteamUser.GetUserDataFolder : " + SteamUser.GetUserDataFolder()); // Todo
-		//GUILayout.Label("SteamUser.StartVoiceRecording : " + SteamUser.StartVoiceRecording()); // N/A
-		//GUILayout.Label("SteamUser.StopVoiceRecording : " + SteamUser.StopVoiceRecording()); // N/A
-		//GUILayout.Label("SteamUser.GetAvailableVoice : " + SteamUser.GetAvailableVoice()); // N/A
-		//GUILayout.Label("SteamUser.GetVoice : " + SteamUser.GetVoice()); // N/A
-		//GUILayout.Label("SteamUser.DecompressVoice : " + SteamUser.DecompressVoice()); // N/A
-		//GUILayout.Label("SteamUser.GetVoiceOptimalSampleRate : " + SteamUser.GetVoiceOptimalSampleRate()); // N/A
-		//GUILayout.Label("SteamUser.GetAuthSessionTicket : " + SteamUser.GetAuthSessionTicket()); // N/A
-		//GUILayout.Label("SteamUser.BeginAuthSession : " + SteamUser.BeginAuthSession()); // N/A
-		//GUILayout.Label("SteamUser.EndAuthSession : " + SteamUser.EndAuthSession()); // N/A
-		//GUILayout.Label("SteamUser.CancelAuthTicket : " + SteamUser.CancelAuthTicket()); // N/A
-		GUILayout.Label("SteamUser.UserHasLicenseForApp : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), 480));
-		GUILayout.Label("SteamUser.BIsBehindNAT : " + SteamUser.BIsBehindNAT());
-		//GUILayout.Label("SteamUser.AdvertiseGame : " + SteamUser.AdvertiseGame()); // N/A
-		//GUILayout.Label("SteamUser.RequestEncryptedAppTicket : " + SteamUser.RequestEncryptedAppTicket()); // N/A
-		//GUILayout.Label("SteamUser.GetEncryptedAppTicket : " + SteamUser.GetEncryptedAppTicket()); // N/A
-		GUILayout.Label("SteamUser.GetGameBadgeLevel : " + SteamUser.GetGameBadgeLevel(1, false));
-		GUILayout.Label("SteamUser.GetPlayerSteamLevel : " + SteamUser.GetPlayerSteamLevel());
-#if _PS3
-		//GUILayout.Label("SteamUser.LogOn : " + SteamUser.LogOn()); // N/A
-		//GUILayout.Label("SteamUser.LogOnAndLinkSteamAccountToPSN : " + SteamUser.LogOnAndLinkSteamAccountToPSN()); // N/A
-		//GUILayout.Label("SteamUser.LogOnAndCreateNewSteamAccountIfNeeded : " + SteamUser.LogOnAndCreateNewSteamAccountIfNeeded()); // N/A
-		//GUILayout.Label("SteamUser.GetConsoleSteamID : " + SteamUser.GetConsoleSteamID());
-#endif
 	}
 }
