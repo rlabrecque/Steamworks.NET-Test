@@ -60,11 +60,6 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyDown(KeyCode.Escape)) {
-			Application.Quit();
-			return;
-		}
-
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			++state;
 			if (state == EGUIState.MAX_STATES)
