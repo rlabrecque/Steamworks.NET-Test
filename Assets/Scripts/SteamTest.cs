@@ -3,16 +3,18 @@ using System.Collections;
 using Steamworks;
 
 public class SteamTest : MonoBehaviour {
-	enum EGUIState {
+	public enum EGUIState {
 		SteamApps,
 		SteamClient,
 		SteamFriends,
+		SteamRemoteStorage,
+		SteamRemoteStoragePg2,
 		SteamUser,
 		SteamUtils,
 
 		MAX_STATES
 	}
-	EGUIState state = EGUIState.SteamApps;
+	public EGUIState state { get; private set; }
 
 	private bool m_bInitialized = false;
 
@@ -22,6 +24,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamFriendsTest FriendsTest;
+	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamUserTest UserTest;
 	private SteamUtilsTest UtilsTest;
 
@@ -31,6 +34,8 @@ public class SteamTest : MonoBehaviour {
 			Destroy(gameObject);
 			return;
 		}
+
+		state = EGUIState.SteamApps;
 		
 		if (SteamAPI.RestartAppIfNecessary(Constants.k_uAppIdInvalid)) {
 			// If Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
@@ -62,6 +67,7 @@ public class SteamTest : MonoBehaviour {
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
+		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
 
@@ -113,6 +119,12 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamFriends:
 				FriendsTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamRemoteStorage:
+				RemoteStorageTest.RenderOnGUI(EGUIState.SteamRemoteStorage);
+				break;
+			case EGUIState.SteamRemoteStoragePg2:
+				RemoteStorageTest.RenderOnGUI(EGUIState.SteamRemoteStoragePg2);
 				break;
 			case EGUIState.SteamUser:
 				UserTest.RenderOnGUI();
