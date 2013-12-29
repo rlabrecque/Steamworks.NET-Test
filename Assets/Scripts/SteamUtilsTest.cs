@@ -2,7 +2,6 @@
 using System.Collections;
 using Steamworks;
 
-
 class SteamUtilsTest : MonoBehaviour {
 	Texture2D m_Image;
 
@@ -64,29 +63,29 @@ class SteamUtilsTest : MonoBehaviour {
 			GUILayout.Label("SteamUtils.GetCSERIPPort(out IP, out Port) : " + ret + " -- " + IP + " -- " + Port);
 		}
 
-		GUILayout.Label("SteamUtils.GetCurrentBatteryPower : " + SteamUtils.GetCurrentBatteryPower());
-		GUILayout.Label("SteamUtils.GetAppID : " + SteamUtils.GetAppID());
+		GUILayout.Label("SteamUtils.GetCurrentBatteryPower() : " + SteamUtils.GetCurrentBatteryPower());
+		GUILayout.Label("SteamUtils.GetAppID() : " + SteamUtils.GetAppID());
 
 		if (GUILayout.Button("SteamUtils.SetOverlayNotificationPosition(k_EPositionTopRight)")) {
 			SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionTopRight);
 			print("SteamUtils.SetOverlayNotificationPosition(k_EPositionTopRight)");
 		}
 
-		//GUILayout.Label("SteamUtils.IsAPICallCompleted : " + SteamUtils.IsAPICallCompleted()); // N/A - These 3 functions are used to dispatch CallResults.
-		//GUILayout.Label("SteamUtils.GetAPICallFailureReason : " + SteamUtils.GetAPICallFailureReason()); // N/A
-		//GUILayout.Label("SteamUtils.GetAPICallResult : " + SteamUtils.GetAPICallResult()); // N/A
+		//GUILayout.Label("SteamUtils.IsAPICallCompleted() : " + SteamUtils.IsAPICallCompleted()); // N/A - These 3 functions are used to dispatch CallResults.
+		//GUILayout.Label("SteamUtils.GetAPICallFailureReason() : " + SteamUtils.GetAPICallFailureReason()); // N/A
+		//GUILayout.Label("SteamUtils.GetAPICallResult() : " + SteamUtils.GetAPICallResult()); // N/A
 
 		if (GUILayout.Button("SteamUtils.RunFrame()")) {
 			SteamUtils.RunFrame();
 			print("SteamUtils.RunFrame()");
 		}
 
-		GUILayout.Label("SteamUtils.GetIPCCallCount : " + SteamUtils.GetIPCCallCount());
+		GUILayout.Label("SteamUtils.GetIPCCallCount() : " + SteamUtils.GetIPCCallCount());
 
-		//GUILayout.Label("SteamUtils.SetWarningMessageHook : " + SteamUtils.SetWarningMessageHook()); // TODO
+		//GUILayout.Label("SteamUtils.SetWarningMessageHook() : " + SteamUtils.SetWarningMessageHook()); // TODO
 
-		GUILayout.Label("SteamUtils.IsOverlayEnabled : " + SteamUtils.IsOverlayEnabled());
-		GUILayout.Label("SteamUtils.BOverlayNeedsPresent : " + SteamUtils.BOverlayNeedsPresent());
+		GUILayout.Label("SteamUtils.IsOverlayEnabled() : " + SteamUtils.IsOverlayEnabled());
+		GUILayout.Label("SteamUtils.BOverlayNeedsPresent() : " + SteamUtils.BOverlayNeedsPresent());
 #if !_PS3
 		if (GUILayout.Button("SteamUtils.CheckFileSignature(\"FileNotFound.txt\")")) {
 			ulong handle = SteamUtils.CheckFileSignature("FileNotFound.txt");
@@ -94,10 +93,10 @@ class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.CheckFileSignature(\"FileNotFound.txt\") - " + handle);
 		}
 #else
-		//GUILayout.Label("SteamUtils.PostPS3SysutilCallback : " + SteamUtils.PostPS3SysutilCallback());
-		GUILayout.Label("SteamUtils.BIsReadyToShutdown : " + SteamUtils.BIsReadyToShutdown());
-		GUILayout.Label("SteamUtils.BIsPSNOnline : " + SteamUtils.BIsPSNOnline());
-		//GUILayout.Label("SteamUtils.SetPSNGameBootInviteStrings : " + SteamUtils.SetPSNGameBootInviteStrings());
+		//GUILayout.Label("SteamUtils.PostPS3SysutilCallback() : " + SteamUtils.PostPS3SysutilCallback());
+		GUILayout.Label("SteamUtils.BIsReadyToShutdown() : " + SteamUtils.BIsReadyToShutdown());
+		GUILayout.Label("SteamUtils.BIsPSNOnline() : " + SteamUtils.BIsPSNOnline());
+		//GUILayout.Label("SteamUtils.SetPSNGameBootInviteStrings() : " + SteamUtils.SetPSNGameBootInviteStrings());
 #endif
 		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32)")) {
 			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32);
