@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Steamworks;
 
@@ -7,6 +7,7 @@ public class SteamTest : MonoBehaviour {
 		SteamApps,
 		SteamClient,
 		SteamFriends,
+		SteamFriendsPg2,
 		SteamRemoteStorage,
 		SteamRemoteStoragePg2,
 		SteamUser,
@@ -14,7 +15,8 @@ public class SteamTest : MonoBehaviour {
 
 		MAX_STATES
 	}
-	public EGUIState state { get; private set; }
+
+	public EGUIState m_State { get; private set; }
 
 	private bool m_bInitialized = false;
 
@@ -35,8 +37,12 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		state = EGUIState.SteamApps;
-		
+		m_State = EGUIState.SteamApps;
+
+		if (!Packsize.Test()) {
+			Debug.LogError("Packsize is wrong!");
+		}
+
 		if (SteamAPI.RestartAppIfNecessary(Constants.k_uAppIdInvalid)) {
 			// If Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
 			// local Steam client and also launches this game again.
@@ -84,14 +90,14 @@ public class SteamTest : MonoBehaviour {
 
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
-			++state;
-			if (state == EGUIState.MAX_STATES)
-				state = EGUIState.SteamApps;
+			++m_State;
+			if (m_State == EGUIState.MAX_STATES)
+				m_State = EGUIState.SteamApps;
 		}
 		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-			--state;
-			if (state == (EGUIState)(-1))
-				state = EGUIState.MAX_STATES - 1;
+			--m_State;
+			if (m_State == (EGUIState)(-1))
+				m_State = EGUIState.MAX_STATES - 1;
 		}
 	}
 
@@ -108,9 +114,9 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		GUILayout.Label("[" + ((int)state + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + state.ToString());
+		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
 
-		switch (state) {
+		switch (m_State) {
 			case EGUIState.SteamApps:
 				AppsTest.RenderOnGUI();
 				break;
@@ -118,13 +124,12 @@ public class SteamTest : MonoBehaviour {
 				ClientTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
-				FriendsTest.RenderOnGUI();
+			case EGUIState.SteamFriendsPg2:
+				FriendsTest.RenderOnGUI(m_State);
 				break;
 			case EGUIState.SteamRemoteStorage:
-				RemoteStorageTest.RenderOnGUI(EGUIState.SteamRemoteStorage);
-				break;
 			case EGUIState.SteamRemoteStoragePg2:
-				RemoteStorageTest.RenderOnGUI(EGUIState.SteamRemoteStoragePg2);
+				RemoteStorageTest.RenderOnGUI(m_State);
 				break;
 			case EGUIState.SteamUser:
 				UserTest.RenderOnGUI();
