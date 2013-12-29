@@ -3,10 +3,10 @@ using System.Collections;
 using Steamworks;
 
 class SteamClientTest : MonoBehaviour {
-	int m_Pipe;
-	int m_GlobalUser;
-	int m_LocalPipe;
-	int m_LocalUser;
+	HSteamPipe m_Pipe;
+	HSteamUser m_GlobalUser;
+	HSteamPipe m_LocalPipe;
+	HSteamUser m_LocalUser;
 
 	public void Awake() {
 		// No Callbacks!
