@@ -6,7 +6,7 @@ using Steamworks;
 class SteamUserTest : MonoBehaviour {
 	byte[] m_Ticket;
 	uint m_pcbTicket;
-	uint m_HAuthTicket;
+	HAuthTicket m_HAuthTicket;
 	GameObject m_VoiceLoopback;
 
 	CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
@@ -106,7 +106,7 @@ class SteamUserTest : MonoBehaviour {
 			}
 
 			if (GUILayout.Button("SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID())")) {
-				if (m_HAuthTicket != 0 && m_pcbTicket != 0) {
+				if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
 					EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
 					print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
 				}
