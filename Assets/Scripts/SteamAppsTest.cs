@@ -17,30 +17,30 @@ class SteamAppsTest : MonoBehaviour {
 		GUILayout.Label("SteamApps.BIsVACBanned() : " + SteamApps.BIsVACBanned());
 		GUILayout.Label("SteamApps.GetCurrentGameLanguage() : " + SteamApps.GetCurrentGameLanguage());
 		GUILayout.Label("SteamApps.GetAvailableGameLanguages() : " + SteamApps.GetAvailableGameLanguages());
-		GUILayout.Label("SteamApps.BIsSubscribedApp(480) : " + SteamApps.BIsSubscribedApp(480)); // SpaceWar
-		GUILayout.Label("SteamApps.BIsDlcInstalled(110902) : " + SteamApps.BIsDlcInstalled(110902)); // pieterw test DLC
-		GUILayout.Label("SteamApps.GetEarliestPurchaseUnixTime(480) : " + SteamApps.GetEarliestPurchaseUnixTime(480)); // SpaceWar
+		GUILayout.Label("SteamApps.BIsSubscribedApp(SteamUtils.GetAppID()) : " + SteamApps.BIsSubscribedApp(SteamUtils.GetAppID()));
+		GUILayout.Label("SteamApps.BIsDlcInstalled(110902) : " + SteamApps.BIsDlcInstalled((AppId_t)110902)); // pieterw test DLC
+		GUILayout.Label("SteamApps.GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()) : " + SteamApps.GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()));
 		GUILayout.Label("SteamApps.BIsSubscribedFromFreeWeekend() : " + SteamApps.BIsSubscribedFromFreeWeekend());
 		GUILayout.Label("SteamApps.GetDLCCount() : " + SteamApps.GetDLCCount());
 
 		for (int iDLC = 0; iDLC < SteamApps.GetDLCCount(); ++iDLC) {
-			uint AppID;
+			AppId_t AppID;
 			bool Available;
 			string Name;
 			bool ret = SteamApps.BGetDLCDataByIndex(iDLC, out AppID, out Available, out Name, 128);
-			GUILayout.Label("SteamApps.BGetDLCDataByIndex(" + iDLC + ", out AppID, out Available, out Name, 128) : " + ret + " -- " + AppID + " -- " + Available + " -- " + Name); // ??
+			GUILayout.Label("SteamApps.BGetDLCDataByIndex(" + iDLC + ", out AppID, out Available, out Name, 128) : " + ret + " -- " + AppID + " -- " + Available + " -- " + Name);
 		}
 
 		if (GUILayout.Button("SteamApps.InstallDLC(110902)")) {
-			SteamApps.InstallDLC(110902); // pieterw test DLC
+			SteamApps.InstallDLC((AppId_t)110902); // pieterw test DLC
 		}
 
 		if (GUILayout.Button("SteamApps.UninstallDLC(110902)")) {
-			SteamApps.UninstallDLC(110902); // pieterw test DLC
+			SteamApps.UninstallDLC((AppId_t)110902); // pieterw test DLC
 		}
 
-		if (GUILayout.Button("SteamApps.RequestAppProofOfPurchaseKey(480)")) {
-			SteamApps.RequestAppProofOfPurchaseKey(480); // SpaceWar
+		if (GUILayout.Button("SteamApps.RequestAppProofOfPurchaseKey(SteamUtils.GetAppID())")) {
+			SteamApps.RequestAppProofOfPurchaseKey(SteamUtils.GetAppID());
 		}
 
 		{
@@ -56,17 +56,17 @@ class SteamAppsTest : MonoBehaviour {
 			print("SteamApps.MarkContentCorrupt(true) : " + SteamApps.MarkContentCorrupt(true));
 		}
 
-		if (GUILayout.Button("SteamApps.GetInstalledDepots(480, Depots, 32)")) {
+		if (GUILayout.Button("SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32)")) {
 			uint[] Depots = new uint[32];
-			uint ret = SteamApps.GetInstalledDepots(480, Depots, 32); // SpaceWar
+			uint ret = SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32);
 			for (int i = 0; i < ret; ++i) {
-				print("SteamApps.GetInstalledDepots(480, Depots, 32) : " + ret + " -- #" + i + " -- " + Depots[i]);
+				print("SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32) : " + ret + " -- #" + i + " -- " + Depots[i]);
 			}
 		}
 
 		{
 			string Folder;
-			uint ret = SteamApps.GetAppInstallDir(480, out Folder, 260); // SpaceWar
+			uint ret = SteamApps.GetAppInstallDir(SteamUtils.GetAppID(), out Folder, 260);
 			if (Folder == null) {
 				Folder = "";
 			}
@@ -74,7 +74,7 @@ class SteamAppsTest : MonoBehaviour {
 			GUILayout.Label("SteamApps.GetAppInstallDir(480, out Folder, 260) : " + ret + " -- " + Folder);
 		}
 
-		GUILayout.Label("SteamApps.BIsAppInstalled(480) : " + SteamApps.BIsAppInstalled(480)); // SpaceWar
+		GUILayout.Label("SteamApps.BIsAppInstalled(480) : " + SteamApps.BIsAppInstalled(SteamUtils.GetAppID()));
 		GUILayout.Label("SteamApps.GetAppOwner() : " + SteamApps.GetAppOwner());
 
 		// Run the test and then use steam://run/480//?test=testing;param2=value2; in your browser to try this out

@@ -148,7 +148,7 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamFriends.ActivateGameOverlayToStore(440, k_EOverlayToStoreFlag_None)")) {
-			SteamFriends.ActivateGameOverlayToStore(440, EOverlayToStoreFlag.k_EOverlayToStoreFlag_None);
+			SteamFriends.ActivateGameOverlayToStore((AppId_t)440, EOverlayToStoreFlag.k_EOverlayToStoreFlag_None); // 440 = TF2
 			print("SteamClient.ActivateGameOverlay(440, k_EOverlayToStoreFlag_None)");
 		}
 

@@ -126,7 +126,7 @@ class SteamUserTest : MonoBehaviour {
 			print("SteamUser.CancelAuthTicket(" + m_HAuthTicket + ")");
 		}
 
-		GUILayout.Label("SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), 480) : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), 480));
+		GUILayout.Label("SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()) : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()));
 		GUILayout.Label("SteamUser.BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
 
 		if (GUILayout.Button("SteamUser.AdvertiseGame(2, 127.0.0.1, 27015)")) {
