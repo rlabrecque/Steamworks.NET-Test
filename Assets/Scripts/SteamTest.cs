@@ -66,9 +66,7 @@ public class SteamTest : MonoBehaviour {
 			Debug.Log("SteamAPI_Init() failed");
 			return;
 		}
-
-		//todo: Check SteamUser.BLoggedOn(); ?
-
+		
 		// Register our Steam Callbacks
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
@@ -80,6 +78,13 @@ public class SteamTest : MonoBehaviour {
 		// We want our Steam Instance to persist across scenes.
 		DontDestroyOnLoad(gameObject);
 		m_SteamTest = this;
+	}
+
+	void OnEnable() {
+		// This should only get called after an Assembly reload, You should probably never Disable the Steamworks Manager yourself.
+		if (m_SteamTest == null) {
+			m_SteamTest = this;
+		}
 	}
 
 	void OnDestroy() {

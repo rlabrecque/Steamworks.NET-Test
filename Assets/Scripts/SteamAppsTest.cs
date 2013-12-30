@@ -3,7 +3,7 @@ using System.Collections;
 using Steamworks;
 
 class SteamAppsTest : MonoBehaviour {
-	public void Awake() {
+	public void OEnable() {
 		new Callback<DlcInstalled_t>(OnDlcInstalled);
 		new Callback<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse);
 		new Callback<AppProofOfPurchaseKeyResponse_t>(OnAppProofOfPurchaseKeyResponse);

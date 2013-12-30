@@ -17,7 +17,7 @@ class SteamFriendsTest : MonoBehaviour {
 	CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
 	CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
 
-	public void Awake() {
+	public void OnEnable() {
 		new Callback<PersonaStateChange_t>(OnPersonaStateChange);
 		new Callback<GameOverlayActivated_t>(OnGameOverlayActivated);
 		new Callback<GameServerChangeRequested_t>(OnGameServerChangeRequested);

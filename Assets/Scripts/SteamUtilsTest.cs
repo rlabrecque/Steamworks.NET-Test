@@ -7,7 +7,7 @@ class SteamUtilsTest : MonoBehaviour {
 
 	CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
-	public void Awake() {
+	public void OnEnable() {
 		new Callback<IPCountry_t>(OnIPCountry);
 		new Callback<LowBatteryPower_t>(OnLowBatteryPower);
 		//new Callback<SteamAPICallCompleted_t>(OnSteamAPICallCompleted); // N/A - CallbackDispatcher already uses this and the current impl only allows one callback at a time!

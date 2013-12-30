@@ -7,11 +7,7 @@ class SteamClientTest : MonoBehaviour {
 	HSteamUser m_GlobalUser;
 	HSteamPipe m_LocalPipe;
 	HSteamUser m_LocalUser;
-
-	public void Awake() {
-		// No Callbacks!
-	}
-
+	
 	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");

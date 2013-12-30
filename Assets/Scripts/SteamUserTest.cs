@@ -11,7 +11,7 @@ class SteamUserTest : MonoBehaviour {
 
 	CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 
-	public void Awake() {
+	public void OnEnable() {
 		new Callback<SteamServersConnected_t>(OnSteamServersConnected);
 		new Callback<SteamServerConnectFailure_t>(OnSteamServerConnectFailure);
 		new Callback<SteamServersDisconnected_t>(OnSteamServersDisconnected);
