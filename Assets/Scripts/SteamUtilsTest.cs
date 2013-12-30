@@ -88,7 +88,7 @@ class SteamUtilsTest : MonoBehaviour {
 		GUILayout.Label("SteamUtils.BOverlayNeedsPresent() : " + SteamUtils.BOverlayNeedsPresent());
 #if !_PS3
 		if (GUILayout.Button("SteamUtils.CheckFileSignature(\"FileNotFound.txt\")")) {
-			ulong handle = SteamUtils.CheckFileSignature("FileNotFound.txt");
+			SteamAPICall_t handle = SteamUtils.CheckFileSignature("FileNotFound.txt");
 			OnCheckFileSignatureCallResult.SetAPICallHandle(handle);
 			print("SteamUtils.CheckFileSignature(\"FileNotFound.txt\") - " + handle);
 		}
@@ -126,7 +126,7 @@ class SteamUtilsTest : MonoBehaviour {
 		Debug.Log("[" + SteamShutdown_t.k_iCallback + " - SteamShutdown]");
 	}
 
-	void OnCheckFileSignature(ulong handle, CheckFileSignature_t pCallback) {
+	void OnCheckFileSignature(SteamAPICall_t handle, CheckFileSignature_t pCallback) {
 		Debug.Log("[" + CheckFileSignature_t.k_iCallback + " - CheckFileSignature] - " + pCallback.m_eCheckFileSignature);
 	}
 

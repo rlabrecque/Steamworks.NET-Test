@@ -124,7 +124,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("FileShare(MESSAGE_FILE_NAME)")) {
-			ulong handle = SteamRemoteStorage.FileShare(MESSAGE_FILE_NAME);
+			SteamAPICall_t handle = SteamRemoteStorage.FileShare(MESSAGE_FILE_NAME);
 			RemoteStorageFileShareResult.SetAPICallHandle(handle);
 			print("FileShare(" + MESSAGE_FILE_NAME + ") - " + handle);
 		}
@@ -196,7 +196,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 
 	private void RenderPageTwo() {
 		if (GUILayout.Button("UGCDownload(m_UGCHandle, 0)")) {
-			ulong handle = SteamRemoteStorage.UGCDownload(m_UGCHandle, 0);
+			SteamAPICall_t handle = SteamRemoteStorage.UGCDownload(m_UGCHandle, 0);
 			RemoteStorageDownloadUGCResult.SetAPICallHandle(handle);
 			print("UGCDownload(" + m_UGCHandle + ", 0) - " + handle);
 		}
@@ -236,7 +236,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 
 		if (GUILayout.Button("PublishWorkshopFile([...])")) {
 			string[] Tags = { "Test1", "Test2", "Test3" };
-			ulong handle = SteamRemoteStorage.PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), "Title!", "Description!", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity);
+			SteamAPICall_t handle = SteamRemoteStorage.PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), "Title!", "Description!", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity);
 			RemoteStoragePublishFileResult.SetAPICallHandle(handle);
 			print("PublishWorkshopFile(" + MESSAGE_FILE_NAME + ", null, " + SteamUtils.GetAppID() + ", \"Title!\", \"Description!\", k_ERemoteStoragePublishedFileVisibilityPublic, SteamParamStringArray(list), k_EWorkshopFileTypeCommunity)");
 		}
@@ -277,43 +277,43 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		}
 				
 		if(GUILayout.Button("CommitPublishedFileUpdate(m_PublishedFileUpdateHandle)")) {
-			ulong handle = SteamRemoteStorage.CommitPublishedFileUpdate(m_PublishedFileUpdateHandle);
+			SteamAPICall_t handle = SteamRemoteStorage.CommitPublishedFileUpdate(m_PublishedFileUpdateHandle);
 			RemoteStorageUpdatePublishedFileResult.SetAPICallHandle(handle);
 			print("CommitPublishedFileUpdate(" + m_PublishedFileUpdateHandle + ") - " + handle);
 		}
 
 		if (GUILayout.Button("GetPublishedFileDetails(m_PublishedFileId, 0)")) {
-			ulong handle = SteamRemoteStorage.GetPublishedFileDetails(m_PublishedFileId, 0);
+			SteamAPICall_t handle = SteamRemoteStorage.GetPublishedFileDetails(m_PublishedFileId, 0);
 			RemoteStorageGetPublishedFileDetailsResult.SetAPICallHandle(handle);
 			print("GetPublishedFileDetails(" + m_UGCHandle + ", 0) - " + handle);
 		}
 
 		if (GUILayout.Button("DeletePublishedFile(m_PublishedFileId)")) {
-			ulong handle = SteamRemoteStorage.DeletePublishedFile(m_PublishedFileId);
+			SteamAPICall_t handle = SteamRemoteStorage.DeletePublishedFile(m_PublishedFileId);
 			RemoteStorageDeletePublishedFileResult.SetAPICallHandle(handle);
 			print("DeletePublishedFile(" + m_PublishedFileId + ") - " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserPublishedFiles(0)")) {
-			ulong handle = SteamRemoteStorage.EnumerateUserPublishedFiles(0);
+			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserPublishedFiles(0);
 			RemoteStorageEnumerateUserPublishedFilesResult.SetAPICallHandle(handle);
 			print("EnumerateUserPublishedFiles(0) - " + handle);
 		}
 
 		if (GUILayout.Button("SubscribePublishedFile(m_PublishedFileId)")) {
-			ulong handle = SteamRemoteStorage.SubscribePublishedFile(m_PublishedFileId);
+			SteamAPICall_t handle = SteamRemoteStorage.SubscribePublishedFile(m_PublishedFileId);
 			RemoteStorageSubscribePublishedFileResult.SetAPICallHandle(handle);
 			print("SubscribePublishedFile(" + m_PublishedFileId + ") - " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserSubscribedFiles(0)")) {
-			ulong handle = SteamRemoteStorage.EnumerateUserSubscribedFiles(0);
+			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserSubscribedFiles(0);
 			RemoteStorageEnumerateUserSubscribedFilesResult.SetAPICallHandle(handle);
 			print("EnumerateUserSubscribedFiles(0) - " + handle);
 		}
 
 		if (GUILayout.Button("UnsubscribePublishedFile(m_PublishedFileId)")) {
-			ulong handle = SteamRemoteStorage.UnsubscribePublishedFile(m_PublishedFileId);
+			SteamAPICall_t handle = SteamRemoteStorage.UnsubscribePublishedFile(m_PublishedFileId);
 			RemoteStorageUnsubscribePublishedFileResult.SetAPICallHandle(handle);
 			print("UnsubscribePublishedFile(" + m_PublishedFileId + ") - " + handle);
 		}
@@ -324,49 +324,49 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("GetPublishedItemVoteDetails(m_PublishedFileId)")) {
-			ulong handle = SteamRemoteStorage.GetPublishedItemVoteDetails(m_PublishedFileId);
+			SteamAPICall_t handle = SteamRemoteStorage.GetPublishedItemVoteDetails(m_PublishedFileId);
 			RemoteStorageGetPublishedItemVoteDetailsResult.SetAPICallHandle(handle);
 			print("GetPublishedItemVoteDetails(" + m_PublishedFileId + ") - " + handle);
 		}
 
 		if (GUILayout.Button("UpdateUserPublishedItemVote(m_PublishedFileId, true)")) {
-			ulong handle = SteamRemoteStorage.UpdateUserPublishedItemVote(m_PublishedFileId, true);
+			SteamAPICall_t handle = SteamRemoteStorage.UpdateUserPublishedItemVote(m_PublishedFileId, true);
 			RemoteStorageUpdateUserPublishedItemVoteResult.SetAPICallHandle(handle);
 			print("UpdateUserPublishedItemVote(" + m_PublishedFileId + ") - " + handle);
 		}
 
 		if (GUILayout.Button("GetUserPublishedItemVoteDetails(m_PublishedFileId)")) {
-			ulong handle = SteamRemoteStorage.GetUserPublishedItemVoteDetails(m_PublishedFileId);
+			SteamAPICall_t handle = SteamRemoteStorage.GetUserPublishedItemVoteDetails(m_PublishedFileId);
 			RemoteStorageUserVoteDetails.SetAPICallHandle(handle);
 			print("GetUserPublishedItemVoteDetails(" + m_PublishedFileId + ") - " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserSharedWorkshopFiles(SteamUser.GetSteamID(), 0, null, null)")) {
-			ulong handle = SteamRemoteStorage.EnumerateUserSharedWorkshopFiles(SteamUser.GetSteamID(), 0, null, null);
+			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserSharedWorkshopFiles(SteamUser.GetSteamID(), 0, null, null);
 			RemoteStorageEnumerateUserSharedWorkshopFilesResult.SetAPICallHandle(handle);
 			print("EnumerateUserSharedWorkshopFiles(" + SteamUser.GetSteamID() + ", 0, System.IntPtr.Zero, System.IntPtr.Zero) - " + handle);
 		}
 
 		if (GUILayout.Button("PublishVideo([...])")) {
-			ulong handle = SteamRemoteStorage.PublishVideo(EWorkshopVideoProvider.k_EWorkshopVideoProviderYoutube, "William Hunter", "Rmvb4Hktv7U", null, SteamUtils.GetAppID(), "Test Video", "Desc", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, null);
+			SteamAPICall_t handle = SteamRemoteStorage.PublishVideo(EWorkshopVideoProvider.k_EWorkshopVideoProviderYoutube, "William Hunter", "Rmvb4Hktv7U", null, SteamUtils.GetAppID(), "Test Video", "Desc", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, null);
 			RemoteStoragePublishFileResult.SetAPICallHandle(handle);
 			print("PublishVideo(k_EWorkshopVideoProviderYoutube, \"William Hunter\", \"Rmvb4Hktv7U\", null, SteamUtils.GetAppID(), \"Test Video\", \"Desc\", k_ERemoteStoragePublishedFileVisibilityPublic, null)");
 		}
 
 		if (GUILayout.Button("SetUserPublishedFileAction(m_PublishedFileId, k_EWorkshopFileActionPlayed)")) {
-			ulong handle = SteamRemoteStorage.SetUserPublishedFileAction(m_PublishedFileId, EWorkshopFileAction.k_EWorkshopFileActionPlayed);
+			SteamAPICall_t handle = SteamRemoteStorage.SetUserPublishedFileAction(m_PublishedFileId, EWorkshopFileAction.k_EWorkshopFileActionPlayed);
 			RemoteStorageSetUserPublishedFileActionResult.SetAPICallHandle(handle);
 			print("SetUserPublishedFileAction(" + m_PublishedFileId + ", " + EWorkshopFileAction.k_EWorkshopFileActionPlayed + ") - " + handle);
 		}
 
 		if (GUILayout.Button("EnumeratePublishedFilesByUserAction(k_EWorkshopFileActionPlayed, 0)")) {
-			ulong handle = SteamRemoteStorage.EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0);
+			SteamAPICall_t handle = SteamRemoteStorage.EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0);
 			RemoteStorageEnumeratePublishedFilesByUserActionResult.SetAPICallHandle(handle);
 			print("EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0) - " + handle);
 		}
 
 		if (GUILayout.Button("EnumeratePublishedWorkshopFiles(k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, IntPtr.Zero, IntPtr.Zero)")) {
-			ulong handle = SteamRemoteStorage.EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType.k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, null, null);
+			SteamAPICall_t handle = SteamRemoteStorage.EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType.k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, null, null);
 			RemoteStorageEnumerateWorkshopFilesResult.SetAPICallHandle(handle);
 			print("EnumeratePublishedWorkshopFiles(k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, IntPtr.Zero, IntPtr.Zero) - " + handle);
 		}
@@ -374,7 +374,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		// There is absolutely no documentation on how to use this function, or what CallResult it gives you...
 		// If you figure out how to use this then let me know!
 		/*if (GUILayout.Button("UGCDownloadToLocation(m_UGCHandle, \"C:\\\", 0)")) {
-			ulong handle = SteamRemoteStorage.UGCDownloadToLocation(m_UGCHandle, "C:\\", 0);
+			SteamAPICall_t handle = SteamRemoteStorage.UGCDownloadToLocation(m_UGCHandle, "C:\\", 0);
 
 			print("UGCDownloadToLocation(m_UGCHandle, \"C:\\\", 0)");
 		}*/
@@ -400,56 +400,56 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		Debug.Log("[" + RemoteStorageConflictResolution_t.k_iCallback + " - RemoteStorageConflictResolution] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult);
 	}
 
-	void OnRemoteStorageFileShareResult(ulong handle, RemoteStorageFileShareResult_t pCallback) {
+	void OnRemoteStorageFileShareResult(SteamAPICall_t handle, RemoteStorageFileShareResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageFileShareResult_t.k_iCallback + " - RemoteStorageFileShareResult] - " + pCallback.m_eResult + " -- " + pCallback.m_hFile);
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_UGCHandle = pCallback.m_hFile;
 		}
 	}
 
-	void OnRemoteStoragePublishFileResult(ulong handle, RemoteStoragePublishFileResult_t pCallback) {
+	void OnRemoteStoragePublishFileResult(SteamAPICall_t handle, RemoteStoragePublishFileResult_t pCallback) {
 		Debug.Log("[" + RemoteStoragePublishFileResult_t.k_iCallback + " - RemoteStoragePublishFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_bUserNeedsToAcceptWorkshopLegalAgreement);
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_PublishedFileId = pCallback.m_nPublishedFileId;
 		}
 	}
 
-	void OnRemoteStorageDeletePublishedFileResult(ulong handle, RemoteStorageDeletePublishedFileResult_t pCallback) {
+	void OnRemoteStorageDeletePublishedFileResult(SteamAPICall_t handle, RemoteStorageDeletePublishedFileResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageDeletePublishedFileResult_t.k_iCallback + " - RemoteStorageDeletePublishedFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 	}
 
-	void OnRemoteStorageEnumerateUserPublishedFilesResult(ulong handle, RemoteStorageEnumerateUserPublishedFilesResult_t pCallback) {
+	void OnRemoteStorageEnumerateUserPublishedFilesResult(SteamAPICall_t handle, RemoteStorageEnumerateUserPublishedFilesResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageEnumerateUserPublishedFilesResult_t.k_iCallback + " - RemoteStorageEnumerateUserPublishedFilesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId);
 	}
 
-	void OnRemoteStorageSubscribePublishedFileResult(ulong handle, RemoteStorageSubscribePublishedFileResult_t pCallback) {
+	void OnRemoteStorageSubscribePublishedFileResult(SteamAPICall_t handle, RemoteStorageSubscribePublishedFileResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageSubscribePublishedFileResult_t.k_iCallback + " - RemoteStorageSubscribePublishedFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 	}
 
-	void OnRemoteStorageEnumerateUserSubscribedFilesResult(ulong handle, RemoteStorageEnumerateUserSubscribedFilesResult_t pCallback) {
+	void OnRemoteStorageEnumerateUserSubscribedFilesResult(SteamAPICall_t handle, RemoteStorageEnumerateUserSubscribedFilesResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageEnumerateUserSubscribedFilesResult_t.k_iCallback + " - RemoteStorageEnumerateUserSubscribedFilesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId + " -- " + pCallback.m_rgRTimeSubscribed);
 	}
 
-	void OnRemoteStorageUnsubscribePublishedFileResult(ulong handle, RemoteStorageUnsubscribePublishedFileResult_t pCallback) {
+	void OnRemoteStorageUnsubscribePublishedFileResult(SteamAPICall_t handle, RemoteStorageUnsubscribePublishedFileResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageUnsubscribePublishedFileResult_t.k_iCallback + " - RemoteStorageUnsubscribePublishedFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 	}
 
-	void OnRemoteStorageUpdatePublishedFileResult(ulong handle, RemoteStorageUpdatePublishedFileResult_t pCallback) {
+	void OnRemoteStorageUpdatePublishedFileResult(SteamAPICall_t handle, RemoteStorageUpdatePublishedFileResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageUpdatePublishedFileResult_t.k_iCallback + " - RemoteStorageUpdatePublishedFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_bUserNeedsToAcceptWorkshopLegalAgreement);
 	}
 
-	void OnRemoteStorageDownloadUGCResult(ulong handle, RemoteStorageDownloadUGCResult_t pCallback) {
+	void OnRemoteStorageDownloadUGCResult(SteamAPICall_t handle, RemoteStorageDownloadUGCResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageDownloadUGCResult_t.k_iCallback + " - RemoteStorageDownloadUGCResult] - " + pCallback.m_eResult + " -- " + pCallback.m_hFile + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_nSizeInBytes + " -- " + pCallback.m_pchFileName + " -- " + pCallback.m_ulSteamIDOwner);
 	}
 
-	void OnRemoteStorageGetPublishedFileDetailsResult(ulong handle, RemoteStorageGetPublishedFileDetailsResult_t pCallback) {
+	void OnRemoteStorageGetPublishedFileDetailsResult(SteamAPICall_t handle, RemoteStorageGetPublishedFileDetailsResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageGetPublishedFileDetailsResult_t.k_iCallback + " - RemoteStorageGetPublishedFileDetailsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nCreatorAppID + " -- " + pCallback.m_nConsumerAppID + " -- " + pCallback.m_rgchTitle + " -- " + pCallback.m_rgchDescription + " -- " + pCallback.m_hFile + " -- " + pCallback.m_hPreviewFile + " -- " + pCallback.m_ulSteamIDOwner + " -- " + pCallback.m_rtimeCreated + " -- " + pCallback.m_rtimeUpdated + " -- " + pCallback.m_eVisibility + " -- " + pCallback.m_bBanned + " -- " + pCallback.m_rgchTags + " -- " + pCallback.m_bTagsTruncated + " -- " + pCallback.m_pchFileName + " -- " + pCallback.m_nFileSize + " -- " + pCallback.m_nPreviewFileSize + " -- " + pCallback.m_rgchURL + " -- " + pCallback.m_eFileType + " -- " + pCallback.m_bAcceptedForUse);
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_UGCHandle = pCallback.m_hFile;
 		}
 	}
 
-	void OnRemoteStorageEnumerateWorkshopFilesResult(ulong handle, RemoteStorageEnumerateWorkshopFilesResult_t pCallback) {
+	void OnRemoteStorageEnumerateWorkshopFilesResult(SteamAPICall_t handle, RemoteStorageEnumerateWorkshopFilesResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageEnumerateWorkshopFilesResult_t.k_iCallback + " - RemoteStorageEnumerateWorkshopFilesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId + " -- " + pCallback.m_rgScore + " -- " + pCallback.m_nAppId + " -- " + pCallback.m_unStartIndex);
 		for (int i = 0; i < pCallback.m_nResultsReturned; ++i) {
 			print(i + ": " + pCallback.m_rgPublishedFileId[i]);
@@ -460,7 +460,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		}
 	}
 
-	void OnRemoteStorageGetPublishedItemVoteDetailsResult(ulong handle, RemoteStorageGetPublishedItemVoteDetailsResult_t pCallback) {
+	void OnRemoteStorageGetPublishedItemVoteDetailsResult(SteamAPICall_t handle, RemoteStorageGetPublishedItemVoteDetailsResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageGetPublishedItemVoteDetailsResult_t.k_iCallback + " - RemoteStorageGetPublishedItemVoteDetailsResult_t] - " + pCallback.m_eResult + " -- " + pCallback.m_unPublishedFileId + " -- " + pCallback.m_nVotesFor + " -- " + pCallback.m_nVotesAgainst + " -- " + pCallback.m_nReports + " -- " + pCallback.m_fScore);
 	}
 
@@ -476,23 +476,23 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		Debug.Log("[" + RemoteStoragePublishedFileDeleted_t.k_iCallback + " - RemoteStoragePublishedFileDeleted] - " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nAppID);
 	}
 
-	void OnRemoteStorageUpdateUserPublishedItemVoteResult(ulong handle, RemoteStorageUpdateUserPublishedItemVoteResult_t pCallback) {
+	void OnRemoteStorageUpdateUserPublishedItemVoteResult(SteamAPICall_t handle, RemoteStorageUpdateUserPublishedItemVoteResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageUpdateUserPublishedItemVoteResult_t.k_iCallback + " - RemoteStorageUpdateUserPublishedItemVoteResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 	}
 
-	void OnRemoteStorageUserVoteDetails(ulong handle, RemoteStorageUserVoteDetails_t pCallback) {
+	void OnRemoteStorageUserVoteDetails(SteamAPICall_t handle, RemoteStorageUserVoteDetails_t pCallback) {
 		Debug.Log("[" + RemoteStorageUserVoteDetails_t.k_iCallback + " - RemoteStorageUserVoteDetails] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_eVote);
 	}
 
-	void OnRemoteStorageEnumerateUserSharedWorkshopFilesResult(ulong handle, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t pCallback) {
+	void OnRemoteStorageEnumerateUserSharedWorkshopFilesResult(SteamAPICall_t handle, RemoteStorageEnumerateUserSharedWorkshopFilesResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageEnumerateUserSharedWorkshopFilesResult_t.k_iCallback + " - RemoteStorageEnumerateUserSharedWorkshopFilesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId);
 	}
 
-	void OnRemoteStorageSetUserPublishedFileActionResult(ulong handle, RemoteStorageSetUserPublishedFileActionResult_t pCallback) {
+	void OnRemoteStorageSetUserPublishedFileActionResult(SteamAPICall_t handle, RemoteStorageSetUserPublishedFileActionResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageSetUserPublishedFileActionResult_t.k_iCallback + " - RemoteStorageSetUserPublishedFileActionResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_eAction);
 	}
 
-	void OnRemoteStorageEnumeratePublishedFilesByUserActionResult(ulong handle, RemoteStorageEnumeratePublishedFilesByUserActionResult_t pCallback) {
+	void OnRemoteStorageEnumeratePublishedFilesByUserActionResult(SteamAPICall_t handle, RemoteStorageEnumeratePublishedFilesByUserActionResult_t pCallback) {
 		Debug.Log("[" + RemoteStorageEnumeratePublishedFilesByUserActionResult_t.k_iCallback + " - RemoteStorageEnumeratePublishedFilesByUserActionResult] - " + pCallback.m_eResult + " -- " + pCallback.m_eAction + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId + " -- " + pCallback.m_rgRTimeUpdated);
 	}
 

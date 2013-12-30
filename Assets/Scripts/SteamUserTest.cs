@@ -136,7 +136,7 @@ class SteamUserTest : MonoBehaviour {
 
 		if(GUILayout.Button("SteamUser.RequestEncryptedAppTicket()")) {
 			byte[] k_unSecretData = System.BitConverter.GetBytes(0x5444);
-			ulong handle = SteamUser.RequestEncryptedAppTicket(k_unSecretData, sizeof(uint));
+			SteamAPICall_t handle = SteamUser.RequestEncryptedAppTicket(k_unSecretData, sizeof(uint));
 			OnEncryptedAppTicketResponseCallResult.SetAPICallHandle(handle);
 			print("SteamUser.RequestEncryptedAppTicket(ref k_unSecretData, " + sizeof(uint) + ") - " + handle + " -- " + k_unSecretData);
 		}
@@ -186,7 +186,7 @@ class SteamUserTest : MonoBehaviour {
 		Debug.Log("[" + MicroTxnAuthorizationResponse_t.k_iCallback + " - MicroTxnAuthorizationResponse] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulOrderID + " -- " + pCallback.m_bAuthorized);
 	}
 
-	void OnEncryptedAppTicketResponse(ulong handle, EncryptedAppTicketResponse_t pCallback) {
+	void OnEncryptedAppTicketResponse(SteamAPICall_t handle, EncryptedAppTicketResponse_t pCallback) {
 		Debug.Log("[" + EncryptedAppTicketResponse_t.k_iCallback + " - EncryptedAppTicketResponse] - " + pCallback.m_eResult);
 
 		// This code is taken directly from SteamworksExample/SpaceWar

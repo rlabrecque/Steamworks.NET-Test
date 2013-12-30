@@ -81,7 +81,7 @@ class SteamAppsTest : MonoBehaviour {
 		GUILayout.Label("SteamApps.GetLaunchQueryParam(\"test\") : " + SteamApps.GetLaunchQueryParam("test"));
 #if _PS3
 		if (GUILayout.Button("SteamApps.RegisterActivationCode(\"???\")")) {
-			ulong handle = SteamApps.RegisterActivationCode("???");
+			SteamAPICall_t handle = SteamApps.RegisterActivationCode("???");
 			new CallResult<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse, handle);
 			new CallResult<AppProofOfPurchaseKeyResponse_t>(OnAppProofOfPurchaseKeyResponse, handle);
 		}

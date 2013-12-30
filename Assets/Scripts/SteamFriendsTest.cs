@@ -63,7 +63,7 @@ class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("SteamFriends.GetPersonaName() : " + SteamFriends.GetPersonaName());
 
 		if (GUILayout.Button("SteamFriends.SetPersonaName(SteamFriends.GetPersonaName())")) {
-			ulong handle = SteamFriends.SetPersonaName(SteamFriends.GetPersonaName());
+			SteamAPICall_t handle = SteamFriends.SetPersonaName(SteamFriends.GetPersonaName());
 			OnSetPersonaNameResponseCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.SetPersonaName(" + SteamFriends.GetPersonaName() + ") : " + handle);
 		}
@@ -226,7 +226,7 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamFriends.RequestClanOfficerList(m_Clan)")) {
-			ulong handle = SteamFriends.RequestClanOfficerList(m_Clan);
+			SteamAPICall_t handle = SteamFriends.RequestClanOfficerList(m_Clan);
 			OnFriendRichPresenceCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.RequestClanOfficerList(" + m_Clan + ") - " + handle);
 		}
@@ -271,7 +271,7 @@ class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("SteamFriends.GetFriendCoplayGame(m_CoPlayFriend) : " + SteamFriends.GetFriendCoplayGame(m_CoPlayFriend));
 
 		if (GUILayout.Button("SteamFriends.JoinClanChatRoom(m_Clan)")) {
-			ulong handle = SteamFriends.JoinClanChatRoom(m_Clan);
+			SteamAPICall_t handle = SteamFriends.JoinClanChatRoom(m_Clan);
 			OnJoinClanChatRoomCompletionResultCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.JoinClanChatRoom(m_Clan) - " + handle);
 		}
@@ -311,19 +311,19 @@ class SteamFriendsTest : MonoBehaviour {
 		//GUILayout.Label("SteamFriends.GetFriendMessage() : " + SteamFriends.GetFriendMessage()); // N/A - Must be called from within the callback OnGameConnectedFriendChatMsg
 
 		if (GUILayout.Button("SteamFriends.GetFollowerCount(SteamUser.GetSteamID())")) {
-			ulong handle = SteamFriends.GetFollowerCount(SteamUser.GetSteamID());
+			SteamAPICall_t handle = SteamFriends.GetFollowerCount(SteamUser.GetSteamID());
 			OnFriendsGetFollowerCountCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.GetFollowerCount(" + SteamUser.GetSteamID() + ") - " + handle);
 		}
 
 		if (GUILayout.Button("SteamFriends.IsFollowing(m_Friend)")) {
-			ulong handle = SteamFriends.IsFollowing(m_Friend);
+			SteamAPICall_t handle = SteamFriends.IsFollowing(m_Friend);
 			OnFriendsIsFollowingCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.IsFollowing(m_Friend) - " + handle);
 		}
 
 		if (GUILayout.Button("SteamFriends.EnumerateFollowingList(0)")) {
-			ulong handle = SteamFriends.EnumerateFollowingList(0);
+			SteamAPICall_t handle = SteamFriends.EnumerateFollowingList(0);
 			OnFriendsEnumerateFollowingListCallResult.SetAPICallHandle(handle);
 			print("SteamFriends.EnumerateFollowingList(0) - " + handle);
 		}
@@ -350,7 +350,7 @@ class SteamFriendsTest : MonoBehaviour {
 		Debug.Log("[" + AvatarImageLoaded_t.k_iCallback + " - AvatarImageLoaded] - " + pCallback.m_steamID + " -- " + pCallback.m_iImage + " -- " + pCallback.m_iWide + " -- " + pCallback.m_iTall);
 	}
 
-	void OnClanOfficerListResponse(ulong handle, ClanOfficerListResponse_t pCallback) {
+	void OnClanOfficerListResponse(SteamAPICall_t handle, ClanOfficerListResponse_t pCallback) {
 		Debug.Log("[" + ClanOfficerListResponse_t.k_iCallback + " - ClanOfficerListResponse] - " + pCallback.m_steamIDClan + " -- " + pCallback.m_cOfficers + " -- " + pCallback.m_bSuccess);
 	}
 
@@ -384,7 +384,7 @@ class SteamFriendsTest : MonoBehaviour {
 		Debug.Log("[" + DownloadClanActivityCountsResult_t.k_iCallback + " - DownloadClanActivityCountsResult] - " + pCallback.m_bSuccess);
 	}
 
-	void OnJoinClanChatRoomCompletionResult(ulong handle, JoinClanChatRoomCompletionResult_t pCallback) {
+	void OnJoinClanChatRoomCompletionResult(SteamAPICall_t handle, JoinClanChatRoomCompletionResult_t pCallback) {
 		Debug.Log("[" + JoinClanChatRoomCompletionResult_t.k_iCallback + " - JoinClanChatRoomCompletionResult] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_eChatRoomEnterResponse);
 	}
 
@@ -397,19 +397,19 @@ class SteamFriendsTest : MonoBehaviour {
 		print(ret + " " + pCallback.m_steamIDUser + ": " + Text);
 	}
 
-	void OnFriendsGetFollowerCount(ulong handle, FriendsGetFollowerCount_t pCallback) {
+	void OnFriendsGetFollowerCount(SteamAPICall_t handle, FriendsGetFollowerCount_t pCallback) {
 		Debug.Log("[" + FriendsGetFollowerCount_t.k_iCallback + " - FriendsGetFollowerCount] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_nCount);
 	}
 
-	void OnFriendsIsFollowing(ulong handle, FriendsIsFollowing_t pCallback) {
+	void OnFriendsIsFollowing(SteamAPICall_t handle, FriendsIsFollowing_t pCallback) {
 		Debug.Log("[" + FriendsIsFollowing_t.k_iCallback + " - FriendsIsFollowing] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_bIsFollowing);
 	}
 
-	void OnFriendsEnumerateFollowingList(ulong handle, FriendsEnumerateFollowingList_t pCallback) {
+	void OnFriendsEnumerateFollowingList(SteamAPICall_t handle, FriendsEnumerateFollowingList_t pCallback) {
 		Debug.Log("[" + FriendsEnumerateFollowingList_t.k_iCallback + " - FriendsEnumerateFollowingList] - " + pCallback.m_eResult + " -- " + pCallback.m_rgSteamID + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount);
 	}
 
-	void OnSetPersonaNameResponse(ulong handle, SetPersonaNameResponse_t pCallback) {
+	void OnSetPersonaNameResponse(SteamAPICall_t handle, SetPersonaNameResponse_t pCallback) {
 		Debug.Log("[" + SetPersonaNameResponse_t.k_iCallback + " - SetPersonaNameResponse] - " + pCallback.m_bSuccess + " -- " + pCallback.m_bLocalSuccess + " -- " + pCallback.m_result);
 	}
 
