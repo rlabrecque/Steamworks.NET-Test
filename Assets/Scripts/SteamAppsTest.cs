@@ -57,7 +57,7 @@ class SteamAppsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32)")) {
-			uint[] Depots = new uint[32];
+			DepotId_t[] Depots = new DepotId_t[32];
 			uint ret = SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32);
 			for (int i = 0; i < ret; ++i) {
 				print("SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32) : " + ret + " -- #" + i + " -- " + Depots[i]);
