@@ -130,7 +130,7 @@ class SteamUserTest : MonoBehaviour {
 		GUILayout.Label("SteamUser.BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
 
 		if (GUILayout.Button("SteamUser.AdvertiseGame(2, 127.0.0.1, 27015)")) {
-			SteamUser.AdvertiseGame(2, 2130706433, 27015);
+			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, 2130706433, 27015);
 			print("SteamUser.AdvertiseGame(2, 2130706433, 27015)");
 		}
 
@@ -212,7 +212,7 @@ class SteamUserTest : MonoBehaviour {
 				Debug.Log("Ticket for wrong app id");
 			}
 
-			ulong steamIDFromTicket;
+			CSteamID steamIDFromTicket;
 			SteamEncryptedAppTicket.GetTicketSteamID(rgubDecrypted, cubDecrypted, out steamIDFromTicket);
 			if (steamIDFromTicket != SteamUser.GetSteamID()) {
 				Debug.Log("Ticket for wrong user");

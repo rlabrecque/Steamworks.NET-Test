@@ -3,9 +3,9 @@ using System.Collections;
 using Steamworks;
 
 class SteamFriendsTest : MonoBehaviour {
-	ulong m_Friend;
-	ulong m_Clan;
-	ulong m_CoPlayFriend;
+	CSteamID m_Friend;
+	CSteamID m_Clan;
+	CSteamID m_CoPlayFriend;
 	Texture2D m_SmallAvatar;
 	Texture2D m_MediumAvatar;
 	Texture2D m_LargeAvatar;
@@ -111,7 +111,7 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamFriends.DownloadClanActivityCounts(m_Clans, 2)")) {
-			ulong[] Clans = { m_Clan, 103582791434672565 }; // m_Clan, Steam Universe
+			CSteamID[] Clans = { m_Clan, new CSteamID(103582791434672565) }; // m_Clan, Steam Universe
 
 			print("SteamFriends.DownloadClanActivityCounts(" + Clans + ", 2) : " + SteamFriends.DownloadClanActivityCounts(Clans, 2));
 		}
@@ -138,7 +138,7 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamFriends.ActivateGameOverlayToUser(\"friendadd\", 76561197991230424)")) {
-			SteamFriends.ActivateGameOverlayToUser("friendadd", 76561197991230424); // rlabrecque
+			SteamFriends.ActivateGameOverlayToUser("friendadd", new CSteamID(76561197991230424)); // rlabrecque
 			print("SteamClient.ActivateGameOverlay(\"friendadd\", 76561197991230424)");
 		}
 
@@ -153,13 +153,13 @@ class SteamFriendsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamFriends.SetPlayedWith(76561197991230424)")) {
-			SteamFriends.SetPlayedWith(76561197991230424); //rlabrecque
+			SteamFriends.SetPlayedWith(new CSteamID(76561197991230424)); //rlabrecque
 			print("SteamClient.SetPlayedWith(76561197991230424)");
 		}
 
-		if (GUILayout.Button("SteamFriends.ActivateGameOverlayInviteDialog(0)")) {
-			SteamFriends.ActivateGameOverlayInviteDialog(0); //TODO
-			print("SteamClient.ActivateGameOverlayInviteDialog(0)");
+		if (GUILayout.Button("SteamFriends.ActivateGameOverlayInviteDialog(76561197991230424)")) {
+			SteamFriends.ActivateGameOverlayInviteDialog(new CSteamID(76561197991230424)); //rlabrecque
+			print("SteamClient.ActivateGameOverlayInviteDialog(76561197991230424)");
 		}
 
 		if (GUILayout.Button("SteamFriends.GetSmallFriendAvatar(m_Friend)")) {
@@ -367,7 +367,7 @@ class SteamFriendsTest : MonoBehaviour {
 
 		string Text;
 		EChatEntryType ChatEntryType;
-		ulong Chatter;
+		CSteamID Chatter;
 		int ret = SteamFriends.GetClanChatMessage(pCallback.m_steamIDClanChat, pCallback.m_iMessageID, out Text, 2048, out ChatEntryType, out Chatter);
 		print(ret + " " + Chatter + ": " + Text);
 	}

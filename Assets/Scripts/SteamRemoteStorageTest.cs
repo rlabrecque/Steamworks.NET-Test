@@ -211,7 +211,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 		{
 			AppId_t AppID;
 			string Name;
-			ulong SteamIDOwner;
+			CSteamID SteamIDOwner;
 			bool ret = SteamRemoteStorage.GetUGCDetails(m_UGCHandle, out AppID, out Name, out m_FileSizeInBytes, out SteamIDOwner);
 			GUILayout.Label("GetUGCDetails(m_UGCHandle, out AppID, Name, out FileSizeInBytes, out SteamIDOwner) : " + ret + " -- " + AppID + " -- " + Name + " -- " + m_FileSizeInBytes + " -- " + SteamIDOwner);
 		}
