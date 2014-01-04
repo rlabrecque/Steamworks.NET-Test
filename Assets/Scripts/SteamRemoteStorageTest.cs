@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamRemoteStorageTest : MonoBehaviour {
+public class SteamRemoteStorageTest : MonoBehaviour {
 	const string MESSAGE_FILE_NAME = "message.dat";
 	private string m_Message = "";
 	private int m_FileCount;
@@ -10,7 +10,7 @@ class SteamRemoteStorageTest : MonoBehaviour {
 	private int m_TotalBytes;
 	private int m_FileSizeInBytes;
 	private UGCFileWriteStreamHandle_t m_FileStream;
-	private UGCHandle_t m_UGCHandle;
+	public UGCHandle_t m_UGCHandle; // public for SteamUserStatsTest
 	private PublishedFileId_t m_PublishedFileId;
 	private PublishedFileUpdateHandle_t m_PublishedFileUpdateHandle;
 

@@ -11,6 +11,8 @@ public class SteamTest : MonoBehaviour {
 		SteamRemoteStorage,
 		SteamRemoteStoragePg2,
 		SteamUser,
+		SteamUserStatsTest,
+		SteamUserStatsTestPg2,
 		SteamUtils,
 
 		MAX_STATES
@@ -19,15 +21,14 @@ public class SteamTest : MonoBehaviour {
 	public EGUIState m_State { get; private set; }
 
 	private bool m_bInitialized = false;
-
-	// serialize this across script reloads somehow?
-	private static SteamTest m_SteamTest = null;
+	public static SteamTest m_SteamTest = null;
 
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamFriendsTest FriendsTest;
-	private SteamRemoteStorageTest RemoteStorageTest;
+	public SteamRemoteStorageTest RemoteStorageTest; // public for SteamUserStatsTest
 	private SteamUserTest UserTest;
+	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;
 
 	void Awake() {
@@ -73,6 +74,7 @@ public class SteamTest : MonoBehaviour {
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		UserTest = gameObject.AddComponent<SteamUserTest>();
+		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
 
 		// We want our Steam Instance to persist across scenes.
@@ -138,6 +140,10 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamUser:
 				UserTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamUserStatsTest:
+			case EGUIState.SteamUserStatsTestPg2:
+				UserStatsTest.RenderOnGUI(m_State);
 				break;
 			case EGUIState.SteamUtils:
 				UtilsTest.RenderOnGUI();
