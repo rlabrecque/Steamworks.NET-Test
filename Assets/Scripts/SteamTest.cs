@@ -26,7 +26,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamFriendsTest FriendsTest;
-	public SteamRemoteStorageTest RemoteStorageTest; // public for SteamUserStatsTest
+	private SteamRemoteStorageTest RemoteStorageTest; // public for SteamUserStatsTest
 	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;

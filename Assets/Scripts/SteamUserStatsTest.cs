@@ -229,9 +229,9 @@ public class SteamUserStatsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, RemoteStorageTest.m_UGCHandle)")) {
-			SteamAPICall_t handle = SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, SteamTest.m_SteamTest.RemoteStorageTest.m_UGCHandle);
+			SteamAPICall_t handle = SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, UGCHandle_t.Invalid);
 			LeaderboardUGCSet.SetAPICallHandle(handle);
-			print("SteamUserStats.AttachLeaderboardUGC(" + m_SteamLeaderboard + ", " + SteamTest.m_SteamTest.RemoteStorageTest.m_UGCHandle + ") - " + handle);
+			print("SteamUserStats.AttachLeaderboardUGC(" + m_SteamLeaderboard + ", " + UGCHandle_t.Invalid + ") - " + handle);
 		}
 
 		if (GUILayout.Button("GetNumberOfCurrentPlayers()")) {
