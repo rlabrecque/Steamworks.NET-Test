@@ -26,7 +26,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamFriendsTest FriendsTest;
-	private SteamRemoteStorageTest RemoteStorageTest; // public for SteamUserStatsTest
+	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;
@@ -43,18 +43,7 @@ public class SteamTest : MonoBehaviour {
 		if (!Packsize.Test()) {
 			Debug.LogError("Packsize is wrong!");
 		}
-
-		if (SteamAPI.RestartAppIfNecessary(AppId_t.Invalid)) {
-			// If Steam is not running or the game wasn't started through Steam, SteamAPI_RestartAppIfNecessary starts the 
-			// local Steam client and also launches this game again.
-
-			// Once you get a public Steam AppID assigned for this game, you need to replace k_uAppIdInvalid with it and
-			// removed steam_appid.txt from the game depot.
-
-			Application.Quit();
-			return;
-		}
-
+		
 		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for everything.
 		// You don't necessarily have to though if you write your code to check whether all the Steam
 		// interfaces are NULL before using them and provide alternate paths when they are unavailable.
@@ -65,7 +54,7 @@ public class SteamTest : MonoBehaviour {
 		m_bInitialized = SteamAPI.InitSafe();
 		if (!m_bInitialized) {
 			Debug.Log("SteamAPI_Init() failed");
-			return;
+			Application.Quit();
 		}
 		
 		// Register our Steam Callbacks
