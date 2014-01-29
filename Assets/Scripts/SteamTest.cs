@@ -6,6 +6,7 @@ public class SteamTest : MonoBehaviour {
 	public enum EGUIState {
 		SteamApps,
 		SteamClient,
+		SteamController,
 		SteamFriends,
 		SteamFriendsPg2,
 		SteamRemoteStorage,
@@ -21,10 +22,13 @@ public class SteamTest : MonoBehaviour {
 	public EGUIState m_State { get; private set; }
 
 	private bool m_bInitialized = false;
+	private bool m_bControllerInitialized = false;
+
 	public static SteamTest m_SteamTest = null;
 
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
+	private SteamControllerTest ControllerTest;
 	private SteamFriendsTest FriendsTest;
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamUserTest UserTest;
@@ -56,10 +60,16 @@ public class SteamTest : MonoBehaviour {
 			Debug.Log("SteamAPI_Init() failed");
 			Application.Quit();
 		}
+
+		m_bControllerInitialized = SteamController.Init(Application.dataPath + "/controller.vdf");
+		if (!m_bControllerInitialized) {
+			Debug.LogWarning("Steam Controller Failed to Initialize");
+		}
 		
 		// Register our Steam Callbacks
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
+		ControllerTest = gameObject.AddComponent<SteamControllerTest>();
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		UserTest = gameObject.AddComponent<SteamUserTest>();
@@ -79,6 +89,13 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void OnDestroy() {
+		if (m_bControllerInitialized) {
+			bool ret = SteamController.Shutdown();
+			if (!ret) {
+				Debug.LogWarning("SteamController.Shutdown() returned false");
+			}
+		}
+
 		if (m_bInitialized) {
 			SteamAPI.Shutdown();
 		}
@@ -118,6 +135,10 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamClient:
 				ClientTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamController:
+				if (m_bControllerInitialized)
+					ControllerTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
 			case EGUIState.SteamFriendsPg2:
