@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamRemoteStorageTest : MonoBehaviour {
+public class SteamRemoteStorageTest : MonoBehaviour {
 	const string MESSAGE_FILE_NAME = "message.dat";
 	private string m_Message = "";
 	private int m_FileCount;

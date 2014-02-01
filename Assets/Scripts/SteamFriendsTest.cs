@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamFriendsTest : MonoBehaviour {
+public class SteamFriendsTest : MonoBehaviour {
 	CSteamID m_Friend;
 	CSteamID m_Clan;
 	CSteamID m_CoPlayFriend;

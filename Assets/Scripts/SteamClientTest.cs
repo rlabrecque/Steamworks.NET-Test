@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamClientTest : MonoBehaviour {
+public class SteamClientTest : MonoBehaviour {
 	HSteamPipe m_Pipe;
 	HSteamUser m_GlobalUser;
 	HSteamPipe m_LocalPipe;

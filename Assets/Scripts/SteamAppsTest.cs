@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamAppsTest : MonoBehaviour {
+public class SteamAppsTest : MonoBehaviour {
 	public void OEnable() {
 		new Callback<DlcInstalled_t>(OnDlcInstalled);
 		new Callback<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse);

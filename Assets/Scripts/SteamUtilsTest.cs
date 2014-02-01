@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-class SteamUtilsTest : MonoBehaviour {
+public class SteamUtilsTest : MonoBehaviour {
 	Texture2D m_Image;
 
 	CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
@@ -102,12 +102,12 @@ class SteamUtilsTest : MonoBehaviour {
 			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32);
 			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32) - " + ret);
 		}
+
 		GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength() : " + SteamUtils.GetEnteredGamepadTextLength()); // TODO - only to be called from within OnGamepadTextInputDismissed?
 		
 		{
 			string Text;
 			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
-
 			GUILayout.Label("SteamUtils.GetEnteredGamepadTextInput(out Text, 32) - " + ret + " -- " + Text);
 		}
 

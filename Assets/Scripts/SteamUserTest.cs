@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
-
-class SteamUserTest : MonoBehaviour {
+public class SteamUserTest : MonoBehaviour {
 	byte[] m_Ticket;
 	uint m_pcbTicket;
 	HAuthTicket m_HAuthTicket;

@@ -55,10 +55,11 @@ public class SteamTest : MonoBehaviour {
 		// This will also load the in-game steam overlay dll into your process.  That dll is normally
 		// injected by steam when it launches games, but by calling this you cause it to always load,
 		// even when not launched via steam.
-		m_bInitialized = SteamAPI.InitSafe();
+		m_bInitialized = SteamAPI.Init();
 		if (!m_bInitialized) {
 			Debug.Log("SteamAPI_Init() failed");
 			Application.Quit();
+			return;
 		}
 
 		m_bControllerInitialized = SteamController.Init(Application.dataPath + "/controller.vdf");
@@ -119,7 +120,7 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		CallbackDispatcher.RunCallbacks();
+		SteamAPI.RunCallbacks();
 	}
 
 	void OnGUI() {
