@@ -34,8 +34,8 @@ public class SteamUserTest : MonoBehaviour {
 		GUILayout.Label("SteamUser.GetSteamID() : " + SteamUser.GetSteamID());
 
 		//GUILayout.Label("SteamUser.InitiateGameConnection() : " + SteamUser.InitiateGameConnection()); // N/A - Too Hard to test like this.
-		//GUILayout.Label("SteamUser.TerminateGameConnection() : " + SteamUser.TerminateGameConnection()); // N/A
-		//GUILayout.Label("SteamUser.TrackAppUsageEvent() : " + SteamUser.TrackAppUsageEvent()); // TODO - Bugged codegen, missing the third arg
+		//GUILayout.Label("SteamUser.TerminateGameConnection() : " + SteamUser.TerminateGameConnection()); // ^
+		//GUILayout.Label("SteamUser.TrackAppUsageEvent() : " + SteamUser.TrackAppUsageEvent()); // Legacy function with no documentation
 
 		{
 			string Buffer;
@@ -136,7 +136,7 @@ public class SteamUserTest : MonoBehaviour {
 		if(GUILayout.Button("SteamUser.RequestEncryptedAppTicket()")) {
 			byte[] k_unSecretData = System.BitConverter.GetBytes(0x5444);
 			SteamAPICall_t handle = SteamUser.RequestEncryptedAppTicket(k_unSecretData, sizeof(uint));
-			OnEncryptedAppTicketResponseCallResult.SetAPICallHandle(handle);
+			OnEncryptedAppTicketResponseCallResult.Set(handle);
 			print("SteamUser.RequestEncryptedAppTicket(ref k_unSecretData, " + sizeof(uint) + ") - " + handle + " -- " + k_unSecretData);
 		}
 
@@ -185,7 +185,7 @@ public class SteamUserTest : MonoBehaviour {
 		Debug.Log("[" + MicroTxnAuthorizationResponse_t.k_iCallback + " - MicroTxnAuthorizationResponse] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulOrderID + " -- " + pCallback.m_bAuthorized);
 	}
 
-	void OnEncryptedAppTicketResponse(SteamAPICall_t handle, EncryptedAppTicketResponse_t pCallback) {
+	void OnEncryptedAppTicketResponse(EncryptedAppTicketResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + EncryptedAppTicketResponse_t.k_iCallback + " - EncryptedAppTicketResponse] - " + pCallback.m_eResult);
 
 		// This code is taken directly from SteamworksExample/SpaceWar

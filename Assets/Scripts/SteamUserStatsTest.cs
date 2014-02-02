@@ -148,7 +148,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 
 		if (GUILayout.Button("RequestUserStats(SteamUser.GetSteamID())")) {
 			SteamAPICall_t handle = SteamUserStats.RequestUserStats(new CSteamID(76561197991230424)); //rlabrecque
-			UserStatsReceived.SetAPICallHandle(handle);
+			UserStatsReceived.Set(handle);
 			print("RequestUserStats(" + SteamUser.GetSteamID() + ") - " + handle);
 		}
 
@@ -186,13 +186,13 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private void RenderPageTwo() {
 		if (GUILayout.Button("FindOrCreateLeaderboard(\"Feet Traveled\", k_ELeaderboardSortMethodAscending, k_ELeaderboardDisplayTypeNumeric)")) {
 			SteamAPICall_t handle = SteamUserStats.FindOrCreateLeaderboard("Feet Traveled", ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending, ELeaderboardDisplayType.k_ELeaderboardDisplayTypeNumeric);
-			LeaderboardFindResult.SetAPICallHandle(handle);
+			LeaderboardFindResult.Set(handle);
 			print("FindOrCreateLeaderboard(\"Feet Traveled\", ELeaderboardSortMethod.k_ELeaderboardSortMethodAscending, ELeaderboardDisplayType.k_ELeaderboardDisplayTypeNumeric) - " + handle);
 		}
 
 		if (GUILayout.Button("FindLeaderboard(\"Feet Traveled\")")) {
 			SteamAPICall_t handle = SteamUserStats.FindLeaderboard("Feet Traveled");
-			LeaderboardFindResult.SetAPICallHandle(handle);
+			LeaderboardFindResult.Set(handle);
 			print("FindLeaderboard(\"Feet Traveled\") - " + handle);
 		}
 
@@ -203,14 +203,14 @@ public class SteamUserStatsTest : MonoBehaviour {
 
 		if (GUILayout.Button("DownloadLeaderboardEntries(m_SteamLeaderboard, ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 1, 5)")) {
 			SteamAPICall_t handle = SteamUserStats.DownloadLeaderboardEntries(m_SteamLeaderboard, ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 1, 5);
-			LeaderboardScoresDownloaded.SetAPICallHandle(handle);
+			LeaderboardScoresDownloaded.Set(handle);
 			print("DownloadLeaderboardEntries(" + m_SteamLeaderboard + ", ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 1, 5) - " + handle);
 		}
 
 		if (GUILayout.Button("DownloadLeaderboardEntriesForUsers(m_SteamLeaderboard, Users, Users.Length)")) {
 			CSteamID[] Users = { SteamUser.GetSteamID() };
 			SteamAPICall_t handle = SteamUserStats.DownloadLeaderboardEntriesForUsers(m_SteamLeaderboard, Users, Users.Length);
-			LeaderboardScoresDownloaded.SetAPICallHandle(handle);
+			LeaderboardScoresDownloaded.Set(handle);
 			print("DownloadLeaderboardEntriesForUsers(" + m_SteamLeaderboard + ", Users, Users.Length) - " + handle);
 		}
 
@@ -224,25 +224,25 @@ public class SteamUserStatsTest : MonoBehaviour {
 		if (GUILayout.Button("UploadLeaderboardScore(m_SteamLeaderboard, k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, ScoreDetails, 0)")) {
 			int[] ScoreDetails = new int[1];
 			SteamAPICall_t handle = SteamUserStats.UploadLeaderboardScore(m_SteamLeaderboard, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, ScoreDetails, 0);
-			LeaderboardScoreUploaded.SetAPICallHandle(handle);
+			LeaderboardScoreUploaded.Set(handle);
 			print("UploadLeaderboardScore(" + m_SteamLeaderboard + ", ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, " + (int)m_FeetTraveledStat + ", ScoreDetails, 0) - " + handle);
 		}
 
 		if (GUILayout.Button("SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, RemoteStorageTest.m_UGCHandle)")) {
 			SteamAPICall_t handle = SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, UGCHandle_t.Invalid);
-			LeaderboardUGCSet.SetAPICallHandle(handle);
+			LeaderboardUGCSet.Set(handle);
 			print("SteamUserStats.AttachLeaderboardUGC(" + m_SteamLeaderboard + ", " + UGCHandle_t.Invalid + ") - " + handle);
 		}
 
 		if (GUILayout.Button("GetNumberOfCurrentPlayers()")) {
 			SteamAPICall_t handle = SteamUserStats.GetNumberOfCurrentPlayers();
-			NumberOfCurrentPlayers.SetAPICallHandle(handle);
+			NumberOfCurrentPlayers.Set(handle);
 			print("GetNumberOfCurrentPlayers() - " + handle);
 		}
 
 		if (GUILayout.Button("RequestGlobalAchievementPercentages()")) {
 			SteamAPICall_t handle = SteamUserStats.RequestGlobalAchievementPercentages();
-			GlobalAchievementPercentagesReady.SetAPICallHandle(handle);
+			GlobalAchievementPercentagesReady.Set(handle);
 			print("RequestGlobalAchievementPercentages() - " + handle);
 		}
 
@@ -279,7 +279,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamUserStats.RequestGlobalStats(3)")) {
 			SteamAPICall_t handle = SteamUserStats.RequestGlobalStats(3);
-			GlobalStatsReceived.SetAPICallHandle(handle);
+			GlobalStatsReceived.Set(handle);
 			print("SteamUserStats.RequestGlobalStats(3) - " + handle);
 		}
 
@@ -344,7 +344,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 #endif
 	}
 
-	private void OnUserStatsReceived(SteamAPICall_t handle, UserStatsReceived_t pCallback) {
+	private void OnUserStatsReceived(UserStatsReceived_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + UserStatsStored_t.k_iCallback + " - UserStatsReceived] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_steamIDUser);
 	}
 
@@ -356,7 +356,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 		Debug.Log("[" + UserAchievementStored_t.k_iCallback + " - UserAchievementStored] - " + pCallback.m_nGameID + " -- " + pCallback.m_bGroupAchievement + " -- " + pCallback.m_rgchAchievementName + " -- " + pCallback.m_nCurProgress + " -- " + pCallback.m_nMaxProgress);
 	}
 
-	private void OnLeaderboardFindResult(SteamAPICall_t handle, LeaderboardFindResult_t pCallback) {
+	private void OnLeaderboardFindResult(LeaderboardFindResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LeaderboardFindResult_t.k_iCallback + " - LeaderboardFindResult] - " + pCallback.m_hSteamLeaderboard + " -- " + pCallback.m_bLeaderboardFound);
 
 		if (pCallback.m_bLeaderboardFound != 0) {
@@ -364,16 +364,16 @@ public class SteamUserStatsTest : MonoBehaviour {
 		}
 	}
 
-	private void OnLeaderboardScoresDownloaded(SteamAPICall_t handle, LeaderboardScoresDownloaded_t pCallback) {
+	private void OnLeaderboardScoresDownloaded(LeaderboardScoresDownloaded_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LeaderboardScoresDownloaded_t.k_iCallback + " - LeaderboardScoresDownloaded] - " + pCallback.m_hSteamLeaderboard + " -- " + pCallback.m_hSteamLeaderboardEntries + " -- " + pCallback.m_cEntryCount);
 		m_SteamLeaderboardEntries = pCallback.m_hSteamLeaderboardEntries;
 	}
 
-	private void OnLeaderboardScoreUploaded(SteamAPICall_t handle, LeaderboardScoreUploaded_t pCallback) {
+	private void OnLeaderboardScoreUploaded(LeaderboardScoreUploaded_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LeaderboardScoreUploaded_t.k_iCallback + " - LeaderboardScoreUploaded] - " + pCallback.m_bSuccess + " -- " + pCallback.m_hSteamLeaderboard + " -- " + pCallback.m_nScore + " -- " + pCallback.m_bScoreChanged + " -- " + pCallback.m_nGlobalRankNew + " -- " + pCallback.m_nGlobalRankPrevious);
 	}
-	
-	private void OnNumberOfCurrentPlayers(SteamAPICall_t handle, NumberOfCurrentPlayers_t pCallback) {
+
+	private void OnNumberOfCurrentPlayers(NumberOfCurrentPlayers_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + NumberOfCurrentPlayers_t.k_iCallback + " - NumberOfCurrentPlayers] - " + pCallback.m_bSuccess + " -- " + pCallback.m_cPlayers);
 	}
 
@@ -385,11 +385,11 @@ public class SteamUserStatsTest : MonoBehaviour {
 		Debug.Log("[" + UserAchievementIconFetched_t.k_iCallback + " - UserAchievementIconFetched_t] - " + pCallback.m_nGameID + " -- " + pCallback.m_rgchAchievementName + " -- " + pCallback.m_bAchieved + " -- " + pCallback.m_nIconHandle);
 	}
 
-	private void OnGlobalAchievementPercentagesReady(SteamAPICall_t handle, GlobalAchievementPercentagesReady_t pCallback) {
+	private void OnGlobalAchievementPercentagesReady(GlobalAchievementPercentagesReady_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + GlobalAchievementPercentagesReady_t.k_iCallback + " - GlobalAchievementPercentagesReady] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult);
 	}
 
-	private void OnLeaderboardUGCSet(SteamAPICall_t handle, LeaderboardUGCSet_t pCallback) {
+	private void OnLeaderboardUGCSet(LeaderboardUGCSet_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LeaderboardUGCSet_t.k_iCallback + " - LeaderboardUGCSet] - " + pCallback.m_eResult + " -- " + pCallback.m_hSteamLeaderboard);
 	}
 
@@ -397,7 +397,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 		Debug.Log("[" + PS3TrophiesInstalled_t.k_iCallback + " - PS3TrophiesInstalled] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_ulRequiredDiskSpace);
 	}
 
-	private void OnGlobalStatsReceived(SteamAPICall_t handle, GlobalStatsReceived_t pCallback) {
+	private void OnGlobalStatsReceived(GlobalStatsReceived_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + GlobalStatsReceived_t.k_iCallback + " - GlobalStatsReceived] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult);
 	}
 }

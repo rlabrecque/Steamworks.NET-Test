@@ -11,6 +11,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	Texture2D m_LargeAvatar;
 
 	CallResult<ClanOfficerListResponse_t> OnFriendRichPresenceCallResult;
+	CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
 	CallResult<JoinClanChatRoomCompletionResult_t> OnJoinClanChatRoomCompletionResultCallResult;
 	CallResult<FriendsGetFollowerCount_t> OnFriendsGetFollowerCountCallResult;
 	CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
@@ -29,7 +30,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		new Callback<GameConnectedClanChatMsg_t>(OnGameConnectedClanChatMsg);
 		new Callback<GameConnectedChatJoin_t>(OnGameConnectedChatJoin);
 		new Callback<GameConnectedChatLeave_t>(OnGameConnectedChatLeave);
-		new Callback<DownloadClanActivityCountsResult_t>(OnDownloadClanActivityCountsResult);
+		OnDownloadClanActivityCountsResultCallResult = new CallResult<DownloadClanActivityCountsResult_t>(OnDownloadClanActivityCountsResult);
 		OnJoinClanChatRoomCompletionResultCallResult = new CallResult<JoinClanChatRoomCompletionResult_t>(OnJoinClanChatRoomCompletionResult);
 		new Callback<GameConnectedFriendChatMsg_t>(OnGameConnectedFriendChatMsg);
 		OnFriendsGetFollowerCountCallResult = new CallResult<FriendsGetFollowerCount_t>(OnFriendsGetFollowerCount);
@@ -64,7 +65,7 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamFriends.SetPersonaName(SteamFriends.GetPersonaName())")) {
 			SteamAPICall_t handle = SteamFriends.SetPersonaName(SteamFriends.GetPersonaName());
-			OnSetPersonaNameResponseCallResult.SetAPICallHandle(handle);
+			OnSetPersonaNameResponseCallResult.Set(handle);
 			print("SteamFriends.SetPersonaName(" + SteamFriends.GetPersonaName() + ") : " + handle);
 		}
 
@@ -112,8 +113,9 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamFriends.DownloadClanActivityCounts(m_Clans, 2)")) {
 			CSteamID[] Clans = { m_Clan, new CSteamID(103582791434672565) }; // m_Clan, Steam Universe
-
-			print("SteamFriends.DownloadClanActivityCounts(" + Clans + ", 2) : " + SteamFriends.DownloadClanActivityCounts(Clans, 2));
+			SteamAPICall_t handle = SteamFriends.DownloadClanActivityCounts(Clans, 2);
+			OnDownloadClanActivityCountsResultCallResult.Set(handle); // This call never seems to produce a callback.
+			print("SteamFriends.DownloadClanActivityCounts(" + Clans + ", 2) : " + handle);
 		}
 
 		{
@@ -227,7 +229,7 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamFriends.RequestClanOfficerList(m_Clan)")) {
 			SteamAPICall_t handle = SteamFriends.RequestClanOfficerList(m_Clan);
-			OnFriendRichPresenceCallResult.SetAPICallHandle(handle);
+			OnFriendRichPresenceCallResult.Set(handle);
 			print("SteamFriends.RequestClanOfficerList(" + m_Clan + ") - " + handle);
 		}
 
@@ -272,7 +274,7 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamFriends.JoinClanChatRoom(m_Clan)")) {
 			SteamAPICall_t handle = SteamFriends.JoinClanChatRoom(m_Clan);
-			OnJoinClanChatRoomCompletionResultCallResult.SetAPICallHandle(handle);
+			OnJoinClanChatRoomCompletionResultCallResult.Set(handle);
 			print("SteamFriends.JoinClanChatRoom(m_Clan) - " + handle);
 		}
 
@@ -312,19 +314,19 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		if (GUILayout.Button("SteamFriends.GetFollowerCount(SteamUser.GetSteamID())")) {
 			SteamAPICall_t handle = SteamFriends.GetFollowerCount(SteamUser.GetSteamID());
-			OnFriendsGetFollowerCountCallResult.SetAPICallHandle(handle);
+			OnFriendsGetFollowerCountCallResult.Set(handle);
 			print("SteamFriends.GetFollowerCount(" + SteamUser.GetSteamID() + ") - " + handle);
 		}
 
 		if (GUILayout.Button("SteamFriends.IsFollowing(m_Friend)")) {
 			SteamAPICall_t handle = SteamFriends.IsFollowing(m_Friend);
-			OnFriendsIsFollowingCallResult.SetAPICallHandle(handle);
+			OnFriendsIsFollowingCallResult.Set(handle);
 			print("SteamFriends.IsFollowing(m_Friend) - " + handle);
 		}
 
 		if (GUILayout.Button("SteamFriends.EnumerateFollowingList(0)")) {
 			SteamAPICall_t handle = SteamFriends.EnumerateFollowingList(0);
-			OnFriendsEnumerateFollowingListCallResult.SetAPICallHandle(handle);
+			OnFriendsEnumerateFollowingListCallResult.Set(handle);
 			print("SteamFriends.EnumerateFollowingList(0) - " + handle);
 		}
 	}
@@ -350,7 +352,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		Debug.Log("[" + AvatarImageLoaded_t.k_iCallback + " - AvatarImageLoaded] - " + pCallback.m_steamID + " -- " + pCallback.m_iImage + " -- " + pCallback.m_iWide + " -- " + pCallback.m_iTall);
 	}
 
-	void OnClanOfficerListResponse(SteamAPICall_t handle, ClanOfficerListResponse_t pCallback) {
+	void OnClanOfficerListResponse(ClanOfficerListResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + ClanOfficerListResponse_t.k_iCallback + " - ClanOfficerListResponse] - " + pCallback.m_steamIDClan + " -- " + pCallback.m_cOfficers + " -- " + pCallback.m_bSuccess);
 	}
 
@@ -380,11 +382,11 @@ public class SteamFriendsTest : MonoBehaviour {
 		Debug.Log("[" + GameConnectedChatLeave_t.k_iCallback + " - GameConnectedChatLeave] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_steamIDUser + " -- " + pCallback.m_bKicked + " -- " + pCallback.m_bDropped);
 	}
 
-	void OnDownloadClanActivityCountsResult(DownloadClanActivityCountsResult_t pCallback) {
+	void OnDownloadClanActivityCountsResult(DownloadClanActivityCountsResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + DownloadClanActivityCountsResult_t.k_iCallback + " - DownloadClanActivityCountsResult] - " + pCallback.m_bSuccess);
 	}
 
-	void OnJoinClanChatRoomCompletionResult(SteamAPICall_t handle, JoinClanChatRoomCompletionResult_t pCallback) {
+	void OnJoinClanChatRoomCompletionResult(JoinClanChatRoomCompletionResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + JoinClanChatRoomCompletionResult_t.k_iCallback + " - JoinClanChatRoomCompletionResult] - " + pCallback.m_steamIDClanChat + " -- " + pCallback.m_eChatRoomEnterResponse);
 	}
 
@@ -397,19 +399,19 @@ public class SteamFriendsTest : MonoBehaviour {
 		print(ret + " " + pCallback.m_steamIDUser + ": " + Text);
 	}
 
-	void OnFriendsGetFollowerCount(SteamAPICall_t handle, FriendsGetFollowerCount_t pCallback) {
+	void OnFriendsGetFollowerCount(FriendsGetFollowerCount_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + FriendsGetFollowerCount_t.k_iCallback + " - FriendsGetFollowerCount] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_nCount);
 	}
 
-	void OnFriendsIsFollowing(SteamAPICall_t handle, FriendsIsFollowing_t pCallback) {
+	void OnFriendsIsFollowing(FriendsIsFollowing_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + FriendsIsFollowing_t.k_iCallback + " - FriendsIsFollowing] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_bIsFollowing);
 	}
 
-	void OnFriendsEnumerateFollowingList(SteamAPICall_t handle, FriendsEnumerateFollowingList_t pCallback) {
+	void OnFriendsEnumerateFollowingList(FriendsEnumerateFollowingList_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + FriendsEnumerateFollowingList_t.k_iCallback + " - FriendsEnumerateFollowingList] - " + pCallback.m_eResult + " -- " + pCallback.m_rgSteamID + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount);
 	}
 
-	void OnSetPersonaNameResponse(SteamAPICall_t handle, SetPersonaNameResponse_t pCallback) {
+	void OnSetPersonaNameResponse(SetPersonaNameResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + SetPersonaNameResponse_t.k_iCallback + " - SetPersonaNameResponse] - " + pCallback.m_bSuccess + " -- " + pCallback.m_bLocalSuccess + " -- " + pCallback.m_result);
 	}
 
