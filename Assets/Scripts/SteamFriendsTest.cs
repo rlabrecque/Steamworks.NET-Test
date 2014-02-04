@@ -49,7 +49,11 @@ public class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("m_MediumAvatar:");
 		GUILayout.Label(m_MediumAvatar);
 		GUILayout.Label("m_LargeAvatar:");
-		GUILayout.Label(m_LargeAvatar);
+		//GUILayout.Label(m_LargeAvatar);
+		// This is an example of how to flip a Texture2D when using OnGUI().
+		if (m_LargeAvatar) {
+			GUI.DrawTexture(new Rect(0, m_LargeAvatar.height * 2 + 85, m_LargeAvatar.width, -m_LargeAvatar.height), m_LargeAvatar);
+		}
 		GUILayout.EndArea();
 
 		if (state == SteamTest.EGUIState.SteamFriends) {
@@ -370,7 +374,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		string Text;
 		EChatEntryType ChatEntryType;
 		CSteamID Chatter;
-		int ret = SteamFriends.GetClanChatMessage(pCallback.m_steamIDClanChat, pCallback.m_iMessageID, out Text, 2048, out ChatEntryType, out Chatter);
+		int ret = SteamFriends.GetClanChatMessage(pCallback.m_steamIDClanChat, pCallback.m_iMessageID, out Text, 2048, out ChatEntryType, out Chatter); // Must be called from within OnGameConnectedClanChatMsg
 		print(ret + " " + Chatter + ": " + Text);
 	}
 
@@ -395,7 +399,7 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		string Text;
 		EChatEntryType ChatEntryType;
-		int ret = SteamFriends.GetFriendMessage(pCallback.m_steamIDUser, pCallback.m_iMessageID, out Text, 2048, out ChatEntryType);
+		int ret = SteamFriends.GetFriendMessage(pCallback.m_steamIDUser, pCallback.m_iMessageID, out Text, 2048, out ChatEntryType); // Must be called from within OnGameConnectedFriendChatMsg
 		print(ret + " " + pCallback.m_steamIDUser + ": " + Text);
 	}
 
