@@ -208,14 +208,18 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 			GUILayout.Label("GetUGCDownloadProgress(m_UGCHandle, out BytesDownloaded, out BytesExpected) : " + ret + " -- " + BytesDownloaded + " -- " + BytesExpected);
 		}
 
-		{
+		// Spams warnings if called with an empty handle
+		if (m_UGCHandle != (UGCHandle_t)0) {
 			AppId_t AppID;
 			string Name;
 			CSteamID SteamIDOwner;
 			bool ret = SteamRemoteStorage.GetUGCDetails(m_UGCHandle, out AppID, out Name, out m_FileSizeInBytes, out SteamIDOwner);
 			GUILayout.Label("GetUGCDetails(m_UGCHandle, out AppID, Name, out FileSizeInBytes, out SteamIDOwner) : " + ret + " -- " + AppID + " -- " + Name + " -- " + m_FileSizeInBytes + " -- " + SteamIDOwner);
 		}
-
+		else {
+			GUILayout.Label("GetUGCDetails(m_UGCHandle, out AppID, Name, out FileSizeInBytes, out SteamIDOwner) : ");
+		}
+		
 		if (GUILayout.Button("UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close)")) {
 			byte[] Data = new byte[m_FileSizeInBytes];
 			int ret = SteamRemoteStorage.UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close);

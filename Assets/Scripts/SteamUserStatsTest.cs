@@ -196,10 +196,19 @@ public class SteamUserStatsTest : MonoBehaviour {
 			print("FindLeaderboard(\"Feet Traveled\") - " + handle);
 		}
 
-		GUILayout.Label("GetLeaderboardName(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardName(m_SteamLeaderboard));
-		GUILayout.Label("GetLeaderboardEntryCount(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardEntryCount(m_SteamLeaderboard));
-		GUILayout.Label("GetLeaderboardSortMethod(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardSortMethod(m_SteamLeaderboard));
-		GUILayout.Label("GetLeaderboardDisplayType(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardDisplayType(m_SteamLeaderboard));
+		// Spams SteamAPI Warnings that the SteamLeaderboard does not exist.
+		if (m_SteamLeaderboard != new SteamLeaderboard_t(0)) {
+			GUILayout.Label("GetLeaderboardName(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardName(m_SteamLeaderboard));
+			GUILayout.Label("GetLeaderboardEntryCount(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardEntryCount(m_SteamLeaderboard));
+			GUILayout.Label("GetLeaderboardSortMethod(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardSortMethod(m_SteamLeaderboard));
+			GUILayout.Label("GetLeaderboardDisplayType(m_SteamLeaderboard) : " + SteamUserStats.GetLeaderboardDisplayType(m_SteamLeaderboard));
+		}
+		else {
+			GUILayout.Label("GetLeaderboardName(m_SteamLeaderboard) : ");
+			GUILayout.Label("GetLeaderboardEntryCount(m_SteamLeaderboard) : ");
+			GUILayout.Label("GetLeaderboardSortMethod(m_SteamLeaderboard) : ");
+			GUILayout.Label("GetLeaderboardDisplayType(m_SteamLeaderboard) : ");
+		}
 
 		if (GUILayout.Button("DownloadLeaderboardEntries(m_SteamLeaderboard, ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 1, 5)")) {
 			SteamAPICall_t handle = SteamUserStats.DownloadLeaderboardEntries(m_SteamLeaderboard, ELeaderboardDataRequest.k_ELeaderboardDataRequestGlobal, 1, 5);
@@ -211,7 +220,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 			CSteamID[] Users = { SteamUser.GetSteamID() };
 			SteamAPICall_t handle = SteamUserStats.DownloadLeaderboardEntriesForUsers(m_SteamLeaderboard, Users, Users.Length);
 			LeaderboardScoresDownloaded.Set(handle);
-			print("DownloadLeaderboardEntriesForUsers(" + m_SteamLeaderboard + ", Users, Users.Length) - " + handle);
+			print("DownloadLeaderboardEntriesForUsers(" + m_SteamLeaderboard + ", " + Users + ", " + Users.Length + ") - " + handle);
 		}
 
 		if (GUILayout.Button("GetDownloadedLeaderboardEntry(m_SteamLeaderboardEntries, 0, out LeaderboardEntry, out Details, 0)")) {
@@ -283,8 +292,8 @@ public class SteamUserStatsTest : MonoBehaviour {
 			print("SteamUserStats.RequestGlobalStats(3) - " + handle);
 		}
 
-		
-		// TODO - Does SpaceWar have a stat marked as "aggregated"?
+		/* TODO - Spams SteamAPI warnings 
+		 * Does SpaceWar have a stat marked as "aggregated" to try out these functions?
 		{
 			long Data;
 			bool ret = SteamUserStats.GetGlobalStat("", out Data);
@@ -318,8 +327,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 				GUILayout.Label("GetGlobalStatHistory(\"\", Data, " + (uint)Data.Length + ") : " + ret + " -- ");
 			}
 		}
-		
-
+		*/
 #if _PS3
 		if (GUILayout.Button("InstallPS3Trophies()")) {
 			bool ret = SteamUserStats.InstallPS3Trophies();

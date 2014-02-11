@@ -147,7 +147,7 @@ public class SteamUserTest : MonoBehaviour {
 			print("SteamUser.GetEncryptedAppTicket() - " + ret + " -- " + cubTicket);
 		}
 
-		GUILayout.Label("SteamUser.GetGameBadgeLevel(1, false) : " + SteamUser.GetGameBadgeLevel(1, false));
+		//GUILayout.Label("SteamUser.GetGameBadgeLevel(1, false) : " + SteamUser.GetGameBadgeLevel(1, false)); // SpaceWar does not have trading cards, so this function will only ever return 0 and produce a warning.
 		GUILayout.Label("SteamUser.GetPlayerSteamLevel() : " + SteamUser.GetPlayerSteamLevel());
 #if _PS3
 		//GUILayout.Label("SteamUser.LogOn() : " + SteamUser.LogOn());

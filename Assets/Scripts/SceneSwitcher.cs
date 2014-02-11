@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// This is to test if Steamworks.NET behaves when switching between scenes.
+/// </summary>
 public class SceneSwitcher : MonoBehaviour {
 	void Update() {
 		if (Input.GetKeyDown(KeyCode.F5)) {

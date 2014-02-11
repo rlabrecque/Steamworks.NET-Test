@@ -182,7 +182,7 @@ public class SteamFriendsTest : MonoBehaviour {
 				ret = SteamUtils.GetImageRGBA(FriendAvatar, Image, (int)(ImageWidth * ImageHeight * 4));
 
 				m_SmallAvatar = new Texture2D((int)ImageWidth, (int)ImageHeight, TextureFormat.RGBA32, false, true);
-				m_SmallAvatar.LoadRawTextureData(Image); //TODO: The image is upside down! "@ares_p: in Unity all texture data starts from "bottom" (OpenGL convention)"
+				m_SmallAvatar.LoadRawTextureData(Image); // The image is upside down! "@ares_p: in Unity all texture data starts from "bottom" (OpenGL convention)"
 				m_SmallAvatar.Apply();
 			}
 		}

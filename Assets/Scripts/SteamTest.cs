@@ -46,10 +46,8 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
-		m_State = EGUIState.SteamApps;
-
 		if (!Packsize.Test()) {
-			Debug.LogError("Packsize is wrong!");
+			throw new System.Exception("Packsize is wrong! You are likely using a Linux/OSX build on Windows or vice versa.");
 		}
 		
 		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for everything.
@@ -66,6 +64,9 @@ public class SteamTest : MonoBehaviour {
 			return;
 		}
 
+		// We are going to use the controller interface, initialize it, which is a seperate step as it 
+		// create a new thread in the game proc and we don't want to force that on games that don't
+		// have native Steam controller implementations
 		m_bControllerInitialized = SteamController.Init(Application.dataPath + "/controller.vdf");
 		if (!m_bControllerInitialized) {
 			Debug.LogWarning("Steam Controller Failed to Initialize");
