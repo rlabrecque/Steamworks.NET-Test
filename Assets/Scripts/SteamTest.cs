@@ -39,6 +39,11 @@ public class SteamTest : MonoBehaviour {
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;
 
+	SteamAPIWarningMessageHook_t SteamAPIWarningMessageHook;
+	static void SteamAPIDebugTextHook(int nSeverity, System.Text.StringBuilder pchDebugText) {
+		Debug.LogWarning(pchDebugText);
+	}
+
 	void Awake() {
 		// Only one instance of Steamworks at a time!
 		if (m_SteamTest != null) {
@@ -63,6 +68,11 @@ public class SteamTest : MonoBehaviour {
 			Application.Quit();
 			return;
 		}
+
+		// Set up our callback to recieve warning messages from Steam.
+		// You must launch with "-debug_steamapi" in the launch args to recieve warnings.
+		SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
+		SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
 
 		// We are going to use the controller interface, initialize it, which is a seperate step as it 
 		// create a new thread in the game proc and we don't want to force that on games that don't
@@ -90,9 +100,14 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		// This should only get called after an Assembly reload, You should probably never Disable the Steamworks Manager yourself.
+		// These should only get called after an Assembly reload, You should probably never Disable the Steamworks Manager yourself.
 		if (m_SteamTest == null) {
 			m_SteamTest = this;
+		}
+
+		if (SteamAPIWarningMessageHook == null) {
+			SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
+			SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
 		}
 	}
 
