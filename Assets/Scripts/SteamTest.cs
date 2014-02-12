@@ -26,7 +26,7 @@ public class SteamTest : MonoBehaviour {
 	private bool m_bInitialized = false;
 	private bool m_bControllerInitialized = false;
 
-	public static SteamTest m_SteamTest = null;
+	private static SteamTest m_SteamTest = null;
 
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
@@ -50,6 +50,8 @@ public class SteamTest : MonoBehaviour {
 			Destroy(gameObject);
 			return;
 		}
+		// We want our Steam Instance to persist across scenes.
+		DontDestroyOnLoad(gameObject);
 
 		if (!Packsize.Test()) {
 			throw new System.Exception("Packsize is wrong! You are likely using a Linux/OSX build on Windows or vice versa.");
@@ -62,7 +64,16 @@ public class SteamTest : MonoBehaviour {
 		// This will also load the in-game steam overlay dll into your process.  That dll is normally
 		// injected by steam when it launches games, but by calling this you cause it to always load,
 		// even when not launched via steam.
-		m_bInitialized = SteamAPI.Init();
+		try {
+			m_bInitialized = SteamAPI.Init();
+		}
+		catch (System.DllNotFoundException e) { // We catch this exception here, as it will be the first occurence of it.
+			Debug.LogError("[Steamworks] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + e, this);
+
+			Application.Quit();
+			return;
+		}
+
 		if (!m_bInitialized) {
 			Debug.Log("SteamAPI_Init() failed");
 			Application.Quit();
@@ -94,8 +105,6 @@ public class SteamTest : MonoBehaviour {
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
 
-		// We want our Steam Instance to persist across scenes.
-		DontDestroyOnLoad(gameObject);
 		m_SteamTest = this;
 	}
 
@@ -138,18 +147,10 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
-		if (!m_bInitialized) {
-			return;
-		}
-
 		SteamAPI.RunCallbacks();
 	}
 
 	void OnGUI() {
-		if (!m_bInitialized) {
-			return;
-		}
-
 		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
 
 		switch (m_State) {
