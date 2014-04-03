@@ -8,3 +8,4 @@ obj/
 *.sln
 *.userprefs
 *.suo
+*UnityVS*
