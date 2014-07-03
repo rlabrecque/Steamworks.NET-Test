@@ -3,11 +3,16 @@ using System.Collections;
 using Steamworks;
 
 public class SteamAppsTest : MonoBehaviour {
+	protected Callback<DlcInstalled_t> m_DlcInstalled;
+	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
+	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
+	protected Callback<NewLaunchQueryParameters_t> m_NewLaunchQueryParameters;
+
 	public void OnEnable() {
-		new Callback<DlcInstalled_t>(OnDlcInstalled);
-		new Callback<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse);
-		new Callback<AppProofOfPurchaseKeyResponse_t>(OnAppProofOfPurchaseKeyResponse);
-		new Callback<NewLaunchQueryParameters_t>(OnNewLaunchQueryParameters);
+		m_DlcInstalled = Callback<DlcInstalled_t>.Create(OnDlcInstalled);
+		m_RegisterActivationCodeResponse = Callback<RegisterActivationCodeResponse_t>.Create(OnRegisterActivationCodeResponse);
+		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
+		m_NewLaunchQueryParameters = Callback<NewLaunchQueryParameters_t>.Create(OnNewLaunchQueryParameters);
 	}
 
 	public void RenderOnGUI() {

@@ -3,40 +3,53 @@ using System.Collections;
 using Steamworks;
 
 public class SteamFriendsTest : MonoBehaviour {
-	CSteamID m_Friend;
-	CSteamID m_Clan;
-	CSteamID m_CoPlayFriend;
-	Texture2D m_SmallAvatar;
-	Texture2D m_MediumAvatar;
-	Texture2D m_LargeAvatar;
+	private CSteamID m_Friend;
+	private CSteamID m_Clan;
+	private CSteamID m_CoPlayFriend;
+	private Texture2D m_SmallAvatar;
+	private Texture2D m_MediumAvatar;
+	private Texture2D m_LargeAvatar;
 
-	CallResult<ClanOfficerListResponse_t> OnFriendRichPresenceCallResult;
-	CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
-	CallResult<JoinClanChatRoomCompletionResult_t> OnJoinClanChatRoomCompletionResultCallResult;
-	CallResult<FriendsGetFollowerCount_t> OnFriendsGetFollowerCountCallResult;
-	CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
-	CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
-	CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
+	protected Callback<PersonaStateChange_t> m_PersonaStateChange;
+	protected Callback<GameOverlayActivated_t> m_GameOverlayActivated;
+	protected Callback<GameServerChangeRequested_t> m_GameServerChangeRequested;
+	protected Callback<GameLobbyJoinRequested_t> m_GameLobbyJoinRequested;
+	protected Callback<AvatarImageLoaded_t> m_AvatarImageLoaded;
+	protected CallResult<ClanOfficerListResponse_t> OnFriendRichPresenceCallResult;
+	protected Callback<FriendRichPresenceUpdate_t> m_FriendRichPresenceUpdate;
+	protected Callback<GameRichPresenceJoinRequested_t> m_GameRichPresenceJoinRequested;
+	protected Callback<GameConnectedClanChatMsg_t> m_GameConnectedClanChatMsg;
+	protected Callback<GameConnectedChatJoin_t> m_GameConnectedChatJoin;
+	protected Callback<GameConnectedChatLeave_t> m_GameConnectedChatLeave;
+	protected Callback<GameConnectedFriendChatMsg_t> m_GameConnectedFriendChatMsg;
+
+	private CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
+	private CallResult<JoinClanChatRoomCompletionResult_t> OnJoinClanChatRoomCompletionResultCallResult;
+	private CallResult<FriendsGetFollowerCount_t> OnFriendsGetFollowerCountCallResult;
+	private CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
+	private CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
+	private CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
 
 	public void OnEnable() {
-		new Callback<PersonaStateChange_t>(OnPersonaStateChange);
-		new Callback<GameOverlayActivated_t>(OnGameOverlayActivated);
-		new Callback<GameServerChangeRequested_t>(OnGameServerChangeRequested);
-		new Callback<GameLobbyJoinRequested_t>(OnGameLobbyJoinRequested);
-		new Callback<AvatarImageLoaded_t>(OnAvatarImageLoaded);
-		OnFriendRichPresenceCallResult = new CallResult<ClanOfficerListResponse_t>(OnClanOfficerListResponse);
-		new Callback<FriendRichPresenceUpdate_t>(OnFriendRichPresenceUpdate);
-		new Callback<GameRichPresenceJoinRequested_t>(OnGameRichPresenceJoinRequested);
-		new Callback<GameConnectedClanChatMsg_t>(OnGameConnectedClanChatMsg);
-		new Callback<GameConnectedChatJoin_t>(OnGameConnectedChatJoin);
-		new Callback<GameConnectedChatLeave_t>(OnGameConnectedChatLeave);
-		OnDownloadClanActivityCountsResultCallResult = new CallResult<DownloadClanActivityCountsResult_t>(OnDownloadClanActivityCountsResult);
-		OnJoinClanChatRoomCompletionResultCallResult = new CallResult<JoinClanChatRoomCompletionResult_t>(OnJoinClanChatRoomCompletionResult);
-		new Callback<GameConnectedFriendChatMsg_t>(OnGameConnectedFriendChatMsg);
-		OnFriendsGetFollowerCountCallResult = new CallResult<FriendsGetFollowerCount_t>(OnFriendsGetFollowerCount);
-		OnFriendsIsFollowingCallResult = new CallResult<FriendsIsFollowing_t>(OnFriendsIsFollowing);
-		OnFriendsEnumerateFollowingListCallResult = new CallResult<FriendsEnumerateFollowingList_t>(OnFriendsEnumerateFollowingList);
-		OnSetPersonaNameResponseCallResult = new CallResult<SetPersonaNameResponse_t>(OnSetPersonaNameResponse);
+		m_PersonaStateChange = Callback<PersonaStateChange_t>.Create(OnPersonaStateChange);
+		m_GameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
+		m_GameServerChangeRequested = Callback<GameServerChangeRequested_t>.Create(OnGameServerChangeRequested);
+		m_GameLobbyJoinRequested = Callback<GameLobbyJoinRequested_t>.Create(OnGameLobbyJoinRequested);
+		m_AvatarImageLoaded = Callback<AvatarImageLoaded_t>.Create(OnAvatarImageLoaded);
+		m_FriendRichPresenceUpdate = Callback<FriendRichPresenceUpdate_t>.Create(OnFriendRichPresenceUpdate);
+		m_GameRichPresenceJoinRequested = Callback<GameRichPresenceJoinRequested_t>.Create(OnGameRichPresenceJoinRequested);
+		m_GameConnectedClanChatMsg = Callback<GameConnectedClanChatMsg_t>.Create(OnGameConnectedClanChatMsg);
+		m_GameConnectedChatJoin = Callback<GameConnectedChatJoin_t>.Create(OnGameConnectedChatJoin);
+		m_GameConnectedChatLeave = Callback<GameConnectedChatLeave_t>.Create(OnGameConnectedChatLeave);
+		m_GameConnectedFriendChatMsg = Callback<GameConnectedFriendChatMsg_t>.Create(OnGameConnectedFriendChatMsg);
+
+		OnFriendRichPresenceCallResult = CallResult<ClanOfficerListResponse_t>.Create(OnClanOfficerListResponse);
+		OnDownloadClanActivityCountsResultCallResult = CallResult<DownloadClanActivityCountsResult_t>.Create(OnDownloadClanActivityCountsResult);
+		OnJoinClanChatRoomCompletionResultCallResult = CallResult<JoinClanChatRoomCompletionResult_t>.Create(OnJoinClanChatRoomCompletionResult);
+		OnFriendsGetFollowerCountCallResult = CallResult<FriendsGetFollowerCount_t>.Create(OnFriendsGetFollowerCount);
+		OnFriendsIsFollowingCallResult = CallResult<FriendsIsFollowing_t>.Create(OnFriendsIsFollowing);
+		OnFriendsEnumerateFollowingListCallResult = CallResult<FriendsEnumerateFollowingList_t>.Create(OnFriendsEnumerateFollowingList);
+		OnSetPersonaNameResponseCallResult = CallResult<SetPersonaNameResponse_t>.Create(OnSetPersonaNameResponse);
 	}
 
 	public void RenderOnGUI(SteamTest.EGUIState state) {
@@ -49,7 +62,6 @@ public class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("m_MediumAvatar:");
 		GUILayout.Label(m_MediumAvatar);
 		GUILayout.Label("m_LargeAvatar:");
-		//GUILayout.Label(m_LargeAvatar);
 		// This is an example of how to flip a Texture2D when using OnGUI().
 		if (m_LargeAvatar) {
 			GUI.DrawTexture(new Rect(0, m_LargeAvatar.height * 2 + 85, m_LargeAvatar.width, -m_LargeAvatar.height), m_LargeAvatar);

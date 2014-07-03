@@ -10,6 +10,11 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private SteamLeaderboardEntries_t m_SteamLeaderboardEntries;
 	private Texture2D m_Icon;
 
+	protected Callback<UserStatsStored_t> m_UserStatsStored;
+	protected Callback<UserAchievementStored_t> m_UserAchievementStored;
+	protected Callback<UserStatsUnloaded_t> m_UserStatsUnloaded;
+	protected Callback<UserAchievementIconFetched_t> m_UserAchievementIconFetched;
+
 	private CallResult<UserStatsReceived_t> UserStatsReceived;
 	private CallResult<LeaderboardFindResult_t> LeaderboardFindResult;
 	private CallResult<LeaderboardScoresDownloaded_t> LeaderboardScoresDownloaded;
@@ -20,21 +25,19 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private CallResult<GlobalStatsReceived_t> GlobalStatsReceived;
 
 	public void OnEnable() {
-		UserStatsReceived = new CallResult<UserStatsReceived_t>(OnUserStatsReceived);
-		new Callback<UserStatsStored_t>(OnUserStatsStored);
-		new Callback<UserAchievementStored_t>(OnUserAchievementStored);
-		LeaderboardFindResult = new CallResult<LeaderboardFindResult_t>(OnLeaderboardFindResult);
-		LeaderboardScoresDownloaded = new CallResult<LeaderboardScoresDownloaded_t>(OnLeaderboardScoresDownloaded);
-		LeaderboardScoreUploaded = new CallResult<LeaderboardScoreUploaded_t>(OnLeaderboardScoreUploaded);
-		NumberOfCurrentPlayers = new CallResult<NumberOfCurrentPlayers_t>(OnNumberOfCurrentPlayers);
-		new Callback<UserStatsUnloaded_t>(OnUserStatsUnloaded);
-		new Callback<UserAchievementIconFetched_t>(OnUserAchievementIconFetched);
-		GlobalAchievementPercentagesReady = new CallResult<GlobalAchievementPercentagesReady_t>(OnGlobalAchievementPercentagesReady);
-		LeaderboardUGCSet = new CallResult<LeaderboardUGCSet_t>(OnLeaderboardUGCSet);
-#if _PS3
-		new Callback<PS3TrophiesInstalled_t>(OnPS3TrophiesInstalled);
-#endif
-		GlobalStatsReceived = new CallResult<GlobalStatsReceived_t>(OnGlobalStatsReceived);
+		m_UserStatsStored = Callback<UserStatsStored_t>.Create(OnUserStatsStored);
+		m_UserAchievementStored = Callback<UserAchievementStored_t>.Create(OnUserAchievementStored);
+		m_UserStatsUnloaded = Callback<UserStatsUnloaded_t>.Create(OnUserStatsUnloaded);
+		m_UserAchievementIconFetched = Callback<UserAchievementIconFetched_t>.Create(OnUserAchievementIconFetched);
+
+		UserStatsReceived = CallResult<UserStatsReceived_t>.Create(OnUserStatsReceived);
+		LeaderboardFindResult = CallResult<LeaderboardFindResult_t>.Create(OnLeaderboardFindResult);
+		LeaderboardScoresDownloaded = CallResult<LeaderboardScoresDownloaded_t>.Create(OnLeaderboardScoresDownloaded);
+		LeaderboardScoreUploaded = CallResult<LeaderboardScoreUploaded_t>.Create(OnLeaderboardScoreUploaded);
+		NumberOfCurrentPlayers = CallResult<NumberOfCurrentPlayers_t>.Create(OnNumberOfCurrentPlayers);
+		GlobalAchievementPercentagesReady = CallResult<GlobalAchievementPercentagesReady_t>.Create(OnGlobalAchievementPercentagesReady);
+		LeaderboardUGCSet = CallResult<LeaderboardUGCSet_t>.Create(OnLeaderboardUGCSet);
+		GlobalStatsReceived = CallResult<GlobalStatsReceived_t>.Create(OnGlobalStatsReceived);
 	}
 
 	public void RenderOnGUI(SteamTest.EGUIState state) {
@@ -223,11 +226,10 @@ public class SteamUserStatsTest : MonoBehaviour {
 			print("DownloadLeaderboardEntriesForUsers(" + m_SteamLeaderboard + ", " + Users + ", " + Users.Length + ") - " + handle);
 		}
 
-		if (GUILayout.Button("GetDownloadedLeaderboardEntry(m_SteamLeaderboardEntries, 0, out LeaderboardEntry, out Details, 0)")) {
+		if (GUILayout.Button("GetDownloadedLeaderboardEntry(m_SteamLeaderboardEntries, 0, out LeaderboardEntry, null, 0)")) {
 			LeaderboardEntry_t LeaderboardEntry;
-			int Details;
-			bool ret = SteamUserStats.GetDownloadedLeaderboardEntry(m_SteamLeaderboardEntries, 0, out LeaderboardEntry, out Details, 0);
-			print("GetDownloadedLeaderboardEntry(" + m_SteamLeaderboardEntries + ", 0, out LeaderboardEntry, out Details, 0) - " + ret + " -- " + LeaderboardEntry.m_steamIDUser + " -- " + LeaderboardEntry.m_nGlobalRank + " -- " + LeaderboardEntry.m_nScore + " -- " + LeaderboardEntry.m_cDetails + " -- " + LeaderboardEntry.m_hUGC);
+			bool ret = SteamUserStats.GetDownloadedLeaderboardEntry(m_SteamLeaderboardEntries, 0, out LeaderboardEntry, null, 0);
+			print("GetDownloadedLeaderboardEntry(" + m_SteamLeaderboardEntries + ", 0, out LeaderboardEntry, null, 0) - " + ret + " -- " + LeaderboardEntry.m_steamIDUser + " -- " + LeaderboardEntry.m_nGlobalRank + " -- " + LeaderboardEntry.m_nScore + " -- " + LeaderboardEntry.m_cDetails + " -- " + LeaderboardEntry.m_hUGC);
 		}
 
 		if (GUILayout.Button("UploadLeaderboardScore(m_SteamLeaderboard, k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, ScoreDetails, 0)")) {
@@ -400,11 +402,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private void OnLeaderboardUGCSet(LeaderboardUGCSet_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LeaderboardUGCSet_t.k_iCallback + " - LeaderboardUGCSet] - " + pCallback.m_eResult + " -- " + pCallback.m_hSteamLeaderboard);
 	}
-
-	private void OnPS3TrophiesInstalled(PS3TrophiesInstalled_t pCallback) {
-		Debug.Log("[" + PS3TrophiesInstalled_t.k_iCallback + " - PS3TrophiesInstalled] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_ulRequiredDiskSpace);
-	}
-
+	
 	private void OnGlobalStatsReceived(GlobalStatsReceived_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + GlobalStatsReceived_t.k_iCallback + " - GlobalStatsReceived] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult);
 	}

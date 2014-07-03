@@ -3,12 +3,15 @@ using System.Collections;
 using Steamworks;
 
 public class SteamScreenshotsTest : MonoBehaviour {
-	ScreenshotHandle m_ScreenshotHandle;
-	bool m_Hooked;
+	private ScreenshotHandle m_ScreenshotHandle;
+	private bool m_Hooked;
+
+	protected Callback<ScreenshotReady_t> m_ScreenshotReady;
+	protected Callback<ScreenshotRequested_t> m_ScreenshotRequested;
 
 	public void OnEnable() {
-		new Callback<ScreenshotReady_t>(OnScreenshotReady);
-		new Callback<ScreenshotRequested_t>(OnScreenshotRequested);
+		m_ScreenshotReady = Callback<ScreenshotReady_t>.Create(OnScreenshotReady);
+		m_ScreenshotRequested = Callback<ScreenshotRequested_t>.Create(OnScreenshotRequested);
 	}
 
 	IEnumerator WriteScreenshot() {

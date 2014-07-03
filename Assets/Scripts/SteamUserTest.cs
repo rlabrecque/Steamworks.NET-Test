@@ -3,24 +3,35 @@ using System.Collections;
 using Steamworks;
 
 public class SteamUserTest : MonoBehaviour {
-	byte[] m_Ticket;
-	uint m_pcbTicket;
-	HAuthTicket m_HAuthTicket;
-	GameObject m_VoiceLoopback;
+	private byte[] m_Ticket;
+	private uint m_pcbTicket;
+	private HAuthTicket m_HAuthTicket;
+	private GameObject m_VoiceLoopback;
 
-	CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
+	protected Callback<SteamServersConnected_t> m_SteamServersConnected;
+	protected Callback<SteamServerConnectFailure_t> m_SteamServerConnectFailure;
+	protected Callback<SteamServersDisconnected_t> m_SteamServersDisconnected;
+	protected Callback<ClientGameServerDeny_t> m_ClientGameServerDeny;
+	protected Callback<IPCFailure_t> m_IPCFailure;
+	protected Callback<ValidateAuthTicketResponse_t> m_ValidateAuthTicketResponse;
+	protected Callback<MicroTxnAuthorizationResponse_t> m_MicroTxnAuthorizationResponse;
+	protected Callback<GetAuthSessionTicketResponse_t> m_GetAuthSessionTicketResponse;
+	protected Callback<GameWebCallback_t> m_GameWebCallback;
+
+	private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 
 	public void OnEnable() {
-		new Callback<SteamServersConnected_t>(OnSteamServersConnected);
-		new Callback<SteamServerConnectFailure_t>(OnSteamServerConnectFailure);
-		new Callback<SteamServersDisconnected_t>(OnSteamServersDisconnected);
-		new Callback<ClientGameServerDeny_t>(OnClientGameServerDeny);
-		new Callback<IPCFailure_t>(OnIPCFailure);
-		new Callback<ValidateAuthTicketResponse_t>(OnValidateAuthTicketResponse);
-		new Callback<MicroTxnAuthorizationResponse_t>(OnMicroTxnAuthorizationResponse);
-		OnEncryptedAppTicketResponseCallResult = new CallResult<EncryptedAppTicketResponse_t>(OnEncryptedAppTicketResponse);
-		new Callback<GetAuthSessionTicketResponse_t>(OnGetAuthSessionTicketResponse);
-		new Callback<GameWebCallback_t>(OnGameWebCallback);
+		m_SteamServersConnected = Callback<SteamServersConnected_t>.Create(OnSteamServersConnected);
+		m_SteamServerConnectFailure = Callback<SteamServerConnectFailure_t>.Create(OnSteamServerConnectFailure);
+		m_SteamServersDisconnected = Callback<SteamServersDisconnected_t>.Create(OnSteamServersDisconnected);
+		m_ClientGameServerDeny = Callback<ClientGameServerDeny_t>.Create(OnClientGameServerDeny);
+		m_IPCFailure = Callback<IPCFailure_t>.Create(OnIPCFailure);
+		m_ValidateAuthTicketResponse = Callback<ValidateAuthTicketResponse_t>.Create(OnValidateAuthTicketResponse);
+		m_MicroTxnAuthorizationResponse = Callback<MicroTxnAuthorizationResponse_t>.Create(OnMicroTxnAuthorizationResponse);
+		m_GetAuthSessionTicketResponse = Callback<GetAuthSessionTicketResponse_t>.Create(OnGetAuthSessionTicketResponse);
+		m_GameWebCallback = Callback<GameWebCallback_t>.Create(OnGameWebCallback);
+
+		OnEncryptedAppTicketResponseCallResult = CallResult<EncryptedAppTicketResponse_t>.Create(OnEncryptedAppTicketResponse);
 	}
 
 	public void RenderOnGUI() {
@@ -64,14 +75,14 @@ public class SteamUserTest : MonoBehaviour {
 				byte[] UncompressedDestBuffer = new byte[1024];
 				uint BytesWritten;
 				uint UncompressedBytesWritten;
-				ret = SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, 1024, out UncompressedBytesWritten, 11025);
-				//print("SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, 1024, out UncompressedBytesWritten, 11025) : " + ret + " -- " + BytesWritten + " -- " + UncompressedBytesWritten);
+				ret = SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, (uint)DestBuffer.Length, out UncompressedBytesWritten, 11025);
+				//print("SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, (uint)DestBuffer.Length, out UncompressedBytesWritten, 11025) : " + ret + " -- " + BytesWritten + " -- " + UncompressedBytesWritten);
 
 				if (ret == EVoiceResult.k_EVoiceResultOK && BytesWritten > 0) {
 					byte[] DestBuffer2 = new byte[11025 * 2];
 					uint BytesWritten2;
-					ret = SteamUser.DecompressVoice(DestBuffer, BytesWritten, DestBuffer2, 11025 * 2, out BytesWritten2, 11025);
-					//print("SteamUser.DecompressVoice(DestBuffer, BytesWritten, DestBuffer2, 11025 * 2, out BytesWritten2, 11025) - " + ret + " -- " + BytesWritten2);
+					ret = SteamUser.DecompressVoice(DestBuffer, BytesWritten, DestBuffer2, (uint)DestBuffer2.Length, out BytesWritten2, 11025);
+					//print("SteamUser.DecompressVoice(DestBuffer, BytesWritten, DestBuffer2, (uint)DestBuffer2.Length, out BytesWritten2, 11025) - " + ret + " -- " + BytesWritten2);
 
 					if (ret == EVoiceResult.k_EVoiceResultOK && BytesWritten2 > 0) {
 						AudioSource source;

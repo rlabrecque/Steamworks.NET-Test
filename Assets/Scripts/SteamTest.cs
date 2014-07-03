@@ -50,6 +50,8 @@ public class SteamTest : MonoBehaviour {
 			Destroy(gameObject);
 			return;
 		}
+		m_SteamTest = this;
+
 		// We want our Steam Instance to persist across scenes.
 		DontDestroyOnLoad(gameObject);
 
@@ -57,13 +59,6 @@ public class SteamTest : MonoBehaviour {
 			throw new System.Exception("Packsize is wrong! You are likely using a Linux/OSX build on Windows or vice versa.");
 		}
 		
-		// Initialize SteamAPI, if this fails we bail out since we depend on Steam for everything.
-		// You don't necessarily have to though if you write your code to check whether all the Steam
-		// interfaces are NULL before using them and provide alternate paths when they are unavailable.
-		//
-		// This will also load the in-game steam overlay dll into your process.  That dll is normally
-		// injected by steam when it launches games, but by calling this you cause it to always load,
-		// even when not launched via steam.
 		try {
 			m_bInitialized = SteamAPI.Init();
 		}
@@ -75,7 +70,7 @@ public class SteamTest : MonoBehaviour {
 		}
 
 		if (!m_bInitialized) {
-			Debug.Log("SteamAPI_Init() failed");
+			Debug.LogError("SteamAPI_Init() failed", this);
 			Application.Quit();
 			return;
 		}
@@ -104,12 +99,10 @@ public class SteamTest : MonoBehaviour {
 		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
-
-		m_SteamTest = this;
 	}
 
 	void OnEnable() {
-		// These should only get called after an Assembly reload, You should probably never Disable the Steamworks Manager yourself.
+		// This should only get called after an Assembly reload, You should never disable the Steamworks Manager yourself.
 		if (m_SteamTest == null) {
 			m_SteamTest = this;
 		}
@@ -120,7 +113,7 @@ public class SteamTest : MonoBehaviour {
 		}
 	}
 
-	void OnDestroy() {
+	void OnApplicationQuit() {
 		if (m_bControllerInitialized) {
 			bool ret = SteamController.Shutdown();
 			if (!ret) {
@@ -134,7 +127,12 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
+		SteamAPI.RunCallbacks();
+
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			Application.Quit();
+		}
+		else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
 			++m_State;
 			if (m_State == EGUIState.MAX_STATES)
 				m_State = EGUIState.SteamApps;
@@ -144,10 +142,6 @@ public class SteamTest : MonoBehaviour {
 			if (m_State == (EGUIState)(-1))
 				m_State = EGUIState.MAX_STATES - 1;
 		}
-	}
-
-	void FixedUpdate() {
-		SteamAPI.RunCallbacks();
 	}
 
 	void OnGUI() {

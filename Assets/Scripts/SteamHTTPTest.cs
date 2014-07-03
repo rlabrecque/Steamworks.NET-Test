@@ -3,17 +3,21 @@ using System.Collections;
 using Steamworks;
 
 public class SteamHTTPTest : MonoBehaviour {
-	HTTPRequestHandle m_RequestHandle = HTTPRequestHandle.Invalid;
-	ulong m_ContextValue;
-	uint m_Offset;
-	uint m_BufferSize;
+	private HTTPRequestHandle m_RequestHandle = HTTPRequestHandle.Invalid;
+	private ulong m_ContextValue;
+	private uint m_Offset;
+	private uint m_BufferSize;
 
-	CallResult<HTTPRequestCompleted_t> OnHTTPRequestCompletedCallResult;
+	protected Callback<HTTPRequestHeadersReceived_t> m_HTTPRequestHeadersReceived;
+	protected Callback<HTTPRequestDataReceived_t> m_HTTPRequestDataReceived;
+
+	private CallResult<HTTPRequestCompleted_t> OnHTTPRequestCompletedCallResult;
 
 	public void OnEnable() {
-		OnHTTPRequestCompletedCallResult = new CallResult<HTTPRequestCompleted_t>(OnHTTPRequestCompleted);
-		new Callback<HTTPRequestHeadersReceived_t>(OnHTTPRequestHeadersReceived);
-		new Callback<HTTPRequestDataReceived_t>(OnHTTPRequestDataReceived);
+		m_HTTPRequestHeadersReceived = Callback<HTTPRequestHeadersReceived_t>.Create(OnHTTPRequestHeadersReceived);
+		m_HTTPRequestDataReceived = Callback<HTTPRequestDataReceived_t>.Create(OnHTTPRequestDataReceived);
+
+		OnHTTPRequestCompletedCallResult = CallResult<HTTPRequestCompleted_t>.Create(OnHTTPRequestCompleted);
 	}
 
 	public void RenderOnGUI() {

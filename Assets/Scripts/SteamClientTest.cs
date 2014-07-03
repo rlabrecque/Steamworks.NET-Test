@@ -3,10 +3,10 @@ using System.Collections;
 using Steamworks;
 
 public class SteamClientTest : MonoBehaviour {
-	HSteamPipe m_Pipe;
-	HSteamUser m_GlobalUser;
-	HSteamPipe m_LocalPipe;
-	HSteamUser m_LocalUser;
+	private HSteamPipe m_Pipe;
+	private HSteamUser m_GlobalUser;
+	private HSteamPipe m_LocalPipe;
+	private HSteamUser m_LocalUser;
 	
 	public void RenderOnGUI() {
 		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
@@ -120,7 +120,7 @@ public class SteamClientTest : MonoBehaviour {
 
 		GUILayout.Label("SteamClient.GetIPCCallCount : " + SteamClient.GetIPCCallCount());
 
-		//GUILayout.Label("SteamClient.SetWarningMessageHook : " + SteamClient.SetWarningMessageHook()); //TODO
+		//GUILayout.Label("SteamClient.SetWarningMessageHook : " + SteamClient.SetWarningMessageHook()); // N/A - Check out SteamTest.cs for example usage.
 
 		if (GUILayout.Button("SteamClient.BShutdownIfAllPipesClosed()")) {
 			print("SteamClient.BShutdownIfAllPipesClosed() : " + SteamClient.BShutdownIfAllPipesClosed());

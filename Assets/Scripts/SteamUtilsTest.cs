@@ -3,25 +3,24 @@ using System.Collections;
 using Steamworks;
 
 public class SteamUtilsTest : MonoBehaviour {
-	Texture2D m_Image;
+	private Texture2D m_Image;
 
-	CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
+	protected Callback<IPCountry_t> m_IPCountry;
+	protected Callback<LowBatteryPower_t> m_LowBatteryPower;
+	//protected Callback<SteamAPICallCompleted_t> m_SteamAPICallCompleted;
+	protected Callback<SteamShutdown_t> m_SteamShutdown;
+	protected Callback<GamepadTextInputDismissed_t> m_GamepadTextInputDismissed;
+
+	private CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
 	public void OnEnable() {
-		new Callback<IPCountry_t>(OnIPCountry);
-		new Callback<LowBatteryPower_t>(OnLowBatteryPower);
-		//new Callback<SteamAPICallCompleted_t>(OnSteamAPICallCompleted); // N/A - CallbackDispatcher already uses this and the current impl only allows one callback at a time!
-		new Callback<SteamShutdown_t>(OnSteamShutdown);
-		OnCheckFileSignatureCallResult = new CallResult<CheckFileSignature_t>(OnCheckFileSignature);
-#if _PS3
-		new Callback<NetStartDialogFinished_t>(OnNetStartDialogFinished);
-		new Callback<NetStartDialogUnloaded_t>(OnNetStartDialogUnloaded);
-		new Callback<PS3SystemMenuClosed_t>(OnPS3SystemMenuClosed);
-		new Callback<PS3NPMessageSelected_t>(OnPS3NPMessageSelected);
-		new Callback<PS3KeyboardDialogFinished_t>(OnPS3KeyboardDialogFinished);
-		new Callback<PS3PSNStatusChange_t>(OnPS3PSNStatusChange);
-#endif
-		new Callback<GamepadTextInputDismissed_t>(OnGamepadTextInputDismissed);
+		m_IPCountry = Callback<IPCountry_t>.Create(OnIPCountry);
+		m_LowBatteryPower = Callback<LowBatteryPower_t>.Create(OnLowBatteryPower);
+		//m_SteamAPICallCompleted = Callback<SteamAPICallCompleted_t>.Create(OnSteamAPICallCompleted); // N/A - Far too spammy to test like this!
+		m_SteamShutdown = Callback<SteamShutdown_t>.Create(OnSteamShutdown);
+		m_GamepadTextInputDismissed = Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed);
+
+		OnCheckFileSignatureCallResult = CallResult<CheckFileSignature_t>.Create(OnCheckFileSignature);
 	}
 
 	public void RenderOnGUI() {
@@ -82,24 +81,19 @@ public class SteamUtilsTest : MonoBehaviour {
 
 		GUILayout.Label("SteamUtils.GetIPCCallCount() : " + SteamUtils.GetIPCCallCount());
 
-		//GUILayout.Label("SteamUtils.SetWarningMessageHook() : " + SteamUtils.SetWarningMessageHook()); // TODO
+		//GUILayout.Label("SteamUtils.SetWarningMessageHook() : " + SteamUtils.SetWarningMessageHook()); // N/A - Check out SteamTest.cs for example usage.
 
 		GUILayout.Label("SteamUtils.IsOverlayEnabled() : " + SteamUtils.IsOverlayEnabled());
 		GUILayout.Label("SteamUtils.BOverlayNeedsPresent() : " + SteamUtils.BOverlayNeedsPresent());
-#if !_PS3
+
 		if (GUILayout.Button("SteamUtils.CheckFileSignature(\"FileNotFound.txt\")")) {
 			SteamAPICall_t handle = SteamUtils.CheckFileSignature("FileNotFound.txt");
 			OnCheckFileSignatureCallResult.Set(handle);
 			print("SteamUtils.CheckFileSignature(\"FileNotFound.txt\") - " + handle);
 		}
-#else
-		//GUILayout.Label("SteamUtils.PostPS3SysutilCallback() : " + SteamUtils.PostPS3SysutilCallback());
-		GUILayout.Label("SteamUtils.BIsReadyToShutdown() : " + SteamUtils.BIsReadyToShutdown());
-		GUILayout.Label("SteamUtils.BIsPSNOnline() : " + SteamUtils.BIsPSNOnline());
-		//GUILayout.Label("SteamUtils.SetPSNGameBootInviteStrings() : " + SteamUtils.SetPSNGameBootInviteStrings());
-#endif
+
 		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32)")) {
-			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32);
+			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32, "");
 			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32) - " + ret);
 		}
 
@@ -129,32 +123,6 @@ public class SteamUtilsTest : MonoBehaviour {
 	void OnCheckFileSignature(CheckFileSignature_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + CheckFileSignature_t.k_iCallback + " - CheckFileSignature] - " + pCallback.m_eCheckFileSignature);
 	}
-
-#if _PS3
-	void OnNetStartDialogFinished(NetStartDialogFinished_t pCallback) {
-		Debug.Log("[" + NetStartDialogFinished_t.k_iCallback + " - NetStartDialogFinished]");
-	}
-
-	void OnNetStartDialogUnloaded(NetStartDialogUnloaded_t pCallback) {
-		Debug.Log("[" + NetStartDialogUnloaded_t.k_iCallback + " - NetStartDialogUnloaded]");
-	}
-
-	void OnPS3SystemMenuClosed(PS3SystemMenuClosed_t pCallback) {
-		Debug.Log("[" + PS3SystemMenuClosed_t.k_iCallback + " - PS3SystemMenuClosed]");
-	}
-
-	void OnPS3NPMessageSelected(PS3NPMessageSelected_t pCallback) {
-		Debug.Log("[" + PS3NPMessageSelected_t.k_iCallback + " - PS3NPMessageSelected] - " + pCallback.dataid);
-	}
-
-	void OnPS3KeyboardDialogFinished(PS3KeyboardDialogFinished_t pCallback) {
-		Debug.Log("[" + PS3KeyboardDialogFinished_t.k_iCallback + " - PS3KeyboardDialogFinished]");
-	}
-
-	void OnPS3PSNStatusChange(PS3PSNStatusChange_t pCallback) {
-		Debug.Log("[" + PS3PSNStatusChange_t.k_iCallback + " - PS3PSNStatusChange] - " + pCallback.m_bPSNOnline);
-	}
-#endif
 
 	void OnGamepadTextInputDismissed(GamepadTextInputDismissed_t pCallback) {
 		Debug.Log("[" + GamepadTextInputDismissed_t.k_iCallback + " - GamepadTextInputDismissed] - " + pCallback.m_bSubmitted + " -- " + pCallback.m_unSubmittedText);
