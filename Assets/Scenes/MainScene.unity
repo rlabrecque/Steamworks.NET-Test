@@ -84,6 +84,7 @@ GameObject:
   - 4: {fileID: 132980947}
   - 114: {fileID: 132980948}
   - 114: {fileID: 132980950}
+  - 114: {fileID: 132980949}
   m_Layer: 0
   m_Name: Steamworks
   m_TagString: Untagged
@@ -111,6 +112,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9abdaac55413bc14a99f1423017a29df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &132980949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 132980946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab12582c09dc3054b84569c6e889d60b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &132980950

@@ -71,7 +71,6 @@ public class SteamTest : MonoBehaviour {
 
 		if (!m_bInitialized) {
 			Debug.LogError("SteamAPI_Init() failed", this);
-			Application.Quit();
 			return;
 		}
 
@@ -107,13 +106,21 @@ public class SteamTest : MonoBehaviour {
 			m_SteamTest = this;
 		}
 
+		if (!m_bInitialized) {
+			return;
+		}
+
 		if (SteamAPIWarningMessageHook == null) {
 			SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
 			SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
 		}
 	}
 
-	void OnApplicationQuit() {
+	void OnDestroy() {
+		if (!m_bInitialized) {
+			return;
+		}
+
 		if (m_bControllerInitialized) {
 			bool ret = SteamController.Shutdown();
 			if (!ret) {
@@ -121,12 +128,14 @@ public class SteamTest : MonoBehaviour {
 			}
 		}
 
-		if (m_bInitialized) {
-			SteamAPI.Shutdown();
-		}
+		SteamAPI.Shutdown();
 	}
 
 	void Update() {
+		if (!m_bInitialized) {
+			return;
+		}
+
 		SteamAPI.RunCallbacks();
 
 		if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -145,6 +154,10 @@ public class SteamTest : MonoBehaviour {
 	}
 
 	void OnGUI() {
+		if (!m_bInitialized) {
+			GUILayout.Label("Steamworks is not Initialized");
+		}
+
 		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
 
 		switch (m_State) {

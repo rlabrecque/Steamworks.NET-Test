@@ -140,7 +140,6 @@ public class SteamClientTest : MonoBehaviour {
 				SteamClient.GetISteamUnifiedMessages(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUNIFIEDMESSAGES_INTERFACE_VERSION));
 		}
 
-		// Crashes on Linux as of Steamworks.NET 1.0.1
 		if (GUILayout.Button("SteamClient.GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMCONTROLLER_INTERFACE_VERSION + ")")) {
 			print("SteamClient.GetISteamController(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMCONTROLLER_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION));
@@ -149,6 +148,21 @@ public class SteamClientTest : MonoBehaviour {
 		if (GUILayout.Button("SteamClient.GetISteamUGC(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMUGC_INTERFACE_VERSION + ")")) {
 			print("SteamClient.GetISteamUGC(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMUGC_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamUGC(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUGC_INTERFACE_VERSION));
+		}
+
+		if (GUILayout.Button("SteamClient.GetISteamAppList(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMAPPLIST_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamAppList(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMAPPLIST_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamAppList(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMAPPLIST_INTERFACE_VERSION));
+		}
+
+		if (GUILayout.Button("SteamClient.GetISteamMusic(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMMUSIC_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamMusic(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMMUSIC_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamMusic(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMMUSIC_INTERFACE_VERSION));
+		}
+
+		if (GUILayout.Button("SteamClient.GetISteamMusicRemote(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMMUSICREMOTE_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamMusicRemote(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMMUSICREMOTE_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamMusicRemote(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMMUSICREMOTE_INTERFACE_VERSION));
 		}
 	}
 }
