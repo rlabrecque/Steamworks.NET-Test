@@ -4,6 +4,7 @@ using Steamworks;
 
 public class SteamTest : MonoBehaviour {
 	public enum EGUIState {
+		SteamAppList,
 		SteamApps,
 		SteamClient,
 		SteamController,
@@ -28,6 +29,7 @@ public class SteamTest : MonoBehaviour {
 
 	private static SteamTest m_SteamTest = null;
 
+	private SteamAppListTest AppListTest;
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamControllerTest ControllerTest;
@@ -88,6 +90,7 @@ public class SteamTest : MonoBehaviour {
 		}
 		
 		// Register our Steam Callbacks
+		AppListTest = gameObject.AddComponent<SteamAppListTest>();
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
 		ControllerTest = gameObject.AddComponent<SteamControllerTest>();
@@ -144,7 +147,7 @@ public class SteamTest : MonoBehaviour {
 		else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
 			++m_State;
 			if (m_State == EGUIState.MAX_STATES)
-				m_State = EGUIState.SteamApps;
+				m_State = EGUIState.SteamAppList;
 		}
 		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 			--m_State;
@@ -161,6 +164,9 @@ public class SteamTest : MonoBehaviour {
 		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
 
 		switch (m_State) {
+			case EGUIState.SteamAppList:
+				AppListTest.RenderOnGUI();
+				break;
 			case EGUIState.SteamApps:
 				AppsTest.RenderOnGUI();
 				break;
