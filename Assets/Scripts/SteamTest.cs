@@ -15,6 +15,7 @@ public class SteamTest : MonoBehaviour {
 		SteamRemoteStorage,
 		SteamRemoteStoragePg2,
 		SteamScreenshots,
+		SteamUGC,
 		SteamUnifiedMessages,
 		SteamUser,
 		SteamUserStatsTest,
@@ -40,6 +41,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamMusicTest MusicTest;
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
+	private SteamUGCTest UGCTest;
 	private SteamUnifiedMessagesTest UnifiedMessagesTest;
 	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
@@ -103,6 +105,7 @@ public class SteamTest : MonoBehaviour {
 		MusicTest = gameObject.AddComponent<SteamMusicTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
+		UGCTest = gameObject.AddComponent<SteamUGCTest>();
 		UnifiedMessagesTest = gameObject.AddComponent<SteamUnifiedMessagesTest>();
 		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
@@ -199,6 +202,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamScreenshots:
 				ScreenshotsTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamUGC:
+				UGCTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUnifiedMessages:
 				UnifiedMessagesTest.RenderOnGUI();
