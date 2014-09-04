@@ -31,6 +31,7 @@ public class SteamUtilsTest : MonoBehaviour {
 		GUILayout.EndArea();
 
 		GUILayout.Label("SteamUtils.GetSecondsSinceAppActive() : " + SteamUtils.GetSecondsSinceAppActive());
+		GUILayout.Label("SteamUtils.GetSecondsSinceComputerActive() : " + SteamUtils.GetSecondsSinceComputerActive());
 		GUILayout.Label("SteamUtils.GetConnectedUniverse() : " + SteamUtils.GetConnectedUniverse());
 		GUILayout.Label("SteamUtils.GetServerRealTime() : " + SteamUtils.GetServerRealTime());
 		GUILayout.Label("SteamUtils.GetIPCountry() : " + SteamUtils.GetIPCountry());
@@ -98,7 +99,7 @@ public class SteamUtilsTest : MonoBehaviour {
 		}
 
 		GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength() : " + SteamUtils.GetEnteredGamepadTextLength()); // TODO - only to be called from within OnGamepadTextInputDismissed?
-		
+
 		{
 			string Text;
 			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
@@ -106,6 +107,8 @@ public class SteamUtilsTest : MonoBehaviour {
 		}
 
 		GUILayout.Label("SteamUtils.GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
+
+		GUILayout.Label("SteamUtils.IsSteamRunningInVR() : " + SteamUtils.IsSteamRunningInVR());
 	}
 
 	void OnIPCountry(IPCountry_t pCallback) {
