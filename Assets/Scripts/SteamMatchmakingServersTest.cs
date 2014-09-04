@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using Steamworks;
-using IntPtr = System.IntPtr;
 
 public class SteamMatchmakingServersTest : MonoBehaviour {
 	private HServerListRequest m_ServerListRequest = HServerListRequest.Invalid;
@@ -19,7 +18,7 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 		m_RulesResponse = new ISteamMatchmakingRulesResponse(OnRulesResponded, OnRulesFailedToRespond, OnRulesRefreshComplete);
 	}
 
-	private void OnDisable() {
+	private void OnApplicationQuit() {
 		ReleaseRequest();
 		CancelServerQuery();
 	}
