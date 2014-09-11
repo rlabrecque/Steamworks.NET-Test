@@ -164,5 +164,25 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamMusicRemote(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMMUSICREMOTE_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamMusicRemote(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMMUSICREMOTE_INTERFACE_VERSION));
 		}
+
+		if (GUILayout.Button("SteamClient.GetISteamHTMLSurface(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMHTMLSURFACE_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamHTMLSurface(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMHTMLSURFACE_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamHTMLSurface(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMHTMLSURFACE_INTERFACE_VERSION));
+		}
+
+#if DISABLED
+		// Helper functions for internal Steam usage
+		if (GUILayout.Button("SteamClient.Set_SteamAPI_CPostAPIResultInProcess()")) {
+			print("SteamClient.Set_SteamAPI_CPostAPIResultInProcess() : " + SteamClient.Set_SteamAPI_CPostAPIResultInProcess());
+		}
+
+		if (GUILayout.Button("SteamClient.Remove_SteamAPI_CPostAPIResultInProcess()")) {
+			print("SteamClient.Remove_SteamAPI_CPostAPIResultInProcess() : " + SteamClient.Remove_SteamAPI_CPostAPIResultInProcess());
+		}
+
+		if (GUILayout.Button("SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess()")) {
+			print("SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess() : " + SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess());
+		}
+#endif
 	}
 }

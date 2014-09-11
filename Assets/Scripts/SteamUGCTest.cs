@@ -185,8 +185,9 @@ public class SteamUGCTest : MonoBehaviour {
 		{
 			ulong SizeOnDisk;
 			string Folder;
-			bool ret = SteamUGC.GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024);
-			GUILayout.Label("GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024) : " + ret + " -- " + SizeOnDisk + " -- " + Folder);
+			bool LegacyItem;
+			bool ret = SteamUGC.GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024, out LegacyItem);
+			GUILayout.Label("GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024) : " + ret + " -- " + SizeOnDisk + " -- " + Folder + " -- " + LegacyItem);
 		}
 
 		{

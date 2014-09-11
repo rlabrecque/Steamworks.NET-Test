@@ -174,6 +174,7 @@ public class SteamTest : MonoBehaviour {
 	void OnGUI() {
 		if (!m_bInitialized) {
 			GUILayout.Label("Steamworks is not Initialized");
+			return;
 		}
 
 		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
