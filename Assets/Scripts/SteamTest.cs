@@ -72,6 +72,10 @@ public class SteamTest : MonoBehaviour {
 		if (!Packsize.Test()) {
 			throw new System.Exception("Packsize is wrong! You are likely using a Linux/OSX build on Windows or vice versa.");
 		}
+
+		if (!DllCheck.Test()) {
+			throw new System.Exception("DllCheck returned false.");
+		}
 		
 		try {
 			m_bInitialized = SteamAPI.Init();
@@ -165,7 +169,7 @@ public class SteamTest : MonoBehaviour {
 		else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
 			++m_State;
 			if (m_State == EGUIState.MAX_STATES)
-				m_State = EGUIState.SteamAppList;
+				m_State = (EGUIState)0;
 		}
 		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 			--m_State;

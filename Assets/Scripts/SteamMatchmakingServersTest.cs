@@ -18,7 +18,7 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 		m_RulesResponse = new ISteamMatchmakingRulesResponse(OnRulesResponded, OnRulesFailedToRespond, OnRulesRefreshComplete);
 	}
 
-	private void OnApplicationQuit() {
+	private void OnDisable() {
 		ReleaseRequest();
 		CancelServerQuery();
 	}
@@ -38,7 +38,7 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 			filters[0].m_szValue = "cp_granary";
 
 			m_ServerListRequest = SteamMatchmakingServers.RequestInternetServerList(new AppId_t(440), filters, (uint)filters.Length, m_ServerListResponse);
-			print("SteamMatchmakingServers.RequestInternetServerList(" + new AppId_t(440) + ", filters, (uint)filters.Length, m_ServerListResponse) : " + m_ServerListRequest);
+			print("SteamMatchmakingServers.RequestInternetServerList(new AppId_t(440), filters, (uint)filters.Length, m_ServerListResponse) : " + m_ServerListRequest);
 		}
 
 		if (GUILayout.Button("RequestLANServerList(new AppId_t(440), m_ServerListResponse)")) {
