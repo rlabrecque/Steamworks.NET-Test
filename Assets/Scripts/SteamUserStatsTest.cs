@@ -10,6 +10,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private SteamLeaderboardEntries_t m_SteamLeaderboardEntries;
 	private Texture2D m_Icon;
 
+	protected Callback<UserStatsReceived_t> m_UserStatsReceived;
 	protected Callback<UserStatsStored_t> m_UserStatsStored;
 	protected Callback<UserAchievementStored_t> m_UserAchievementStored;
 	protected Callback<UserStatsUnloaded_t> m_UserStatsUnloaded;
@@ -25,6 +26,7 @@ public class SteamUserStatsTest : MonoBehaviour {
 	private CallResult<GlobalStatsReceived_t> GlobalStatsReceived;
 
 	public void OnEnable() {
+		m_UserStatsReceived = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
 		m_UserStatsStored = Callback<UserStatsStored_t>.Create(OnUserStatsStored);
 		m_UserAchievementStored = Callback<UserAchievementStored_t>.Create(OnUserAchievementStored);
 		m_UserStatsUnloaded = Callback<UserStatsUnloaded_t>.Create(OnUserStatsUnloaded);
@@ -354,6 +356,12 @@ public class SteamUserStatsTest : MonoBehaviour {
 #endif
 	}
 
+	// Callback version for: SteamUserStats.RequestCurrentStats() (Local Player)
+	private void OnUserStatsReceived(UserStatsReceived_t pCallback) {
+		Debug.Log("[" + UserStatsReceived_t.k_iCallback + " - UserStatsReceived] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_steamIDUser);
+	}
+
+	// CallResult version for: SteamUserStats.RequestUserStats() (Other Players)
 	private void OnUserStatsReceived(UserStatsReceived_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + UserStatsStored_t.k_iCallback + " - UserStatsReceived] - " + pCallback.m_nGameID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_steamIDUser);
 	}
