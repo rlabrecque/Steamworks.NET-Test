@@ -101,10 +101,10 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetRankedByTrendDays(" + m_UGCQueryHandle + ", 7) : " + SteamUGC.SetRankedByTrendDays(m_UGCQueryHandle, 7));
 		}
 
-		if (GUILayout.Button("RequestUGCDetails((PublishedFileId_t)113142309, 5)")) {
-			SteamAPICall_t handle = SteamUGC.RequestUGCDetails((PublishedFileId_t)113142309, 5);
+		if (GUILayout.Button("RequestUGCDetails(m_PublishedFileId, 5)")) {
+			SteamAPICall_t handle = SteamUGC.RequestUGCDetails(m_PublishedFileId, 5);
 			OnSteamUGCRequestUGCDetailsResultCallResult.Set(handle);
-			print("SteamUGC.RequestUGCDetails((PublishedFileId_t)113142309, 5) : " + handle);
+			print("SteamUGC.RequestUGCDetails(m_PublishedFileId, 5) : " + handle);
 		}
 
 		if (GUILayout.Button("CreateItem((AppId_t)480, EWorkshopFileType.k_EWorkshopFileTypeWebGuide)")) {
