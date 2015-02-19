@@ -12,6 +12,7 @@ public class SteamTest : MonoBehaviour {
 		SteamFriendsPg2,
 		SteamHTMLSurface,
 		SteamHTTP,
+		SteamInventory,
 		SteamMatchmaking,
 		SteamMatchmakingServers,
 		SteamMusic,
@@ -45,6 +46,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamFriendsTest FriendsTest;
 	private SteamHTMLSurfaceTest HTMLSurfaceTest;
 	private SteamHTTPTest HTTPTest;
+	private SteamInventoryTest InventoryTest;
 	private SteamMatchmakingTest MatchmakingTest;
 	private SteamMatchmakingServersTest MatchmakingServersTest;
 	private SteamMusicTest MusicTest;
@@ -119,6 +121,7 @@ public class SteamTest : MonoBehaviour {
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
 		HTMLSurfaceTest = gameObject.AddComponent<SteamHTMLSurfaceTest>();
 		HTTPTest = gameObject.AddComponent<SteamHTTPTest>();
+		InventoryTest = gameObject.AddComponent<SteamInventoryTest>();
 		MatchmakingTest = gameObject.AddComponent<SteamMatchmakingTest>();
 		MatchmakingServersTest = gameObject.AddComponent<SteamMatchmakingServersTest>();
 		MusicTest = gameObject.AddComponent<SteamMusicTest>();
@@ -218,6 +221,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamHTTP:
 				HTTPTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamInventory:
+				InventoryTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamMatchmaking:
 				MatchmakingTest.RenderOnGUI();
