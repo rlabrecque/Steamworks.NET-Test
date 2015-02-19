@@ -84,6 +84,15 @@ public class SteamAppsTest : MonoBehaviour {
 
 		// Run the test and then use steam://run/480//?test=testing;param2=value2; in your browser to try this out
 		GUILayout.Label("SteamApps.GetLaunchQueryParam(\"test\") : " + SteamApps.GetLaunchQueryParam("test"));
+
+		{
+			ulong BytesDownloaded;
+			ulong BytesTotal;
+			bool ret = SteamApps.GetDlcDownloadProgress((AppId_t)110902, out BytesDownloaded, out BytesTotal);
+			GUILayout.Label("SteamApps.GetDlcDownloadProgress((AppId_t)110902, out BytesDownloaded, out BytesTotal): " + ret + " -- " + BytesDownloaded + " -- " + BytesTotal);
+		}
+
+		GUILayout.Label("SteamApps.GetAppBuildId(): " + SteamApps.GetAppBuildId());
 #if _PS3
 		if (GUILayout.Button("SteamApps.RegisterActivationCode(\"???\")")) {
 			SteamAPICall_t handle = SteamApps.RegisterActivationCode("???");
