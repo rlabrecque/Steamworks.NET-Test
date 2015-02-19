@@ -13,12 +13,14 @@ public class SteamUserTest : MonoBehaviour {
 	protected Callback<SteamServersDisconnected_t> m_SteamServersDisconnected;
 	protected Callback<ClientGameServerDeny_t> m_ClientGameServerDeny;
 	protected Callback<IPCFailure_t> m_IPCFailure;
+	protected Callback<LicensesUpdated_t> m_LicensesUpdated;
 	protected Callback<ValidateAuthTicketResponse_t> m_ValidateAuthTicketResponse;
 	protected Callback<MicroTxnAuthorizationResponse_t> m_MicroTxnAuthorizationResponse;
 	protected Callback<GetAuthSessionTicketResponse_t> m_GetAuthSessionTicketResponse;
 	protected Callback<GameWebCallback_t> m_GameWebCallback;
 
 	private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
+	private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
 
 	public void OnEnable() {
 		m_SteamServersConnected = Callback<SteamServersConnected_t>.Create(OnSteamServersConnected);
@@ -26,12 +28,14 @@ public class SteamUserTest : MonoBehaviour {
 		m_SteamServersDisconnected = Callback<SteamServersDisconnected_t>.Create(OnSteamServersDisconnected);
 		m_ClientGameServerDeny = Callback<ClientGameServerDeny_t>.Create(OnClientGameServerDeny);
 		m_IPCFailure = Callback<IPCFailure_t>.Create(OnIPCFailure);
+		m_LicensesUpdated = Callback<LicensesUpdated_t>.Create(OnLicensesUpdated);
 		m_ValidateAuthTicketResponse = Callback<ValidateAuthTicketResponse_t>.Create(OnValidateAuthTicketResponse);
 		m_MicroTxnAuthorizationResponse = Callback<MicroTxnAuthorizationResponse_t>.Create(OnMicroTxnAuthorizationResponse);
 		m_GetAuthSessionTicketResponse = Callback<GetAuthSessionTicketResponse_t>.Create(OnGetAuthSessionTicketResponse);
 		m_GameWebCallback = Callback<GameWebCallback_t>.Create(OnGameWebCallback);
 
 		OnEncryptedAppTicketResponseCallResult = CallResult<EncryptedAppTicketResponse_t>.Create(OnEncryptedAppTicketResponse);
+		OnStoreAuthURLResponseCallResult = CallResult<StoreAuthURLResponse_t>.Create(OnStoreAuthURLResponse);
 	}
 
 	public void RenderOnGUI() {
@@ -40,26 +44,26 @@ public class SteamUserTest : MonoBehaviour {
 		GUILayout.Label("m_pcbTicket: " + m_pcbTicket);
 		GUILayout.EndArea();
 
-		GUILayout.Label("SteamUser.GetHSteamUser() : " + SteamUser.GetHSteamUser());
-		GUILayout.Label("SteamUser.BLoggedOn() : " + SteamUser.BLoggedOn());
-		GUILayout.Label("SteamUser.GetSteamID() : " + SteamUser.GetSteamID());
+		GUILayout.Label("GetHSteamUser() : " + SteamUser.GetHSteamUser());
+		GUILayout.Label("BLoggedOn() : " + SteamUser.BLoggedOn());
+		GUILayout.Label("GetSteamID() : " + SteamUser.GetSteamID());
 
-		//GUILayout.Label("SteamUser.InitiateGameConnection() : " + SteamUser.InitiateGameConnection()); // N/A - Too Hard to test like this.
-		//GUILayout.Label("SteamUser.TerminateGameConnection() : " + SteamUser.TerminateGameConnection()); // ^
-		//GUILayout.Label("SteamUser.TrackAppUsageEvent() : " + SteamUser.TrackAppUsageEvent()); // Legacy function with no documentation
+		//GUILayout.Label("InitiateGameConnection() : " + SteamUser.InitiateGameConnection()); // N/A - Too Hard to test like this.
+		//GUILayout.Label("TerminateGameConnection() : " + SteamUser.TerminateGameConnection()); // ^
+		//GUILayout.Label("TrackAppUsageEvent() : " + SteamUser.TrackAppUsageEvent()); // Legacy function with no documentation
 
 		{
 			string Buffer;
 			bool ret = SteamUser.GetUserDataFolder(out Buffer, 260);
-			GUILayout.Label("SteamUser.GetUserDataFolder(out Buffer, 260) : " + ret + " -- " + Buffer);
+			GUILayout.Label("GetUserDataFolder(out Buffer, 260) : " + ret + " -- " + Buffer);
 		}
 
-		if (GUILayout.Button("SteamUser.StartVoiceRecording()")) {
+		if (GUILayout.Button("StartVoiceRecording()")) {
 			SteamUser.StartVoiceRecording();
 			print("SteamUser.StartVoiceRecording()");
 		}
 
-		if (GUILayout.Button("SteamUser.StopVoiceRecording()")) {
+		if (GUILayout.Button("StopVoiceRecording()")) {
 			SteamUser.StopVoiceRecording();
 			print("SteamUser.StopVoiceRecording()");
 		}
@@ -68,7 +72,7 @@ public class SteamUserTest : MonoBehaviour {
 			uint Compressed;
 			uint Uncompressed;
 			EVoiceResult ret = SteamUser.GetAvailableVoice(out Compressed, out Uncompressed, 11025);
-			GUILayout.Label("SteamUser.GetAvailableVoice(out Compressed, out Uncompressed, 11025) : " + ret + " -- " + Compressed + " -- " + Uncompressed);
+			GUILayout.Label("GetAvailableVoice(out Compressed, out Uncompressed, 11025) : " + ret + " -- " + Compressed + " -- " + Uncompressed);
 
 			if (ret == EVoiceResult.k_EVoiceResultOK && Compressed > 0) {
 				byte[] DestBuffer = new byte[1024];
@@ -106,16 +110,16 @@ public class SteamUserTest : MonoBehaviour {
 			}
 		}
 
-		GUILayout.Label("SteamUser.GetVoiceOptimalSampleRate() : " + SteamUser.GetVoiceOptimalSampleRate());
+		GUILayout.Label("GetVoiceOptimalSampleRate() : " + SteamUser.GetVoiceOptimalSampleRate());
 
 		{
-			if (GUILayout.Button("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket)")) {
+			if (GUILayout.Button("GetAuthSessionTicket(Ticket, 1024, out pcbTicket)")) {
 				m_Ticket = new byte[1024];
 				m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
 				print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
 			}
 
-			if (GUILayout.Button("SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID())")) {
+			if (GUILayout.Button("BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID())")) {
 				if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
 					EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
 					print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
@@ -126,45 +130,52 @@ public class SteamUserTest : MonoBehaviour {
 			}
 		}
 
-		if (GUILayout.Button("SteamUser.EndAuthSession(SteamUser.GetSteamID())")) {
+		if (GUILayout.Button("EndAuthSession(SteamUser.GetSteamID())")) {
 			SteamUser.EndAuthSession(SteamUser.GetSteamID());
 			print("SteamUser.EndAuthSession(" + SteamUser.GetSteamID() + ")");
 		}
 
-		if (GUILayout.Button("SteamUser.CancelAuthTicket(m_HAuthTicket)")) {
+		if (GUILayout.Button("CancelAuthTicket(m_HAuthTicket)")) {
 			SteamUser.CancelAuthTicket(m_HAuthTicket);
 			print("SteamUser.CancelAuthTicket(" + m_HAuthTicket + ")");
 		}
 
-		GUILayout.Label("SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()) : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()));
-		GUILayout.Label("SteamUser.BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
+		GUILayout.Label("UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()) : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()));
+		GUILayout.Label("BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
 
-		if (GUILayout.Button("SteamUser.AdvertiseGame(2, 127.0.0.1, 27015)")) {
+		if (GUILayout.Button("AdvertiseGame(2, 127.0.0.1, 27015)")) {
 			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, 2130706433, 27015);
 			print("SteamUser.AdvertiseGame(2, 2130706433, 27015)");
 		}
 
-		if(GUILayout.Button("SteamUser.RequestEncryptedAppTicket()")) {
+		if(GUILayout.Button("RequestEncryptedAppTicket()")) {
 			byte[] k_unSecretData = System.BitConverter.GetBytes(0x5444);
 			SteamAPICall_t handle = SteamUser.RequestEncryptedAppTicket(k_unSecretData, sizeof(uint));
 			OnEncryptedAppTicketResponseCallResult.Set(handle);
-			print("SteamUser.RequestEncryptedAppTicket(ref k_unSecretData, " + sizeof(uint) + ") - " + handle + " -- " + k_unSecretData);
+			print("SteamUser.RequestEncryptedAppTicket(k_unSecretData, " + sizeof(uint) + ") - " + handle);
 		}
 
-		if (GUILayout.Button("SteamUser.GetEncryptedAppTicket()")) {
+		if (GUILayout.Button("GetEncryptedAppTicket()")) {
 			byte[] rgubTicket = new byte[1024];
 			uint cubTicket;
 			bool ret = SteamUser.GetEncryptedAppTicket(rgubTicket, 1024, out cubTicket);
 			print("SteamUser.GetEncryptedAppTicket() - " + ret + " -- " + cubTicket);
 		}
 
-		//GUILayout.Label("SteamUser.GetGameBadgeLevel(1, false) : " + SteamUser.GetGameBadgeLevel(1, false)); // SpaceWar does not have trading cards, so this function will only ever return 0 and produce a warning.
-		GUILayout.Label("SteamUser.GetPlayerSteamLevel() : " + SteamUser.GetPlayerSteamLevel());
+		//GUILayout.Label("GetGameBadgeLevel(1, false) : " + SteamUser.GetGameBadgeLevel(1, false)); // SpaceWar does not have trading cards, so this function will only ever return 0 and produce an annoying warning.
+		GUILayout.Label("GetPlayerSteamLevel() : " + SteamUser.GetPlayerSteamLevel());
+
+		if (GUILayout.Button("RequestStoreAuthURL(\"https://steampowered.com\")")) {
+			SteamAPICall_t handle = SteamUser.RequestStoreAuthURL("https://steampowered.com");
+			OnStoreAuthURLResponseCallResult.Set(handle);
+			print("SteamUser.RequestStoreAuthURL(\"https://steampowered.com\") - " + handle);
+		}
+
 #if _PS3
-		//GUILayout.Label("SteamUser.LogOn() : " + SteamUser.LogOn());
-		//GUILayout.Label("SteamUser.LogOnAndLinkSteamAccountToPSN : " + SteamUser.LogOnAndLinkSteamAccountToPSN());
-		//GUILayout.Label("SteamUser.LogOnAndCreateNewSteamAccountIfNeeded : " + SteamUser.LogOnAndCreateNewSteamAccountIfNeeded());
-		//GUILayout.Label("SteamUser.GetConsoleSteamID : " + SteamUser.GetConsoleSteamID());
+		//GUILayout.Label("LogOn() : " + SteamUser.LogOn());
+		//GUILayout.Label("LogOnAndLinkSteamAccountToPSN : " + SteamUser.LogOnAndLinkSteamAccountToPSN());
+		//GUILayout.Label("LogOnAndCreateNewSteamAccountIfNeeded : " + SteamUser.LogOnAndCreateNewSteamAccountIfNeeded());
+		//GUILayout.Label("GetConsoleSteamID : " + SteamUser.GetConsoleSteamID());
 #endif
 	}
 	
@@ -186,6 +197,10 @@ public class SteamUserTest : MonoBehaviour {
 
 	void OnIPCFailure(IPCFailure_t pCallback) {
 		Debug.Log("[" + IPCFailure_t.k_iCallback + " - IPCFailure] - " + pCallback.m_eFailureType);
+	}
+
+	void OnLicensesUpdated(LicensesUpdated_t pCallback) {
+		Debug.Log("[" + LicensesUpdated_t.k_iCallback + " - LicensesUpdated_t]");
 	}
 
 	void OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t pCallback) {
@@ -213,7 +228,7 @@ public class SteamUserTest : MonoBehaviour {
 
 			byte[] rgubDecrypted = new byte[1024];
 			uint cubDecrypted = 1024;
-			if (!SteamEncryptedAppTicket.BDecryptTicket(rgubTicket, cubTicket, rgubDecrypted, out cubDecrypted, rgubKey, rgubKey.Length)) {
+			if (!SteamEncryptedAppTicket.BDecryptTicket(rgubTicket, cubTicket, rgubDecrypted, ref cubDecrypted, rgubKey, rgubKey.Length)) {
 				Debug.Log("Ticket failed to decrypt");
 				return;
 			}
@@ -252,4 +267,7 @@ public class SteamUserTest : MonoBehaviour {
 		Debug.Log("[" + GameWebCallback_t.k_iCallback + " - GameWebCallback] - " + pCallback.m_szURL);
 	}
 
+	void OnStoreAuthURLResponse(StoreAuthURLResponse_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + StoreAuthURLResponse_t.k_iCallback + " - StoreAuthURLResponse] - " + pCallback.m_szURL);
+	}
 }
