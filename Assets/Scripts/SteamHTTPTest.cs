@@ -7,6 +7,7 @@ public class SteamHTTPTest : MonoBehaviour {
 	private ulong m_ContextValue;
 	private uint m_Offset;
 	private uint m_BufferSize;
+	private HTTPCookieContainerHandle m_CookieContainer;
 
 	protected Callback<HTTPRequestHeadersReceived_t> m_HTTPRequestHeadersReceived;
 	protected Callback<HTTPRequestDataReceived_t> m_HTTPRequestDataReceived;
@@ -18,6 +19,12 @@ public class SteamHTTPTest : MonoBehaviour {
 		m_HTTPRequestDataReceived = Callback<HTTPRequestDataReceived_t>.Create(OnHTTPRequestDataReceived);
 
 		OnHTTPRequestCompletedCallResult = CallResult<HTTPRequestCompleted_t>.Create(OnHTTPRequestCompleted);
+
+		m_CookieContainer = HTTPCookieContainerHandle.Invalid;
+	}
+
+	public void OnDisable() {
+		ReleaseCookieContainer();
 	}
 
 	public void RenderOnGUI() {
@@ -27,6 +34,7 @@ public class SteamHTTPTest : MonoBehaviour {
 		GUILayout.Label("m_ContextValue: " + m_ContextValue);
 		GUILayout.Label("m_Offset: " + m_Offset);
 		GUILayout.Label("m_BufferSize: " + m_BufferSize);
+		GUILayout.Label("m_CookieContainer: " + m_CookieContainer);
 		GUILayout.EndArea();
 
 		if (GUILayout.Button("CreateHTTPRequest(k_EHTTPMethodGET, \"http://httpbin.org/get\")")) {
@@ -75,7 +83,7 @@ public class SteamHTTPTest : MonoBehaviour {
 		if (GUILayout.Button("GetHTTPResponseHeaderSize(m_RequestHandle, \"User-Agent\", out ResponseHeaderSize)")) {
 			uint ResponseHeaderSize;
 			bool ret = SteamHTTP.GetHTTPResponseHeaderSize(m_RequestHandle, "User-Agent", out ResponseHeaderSize);
-			print("SteamHTTP.GetHTTPResponseHeaderSize(" + m_RequestHandle + ", \"User-Agent\", out ResponseHeaderSize : " + ret + " -- " + ResponseHeaderSize);
+			print("SteamHTTP.GetHTTPResponseHeaderSize(" + m_RequestHandle + ", \"User-Agent\", out ResponseHeaderSize) : " + ret + " -- " + ResponseHeaderSize);
 		}
 
 		if (GUILayout.Button("GetHTTPResponseHeaderValue(m_RequestHandle, \"User-Agent\", HeaderValueBuffer, ResponseHeaderSize)")) {
@@ -124,6 +132,53 @@ public class SteamHTTPTest : MonoBehaviour {
 			System.Text.Encoding.UTF8.GetBytes(Body, 0, Body.Length, buffer, 0);
 			bool ret = SteamHTTP.SetHTTPRequestRawPostBody(m_RequestHandle, "application/x-www-form-urlencoded", buffer, (uint)buffer.Length);
 			print("SteamHTTP.SetHTTPRequestRawPostBody(" + m_RequestHandle + ", \"application/x-www-form-urlencoded\", " + buffer + ", " + (uint)buffer.Length + ") : " + ret);
+		}
+
+		if(GUILayout.Button("CreateCookieContainer(true)")) {
+			m_CookieContainer = SteamHTTP.CreateCookieContainer(true);
+			print("SteamHTTP.CreateCookieContainer(true) - " + m_CookieContainer);
+		}
+
+		if (GUILayout.Button("ReleaseCookieContainer(m_CookieContainer)")) {
+			ReleaseCookieContainer();
+		}
+
+		if (GUILayout.Button("SetCookie(m_CookieContainer, \"http://httpbin.org\", \"http://httpbin.org/get\", \"TestCookie\")")) {
+			bool ret = SteamHTTP.SetCookie(m_CookieContainer, "http://httpbin.org", "http://httpbin.org/get", "TestCookie");
+			print("SteamHTTP.SetCookie(" + m_CookieContainer + ", \"http://httpbin.org\", \"http://httpbin.org\", \"TestCookie\") - " + ret);
+		}
+
+		if (GUILayout.Button("SetHTTPRequestCookieContainer(m_RequestHandle, m_CookieContainer)")) {
+			bool ret = SteamHTTP.SetHTTPRequestCookieContainer(m_RequestHandle, m_CookieContainer);
+			print("SteamHTTP.SetHTTPRequestCookieContainer(" + m_RequestHandle + ", " + m_CookieContainer + ") - " + ret);
+		}
+
+		if (GUILayout.Button("SetHTTPRequestUserAgentInfo(m_RequestHandle, \"TestUserAgentInfo\")")) {
+			bool ret = SteamHTTP.SetHTTPRequestUserAgentInfo(m_RequestHandle, "TestUserAgentInfo");
+			print("SteamHTTP.SetHTTPRequestUserAgentInfo(" + m_RequestHandle + ", \"TestUserAgentInfo\") - " + ret);
+		}
+
+		if (GUILayout.Button("SetHTTPRequestRequiresVerifiedCertificate(m_RequestHandle, false)")) {
+			bool ret = SteamHTTP.SetHTTPRequestRequiresVerifiedCertificate(m_RequestHandle, false);
+			print("SteamHTTP.SetHTTPRequestRequiresVerifiedCertificate(" + m_RequestHandle + ", false) - " + ret);
+		}
+
+		if (GUILayout.Button("SetHTTPRequestAbsoluteTimeoutMS(m_RequestHandle, 20000)")) {
+			bool ret = SteamHTTP.SetHTTPRequestAbsoluteTimeoutMS(m_RequestHandle, 20000);
+			print("SteamHTTP.SetHTTPRequestAbsoluteTimeoutMS(" + m_RequestHandle + ", 20000) - " + ret);
+		}
+
+		{
+			bool WasTimedOut;
+			bool ret = SteamHTTP.GetHTTPRequestWasTimedOut(m_RequestHandle, out WasTimedOut);
+			GUILayout.Label("GetHTTPRequestWasTimedOut(m_RequestHandle, out WasTimedOut) - " + ret + " -- " + WasTimedOut);
+		}
+	}
+
+	void ReleaseCookieContainer() {
+		if (m_CookieContainer != HTTPCookieContainerHandle.Invalid) {
+			print("SteamHTTP.ReleaseCookieContainer(" + m_CookieContainer + ") - " + SteamHTTP.ReleaseCookieContainer(m_CookieContainer));
+			m_CookieContainer = HTTPCookieContainerHandle.Invalid;
 		}
 	}
 
