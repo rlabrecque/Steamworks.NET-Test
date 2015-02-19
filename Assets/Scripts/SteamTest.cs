@@ -14,6 +14,7 @@ public class SteamTest : MonoBehaviour {
 		SteamMatchmaking,
 		SteamMatchmakingServers,
 		SteamMusic,
+		SteamMusicRemote,
 		SteamNetworking,
 		SteamRemoteStorage,
 		SteamRemoteStoragePg2,
@@ -45,6 +46,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamMatchmakingTest MatchmakingTest;
 	private SteamMatchmakingServersTest MatchmakingServersTest;
 	private SteamMusicTest MusicTest;
+	private SteamMusicRemoteTest MusicRemoteTest;
 	private SteamNetworkingTest NetworkingTest;
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
@@ -117,6 +119,7 @@ public class SteamTest : MonoBehaviour {
 		MatchmakingTest = gameObject.AddComponent<SteamMatchmakingTest>();
 		MatchmakingServersTest = gameObject.AddComponent<SteamMatchmakingServersTest>();
 		MusicTest = gameObject.AddComponent<SteamMusicTest>();
+		MusicRemoteTest = gameObject.AddComponent<SteamMusicRemoteTest>();
 		NetworkingTest = gameObject.AddComponent<SteamNetworkingTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
@@ -218,6 +221,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamMusic:
 				MusicTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamMusicRemote:
+				MusicRemoteTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamNetworking:
 				NetworkingTest.RenderOnGUI();
