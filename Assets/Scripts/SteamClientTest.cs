@@ -184,5 +184,15 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess() : " + SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess());
 		}
 #endif
+
+		if (GUILayout.Button("SteamClient.GetISteamInventory(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMINVENTORY_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamInventory(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMINVENTORY_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamInventory(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMINVENTORY_INTERFACE_VERSION));
+		}
+
+		if (GUILayout.Button("SteamClient.GetISteamVideo(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMVIDEO_INTERFACE_VERSION + ")")) {
+			print("SteamClient.GetISteamVideo(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMVIDEO_INTERFACE_VERSION + ") : " +
+				SteamClient.GetISteamVideo(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMVIDEO_INTERFACE_VERSION));
+		}
 	}
 }
