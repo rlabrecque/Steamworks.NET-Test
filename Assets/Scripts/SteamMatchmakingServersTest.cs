@@ -33,9 +33,11 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 		if (GUILayout.Button("RequestInternetServerList(new AppId_t(440), filters, (uint)filters.Length, m_ServerListResponse)")) {
 			ReleaseRequest();
 
-			MatchMakingKeyValuePair_t[] filters = new MatchMakingKeyValuePair_t[1];
-			filters[0].m_szKey = "map";
-			filters[0].m_szValue = "cp_granary";
+			MatchMakingKeyValuePair_t[] filters = {
+				new MatchMakingKeyValuePair_t { m_szKey = "appid", m_szValue = "440" },
+				new MatchMakingKeyValuePair_t { m_szKey = "gamedir", m_szValue = "tf" },
+				new MatchMakingKeyValuePair_t { m_szKey = "gametagsand", m_szValue = "beta" },
+			};
 
 			m_ServerListRequest = SteamMatchmakingServers.RequestInternetServerList(new AppId_t(440), filters, (uint)filters.Length, m_ServerListResponse);
 			print("SteamMatchmakingServers.RequestInternetServerList(new AppId_t(440), filters, (uint)filters.Length, m_ServerListResponse) : " + m_ServerListRequest);
