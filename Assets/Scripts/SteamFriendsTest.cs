@@ -104,8 +104,31 @@ public class SteamFriendsTest : MonoBehaviour {
 			GUILayout.Label("SteamFriends.GetFriendGamePlayed(m_Friend, out fgi) : " + ret + " -- " + fgi.m_gameID + " -- " + fgi.m_unGameIP + " -- " + fgi.m_usGamePort + " -- " + fgi.m_usQueryPort + " -- " + fgi.m_steamIDLobby);
 		}
 
+
 		GUILayout.Label("SteamFriends.GetFriendPersonaNameHistory(m_Friend, 1) : " + SteamFriends.GetFriendPersonaNameHistory(m_Friend, 1));
+		GUILayout.Label("SteamFriends.GetFriendSteamLevel(m_Friend) : " + SteamFriends.GetFriendSteamLevel(m_Friend));
 		GUILayout.Label("SteamFriends.GetPlayerNickname(m_Friend) : " + SteamFriends.GetPlayerNickname(m_Friend));
+
+		{
+			int FriendsGroupCount = SteamFriends.GetFriendsGroupCount();
+			GUILayout.Label("SteamFriends.GetFriendsGroupCount() : " + FriendsGroupCount);
+
+			if (FriendsGroupCount > 0) {
+				FriendsGroupID_t FriendsGroupID = SteamFriends.GetFriendsGroupIDByIndex(0);
+				GUILayout.Label("SteamFriends.GetFriendsGroupIDByIndex(0) : " + FriendsGroupID);
+				GUILayout.Label("SteamFriends.GetFriendsGroupName(FriendsGroupID) : " + SteamFriends.GetFriendsGroupName(FriendsGroupID));
+
+				int FriendsGroupMembersCount = SteamFriends.GetFriendsGroupMembersCount(FriendsGroupID);
+				GUILayout.Label("SteamFriends.GetFriendsGroupMembersCount(FriendsGroupID) : " + FriendsGroupMembersCount);
+
+				if (FriendsGroupMembersCount > 0) {
+					CSteamID[] FriendsGroupMembersList = new CSteamID[FriendsGroupMembersCount];
+					SteamFriends.GetFriendsGroupMembersList(FriendsGroupID, FriendsGroupMembersList, FriendsGroupMembersCount);
+					GUILayout.Label("SteamFriends.GetFriendsGroupMembersList(FriendsGroupID, FriendsGroupMembersList, FriendsGroupMembersCount) : " + FriendsGroupMembersList[0]);
+				}
+			}
+		}
+
 		GUILayout.Label("SteamFriends.HasFriend(m_Friend, k_EFriendFlagImmediate) : " + SteamFriends.HasFriend(m_Friend, EFriendFlags.k_EFriendFlagImmediate));
 
 		GUILayout.Label("SteamFriends.GetClanCount() : " + SteamFriends.GetClanCount());
