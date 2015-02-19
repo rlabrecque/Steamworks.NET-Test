@@ -24,6 +24,7 @@ public class SteamTest : MonoBehaviour {
 		SteamUserStatsTest,
 		SteamUserStatsTestPg2,
 		SteamUtils,
+		SteamVideo,
 
 		MAX_STATES
 	}
@@ -52,6 +53,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;
+	private SteamVideoTest VideoTest;
 
 	SteamAPIWarningMessageHook_t SteamAPIWarningMessageHook;
 	static void SteamAPIDebugTextHook(int nSeverity, System.Text.StringBuilder pchDebugText) {
@@ -123,6 +125,7 @@ public class SteamTest : MonoBehaviour {
 		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
+		VideoTest = gameObject.AddComponent<SteamVideoTest>();
 	}
 
 	void OnEnable() {
@@ -241,6 +244,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamUtils:
 				UtilsTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamVideo:
+				VideoTest.RenderOnGUI();
 				break;
 		}
 	}
