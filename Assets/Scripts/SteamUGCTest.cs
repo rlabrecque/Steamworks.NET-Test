@@ -138,13 +138,13 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemTags(" + m_UGCUpdateHandle + ", new string[] {\"Tag One\", \"Tag Two\", \"Test Tags\", \"Sorry\"}) : " + ret);
 		}
 
-		if (GUILayout.Button("SetItemContent(m_UGCUpdateHandle, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.SetItemContent(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf");
-			print("SteamUGC.SetItemContent(" + m_UGCUpdateHandle + ", Application.dataPath + \"/controller.vdf\") : " + ret);
+		if (GUILayout.Button("SetItemContent(m_UGCUpdateHandle, Application.dataPath + \"/Scenes\")")) {
+			bool ret = SteamUGC.SetItemContent(m_UGCUpdateHandle, Application.dataPath + "/Scenes"); // Should point to a folder containing the UGC Item
+			print("SteamUGC.SetItemContent(" + m_UGCUpdateHandle + ", Application.dataPath + \"/Scenes\") : " + ret);
 		}
 
 		if (GUILayout.Button("SetItemPreview(m_UGCUpdateHandle, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.SetItemPreview(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf");
+			bool ret = SteamUGC.SetItemPreview(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf"); // Should actually be a PNG/JPG Screenshot.
 			print("SteamUGC.SetItemPreview(" + m_UGCUpdateHandle + ", Application.dataPath + \"/controller.vdf\") : " + ret);
 		}
 
@@ -162,13 +162,13 @@ public class SteamUGCTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SubscribeItem((PublishedFileId_t)113142309)")) {
-			SteamAPICall_t handle = SteamUGC.SubscribeItem((PublishedFileId_t)113142309);
+			SteamAPICall_t handle = SteamUGC.SubscribeItem((PublishedFileId_t)113142309); // http://steamcommunity.com/sharedfiles/filedetails/?id=113142309
 			OnRemoteStorageSubscribePublishedFileResultCallResult.Set(handle);
 			print("SteamUGC. : " + handle);
 		}
 
 		if (GUILayout.Button("UnsubscribeItem((PublishedFileId_t)113142309)")) {
-			SteamAPICall_t handle = SteamUGC.UnsubscribeItem((PublishedFileId_t)113142309);
+			SteamAPICall_t handle = SteamUGC.UnsubscribeItem((PublishedFileId_t)113142309); // http://steamcommunity.com/sharedfiles/filedetails/?id=113142309
 			OnRemoteStorageUnsubscribePublishedFileResultCallResult.Set(handle);
 			print("SteamUGC. : " + handle);
 		}
