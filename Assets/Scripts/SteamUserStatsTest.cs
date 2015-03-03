@@ -235,10 +235,9 @@ public class SteamUserStatsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("UploadLeaderboardScore(m_SteamLeaderboard, k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, ScoreDetails, 0)")) {
-			int[] ScoreDetails = new int[1];
-			SteamAPICall_t handle = SteamUserStats.UploadLeaderboardScore(m_SteamLeaderboard, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, ScoreDetails, 0);
+			SteamAPICall_t handle = SteamUserStats.UploadLeaderboardScore(m_SteamLeaderboard, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, (int)m_FeetTraveledStat, null, 0);
 			LeaderboardScoreUploaded.Set(handle);
-			print("UploadLeaderboardScore(" + m_SteamLeaderboard + ", ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, " + (int)m_FeetTraveledStat + ", ScoreDetails, 0) - " + handle);
+			print("UploadLeaderboardScore(" + m_SteamLeaderboard + ", ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodForceUpdate, " + (int)m_FeetTraveledStat + ", null, 0) - " + handle);
 		}
 
 		if (GUILayout.Button("SteamUserStats.AttachLeaderboardUGC(m_SteamLeaderboard, RemoteStorageTest.m_UGCHandle)")) {
