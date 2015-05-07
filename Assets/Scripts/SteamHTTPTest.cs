@@ -184,7 +184,7 @@ public class SteamHTTPTest : MonoBehaviour {
 
 	void OnHTTPRequestCompleted(HTTPRequestCompleted_t pCallback, bool bIOFailure) {
 		m_ContextValue = pCallback.m_ulContextValue;
-		Debug.Log("[" + HTTPRequestCompleted_t.k_iCallback + " - HTTPRequestCompleted] - " + pCallback.m_hRequest + " -- " + pCallback.m_ulContextValue + " -- " + pCallback.m_bRequestSuccessful + " -- " + pCallback.m_eStatusCode);
+		Debug.Log("[" + HTTPRequestCompleted_t.k_iCallback + " - HTTPRequestCompleted] - " + pCallback.m_hRequest + " -- " + pCallback.m_ulContextValue + " -- " + pCallback.m_bRequestSuccessful + " -- " + pCallback.m_eStatusCode + " -- " + pCallback.m_unBodySize);
 	}
 
 	void OnHTTPRequestHeadersReceived(HTTPRequestHeadersReceived_t pCallback) {

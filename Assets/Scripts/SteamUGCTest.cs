@@ -185,18 +185,16 @@ public class SteamUGCTest : MonoBehaviour {
 		{
 			ulong SizeOnDisk;
 			string Folder;
-			bool LegacyItem;
-			bool ret = SteamUGC.GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024, out LegacyItem);
-			GUILayout.Label("GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024) : " + ret + " -- " + SizeOnDisk + " -- " + Folder + " -- " + LegacyItem);
+			uint punTimeStamp;
+			bool ret = SteamUGC.GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024, out punTimeStamp);
+			GUILayout.Label("GetItemInstallInfo(m_PublishedFileId, out SizeOnDisk, out Folder, 1024, out punTimeStamp) : " + ret + " -- " + SizeOnDisk + " -- " + Folder + " -- " + punTimeStamp);
 		}
 
 		{
-			bool NeedsUpdate;
-			bool IsDownloading;
 			ulong BytesDownloaded;
 			ulong BytesTotal;
-			bool ret = SteamUGC.GetItemUpdateInfo(m_PublishedFileId, out NeedsUpdate, out IsDownloading, out BytesDownloaded, out BytesTotal);
-			GUILayout.Label("GetItemUpdateInfo(m_PublishedFileId, out NeedsUpdate, out IsDownloading, out BytesDownloaded, out BytesTotal) : " + ret + " -- " + NeedsUpdate + " -- " + IsDownloading + " -- " + BytesDownloaded + " -- " + BytesTotal);
+			bool ret = SteamUGC.GetItemDownloadInfo(m_PublishedFileId, out BytesDownloaded, out BytesTotal);
+			GUILayout.Label("GetItemDownloadInfo(m_PublishedFileId, out BytesDownloaded, out BytesTotal) : " + ret + " -- " + BytesDownloaded + " -- " + BytesTotal);
 		}
 	}
 

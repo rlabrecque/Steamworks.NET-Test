@@ -40,10 +40,6 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	protected Callback<HTML_JSAlert_t> m_HTML_JSAlert;
 	protected Callback<HTML_JSConfirm_t> m_HTML_JSConfirm;
 	protected Callback<HTML_FileOpenDialog_t> m_HTML_FileOpenDialog;
-	protected Callback<HTML_ComboNeedsPaint_t> m_HTML_ComboNeedsPaint;
-	protected Callback<HTML_ShowPopup_t> m_HTML_ShowPopup;
-	protected Callback<HTML_HidePopup_t> m_HTML_HidePopup;
-	protected Callback<HTML_SizePopup_t> m_HTML_SizePopup;
 	protected Callback<HTML_NewWindow_t> m_HTML_NewWindow;
 	protected Callback<HTML_SetCursor_t> m_HTML_SetCursor;
 	protected Callback<HTML_StatusText_t> m_HTML_StatusText;
@@ -69,10 +65,6 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		m_HTML_JSAlert = Callback<HTML_JSAlert_t>.Create(OnHTML_JSAlert);
 		m_HTML_JSConfirm = Callback<HTML_JSConfirm_t>.Create(OnHTML_JSConfirm);
 		m_HTML_FileOpenDialog = Callback<HTML_FileOpenDialog_t>.Create(OnHTML_FileOpenDialog);
-		m_HTML_ComboNeedsPaint = Callback<HTML_ComboNeedsPaint_t>.Create(OnHTML_ComboNeedsPaint);
-		m_HTML_ShowPopup = Callback<HTML_ShowPopup_t>.Create(OnHTML_ShowPopup);
-		m_HTML_HidePopup = Callback<HTML_HidePopup_t>.Create(OnHTML_HidePopup);
-		m_HTML_SizePopup = Callback<HTML_SizePopup_t>.Create(OnHTML_SizePopup);
 		m_HTML_NewWindow = Callback<HTML_NewWindow_t>.Create(OnHTML_NewWindow);
 		m_HTML_SetCursor = Callback<HTML_SetCursor_t>.Create(OnHTML_SetCursor);
 		m_HTML_StatusText = Callback<HTML_StatusText_t>.Create(OnHTML_StatusText);
@@ -399,24 +391,8 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		SteamHTMLSurface.FileLoadDialogResponse(pCallback.unBrowserHandle, System.IntPtr.Zero);
 	}
 
-	void OnHTML_ComboNeedsPaint(HTML_ComboNeedsPaint_t pCallback) {
-		Debug.Log("[" + HTML_ComboNeedsPaint_t.k_iCallback + " - HTML_ComboNeedsPaint] - " + pCallback.unBrowserHandle + " -- " + pCallback.pBGRA + " -- " + pCallback.unWide + " -- " + pCallback.unTall);
-	}
-
-	void OnHTML_ShowPopup(HTML_ShowPopup_t pCallback) {
-		Debug.Log("[" + HTML_ShowPopup_t.k_iCallback + " - HTML_ShowPopup] - " + pCallback.unBrowserHandle);
-	}
-
-	void OnHTML_HidePopup(HTML_HidePopup_t pCallback) {
-		Debug.Log("[" + HTML_HidePopup_t.k_iCallback + " - HTML_HidePopup] - " + pCallback.unBrowserHandle);
-	}
-
-	void OnHTML_SizePopup(HTML_SizePopup_t pCallback) {
-		Debug.Log("[" + HTML_SizePopup_t.k_iCallback + " - HTML_SizePopup] - " + pCallback.unBrowserHandle + " -- " + pCallback.unX + " -- " + pCallback.unY + " -- " + pCallback.unWide + " -- " + pCallback.unTall);
-	}
-
 	void OnHTML_NewWindow(HTML_NewWindow_t pCallback) {
-		Debug.Log("[" + HTML_NewWindow_t.k_iCallback + " - HTML_NewWindow] - " + pCallback.unBrowserHandle + " -- " + pCallback.pchURL + " -- " + pCallback.unX + " -- " + pCallback.unY + " -- " + pCallback.unWide + " -- " + pCallback.unTall);
+		Debug.Log("[" + HTML_NewWindow_t.k_iCallback + " - HTML_NewWindow] - " + pCallback.unBrowserHandle + " -- " + pCallback.pchURL + " -- " + pCallback.unX + " -- " + pCallback.unY + " -- " + pCallback.unWide + " -- " + pCallback.unTall + " -- " + pCallback.unNewWindow_BrowserHandle);
 	}
 
 	void OnHTML_SetCursor(HTML_SetCursor_t pCallback) {
