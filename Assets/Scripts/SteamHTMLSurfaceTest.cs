@@ -208,6 +208,11 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 			SteamHTMLSurface.SetPageScaleFactor(m_HHTMLBrowser, m_ScaleFactor, 0, 0);
 			print("SteamHTMLSurface.SetPageScaleFactor(m_HHTMLBrowser, " + m_ScaleFactor + ", 0, 0)");
 		}
+
+		if (GUILayout.Button("SetBackgroundMode(m_HHTMLBrowser, Random.Range(0, 2) != 0)")) {
+			SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, Random.Range(0, 2) != 0);
+			print("SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, " + (Random.Range(0, 2) != 0));
+		}
 		
 		if (m_HHTMLBrowser == HHTMLBrowser.Invalid) {
 			return;
