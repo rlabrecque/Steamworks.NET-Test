@@ -109,6 +109,11 @@ public class SteamUtilsTest : MonoBehaviour {
 		GUILayout.Label("SteamUtils.GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
 
 		GUILayout.Label("SteamUtils.IsSteamRunningInVR() : " + SteamUtils.IsSteamRunningInVR());
+
+		if (GUILayout.Button("SteamUtils.SetOverlayNotificationInset(400, 400)")) {
+			SteamUtils.SetOverlayNotificationInset(400, 400);
+			print("SteamUtils.SetOverlayNotificationInset(400, 400)");
+		}
 	}
 
 	void OnIPCountry(IPCountry_t pCallback) {

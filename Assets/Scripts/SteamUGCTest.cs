@@ -15,6 +15,8 @@ public class SteamUGCTest : MonoBehaviour {
 	private CallResult<CreateItemResult_t> OnCreateItemResultCallResult;
 	private CallResult<SubmitItemUpdateResult_t> OnSubmitItemUpdateResultCallResult;
 	private CallResult<UserFavoriteItemsListChanged_t> OnUserFavoriteItemsListChangedCallResult;
+	private CallResult<SetUserItemVoteResult_t> OnSetUserItemVoteResultCallResult;
+	private CallResult<GetUserItemVoteResult_t> OnGetUserItemVoteResultCallResult;
 
 	private CallResult<RemoteStorageSubscribePublishedFileResult_t> OnRemoteStorageSubscribePublishedFileResultCallResult;
 	private CallResult<RemoteStorageUnsubscribePublishedFileResult_t> OnRemoteStorageUnsubscribePublishedFileResultCallResult;
@@ -28,6 +30,8 @@ public class SteamUGCTest : MonoBehaviour {
 		OnCreateItemResultCallResult = CallResult<CreateItemResult_t>.Create(OnCreateItemResult);
 		OnSubmitItemUpdateResultCallResult = CallResult<SubmitItemUpdateResult_t>.Create(OnSubmitItemUpdateResult);
 		OnUserFavoriteItemsListChangedCallResult = CallResult<UserFavoriteItemsListChanged_t>.Create(OnUserFavoriteItemsListChanged);
+		OnSetUserItemVoteResultCallResult = CallResult<SetUserItemVoteResult_t>.Create(OnSetUserItemVoteResult);
+		OnGetUserItemVoteResultCallResult = CallResult<GetUserItemVoteResult_t>.Create(OnGetUserItemVoteResult);
 
 		// These come from ISteamRemoteStorage but they are used here as well...
 		OnRemoteStorageSubscribePublishedFileResultCallResult = CallResult<RemoteStorageSubscribePublishedFileResult_t>.Create(OnRemoteStorageSubscribePublishedFileResult);
@@ -109,6 +113,18 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.GetQueryUGCAdditionalPreview(" + m_UGCQueryHandle + ", 0, 0, out URLOrVideoID, 1024, out IsImage) : " + ret + " -- " + URLOrVideoID + " -- " + IsImage);
 		}
 
+		if (GUILayout.Button("GetQueryUGCNumKeyValueTags(m_UGCQueryHandle, 0)")) {
+			uint ret = SteamUGC.GetQueryUGCNumKeyValueTags(m_UGCQueryHandle, 0);
+			print("SteamUGC.GetQueryUGCNumKeyValueTags(" + m_UGCQueryHandle + ", 0) : " + ret);
+		}
+
+		if (GUILayout.Button("GetQueryUGCKeyValueTag(m_UGCQueryHandle, 0, 0, out Key, 260, out Value, 260)")) {
+			string Key;
+			string Value;
+			bool ret = SteamUGC.GetQueryUGCKeyValueTag(m_UGCQueryHandle, 0, 0, out Key, 260, out Value, 260);
+			print("SteamUGC.GetQueryUGCKeyValueTag(" + m_UGCQueryHandle + ", 0, 0, out Key, 260, out Value, 260) : " + ret + " -- " + Key + " -- " + Value);
+		}
+
 		if (GUILayout.Button("ReleaseQueryUGCRequest(m_UGCQueryHandle)")) {
 			print("SteamUGC.ReleaseQueryUGCRequest(" + m_UGCQueryHandle + ") : " + SteamUGC.ReleaseQueryUGCRequest(m_UGCQueryHandle));
 		}
@@ -119,6 +135,10 @@ public class SteamUGCTest : MonoBehaviour {
 
 		if (GUILayout.Button("AddExcludedTag(m_UGCQueryHandle, \"Co-op\")")) {
 			print("SteamUGC.AddExcludedTag(" + m_UGCQueryHandle + ", \"Co-op\") : " + SteamUGC.AddExcludedTag(m_UGCQueryHandle, "Co-op"));
+		}
+
+		if (GUILayout.Button("SetReturnKeyValueTags(m_UGCQueryHandle, true)")) {
+			print("SteamUGC.SetReturnKeyValueTags(" + m_UGCQueryHandle + ", true) : " + SteamUGC.SetReturnKeyValueTags(m_UGCQueryHandle, true));
 		}
 
 		if (GUILayout.Button("SetReturnLongDescription(m_UGCQueryHandle, true)")) {
@@ -141,6 +161,10 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetReturnTotalOnly(" + m_UGCQueryHandle + ", true) : " + SteamUGC.SetReturnTotalOnly(m_UGCQueryHandle, true));
 		}
 
+		if (GUILayout.Button("SetLanguage(m_UGCQueryHandle, \"english\")")) {
+			print("SteamUGC.SetLanguage(" + m_UGCQueryHandle + ", \"english\") : " + SteamUGC.SetLanguage(m_UGCQueryHandle, "english"));
+		}
+
 		if (GUILayout.Button("SetAllowCachedResponse(m_UGCQueryHandle, 5)")) {
 			print("SteamUGC.SetAllowCachedResponse(" + m_UGCQueryHandle + ", 5) : " + SteamUGC.SetAllowCachedResponse(m_UGCQueryHandle, 5));
 		}
@@ -159,6 +183,10 @@ public class SteamUGCTest : MonoBehaviour {
 
 		if (GUILayout.Button("SetRankedByTrendDays(m_UGCQueryHandle, 7)")) {
 			print("SteamUGC.SetRankedByTrendDays(" + m_UGCQueryHandle + ", 7) : " + SteamUGC.SetRankedByTrendDays(m_UGCQueryHandle, 7));
+		}
+
+		if (GUILayout.Button("AddRequiredKeyValueTag(m_UGCQueryHandle, \"TestKey\", \"TestValue\")")) {
+			print("SteamUGC.AddRequiredKeyValueTag(" + m_UGCQueryHandle + ", \"TestKey\", \"TestValue\") : " + SteamUGC.AddRequiredKeyValueTag(m_UGCQueryHandle, "TestKey", "TestValue"));
 		}
 
 		if (GUILayout.Button("RequestUGCDetails(m_PublishedFileId, 5)")) {
@@ -188,6 +216,11 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemDescription(" + m_UGCUpdateHandle + ", \"This is the test description.\") : " + ret);
 		}
 
+		if (GUILayout.Button("SetItemUpdateLanguage(m_UGCUpdateHandle, \"english\")")) {
+			bool ret = SteamUGC.SetItemUpdateLanguage(m_UGCUpdateHandle, "english");
+			print("SteamUGC.SetItemUpdateLanguage(" + m_UGCUpdateHandle + ", \"english\") : " + ret);
+		}
+
 		if (GUILayout.Button("SetItemMetadata(m_UGCUpdateHandle, \"This is the test metadata.\")")) {
 			bool ret = SteamUGC.SetItemMetadata(m_UGCUpdateHandle, "This is the test metadata.");
 			print("SteamUGC.SetItemMetadata(" + m_UGCUpdateHandle + ", \"This is the test metadata.\") : " + ret);
@@ -213,6 +246,16 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemPreview(" + m_UGCUpdateHandle + ", Application.dataPath + \"/controller.vdf\") : " + ret);
 		}
 
+		if (GUILayout.Button("RemoveItemKeyValueTags(m_UGCUpdateHandle, \"TestKey\")")) {
+			bool ret = SteamUGC.RemoveItemKeyValueTags(m_UGCUpdateHandle, "TestKey");
+			print("SteamUGC.RemoveItemKeyValueTags(" + m_UGCUpdateHandle + "\"TestKey\") : " + ret);
+		}
+
+		if (GUILayout.Button("AddItemKeyValueTag(m_UGCUpdateHandle, \"TestKey\", \"TestValue\")")) {
+			bool ret = SteamUGC.AddItemKeyValueTag(m_UGCUpdateHandle, "TestKey", "TestValue");
+			print("SteamUGC.AddItemKeyValueTag(" + m_UGCUpdateHandle + "\"TestKey\", \"TestValue\") : " + ret);
+		}
+
 		if (GUILayout.Button("SubmitItemUpdate(m_UGCUpdateHandle, \"Test Changenote\")")) {
 			SteamAPICall_t handle = SteamUGC.SubmitItemUpdate(m_UGCUpdateHandle, "Test Changenote");
 			OnSubmitItemUpdateResultCallResult.Set(handle);
@@ -224,6 +267,18 @@ public class SteamUGCTest : MonoBehaviour {
 			ulong BytesTotal;
 			EItemUpdateStatus ret = SteamUGC.GetItemUpdateProgress(m_UGCUpdateHandle, out BytesProcessed, out BytesTotal);
 			GUILayout.Label("GetItemUpdateProgress(m_UGCUpdateHandle, out BytesProcessed, out BytesTotal) : " + ret + " -- " + BytesProcessed + " -- " + BytesTotal);
+		}
+
+		if (GUILayout.Button("SetUserItemVote((PublishedFileId_t)280762427, true)")) {
+			SteamAPICall_t handle = SteamUGC.SetUserItemVote((PublishedFileId_t)280762427, true); // http://steamcommunity.com/sharedfiles/filedetails/?id=280762427
+			OnSetUserItemVoteResultCallResult.Set(handle);
+			print("SteamUGC.SetUserItemVote((PublishedFileId_t)280762427, true) : " + handle);
+		}
+
+		if (GUILayout.Button("GetUserItemVote((PublishedFileId_t)280762427)")) {
+			SteamAPICall_t handle = SteamUGC.GetUserItemVote((PublishedFileId_t)280762427); // http://steamcommunity.com/sharedfiles/filedetails/?id=280762427
+			OnGetUserItemVoteResultCallResult.Set(handle);
+			print("SteamUGC.GetUserItemVote((PublishedFileId_t)280762427) : " + handle);
 		}
 
 		if (GUILayout.Button("AddItemToFavorites(SteamUtils.GetAppID(), (PublishedFileId_t)280762427)")) {
@@ -320,5 +375,13 @@ public class SteamUGCTest : MonoBehaviour {
 	void OnRemoteStorageUnsubscribePublishedFileResult(RemoteStorageUnsubscribePublishedFileResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStorageUnsubscribePublishedFileResult_t.k_iCallback + " - RemoteStorageUnsubscribePublishedFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 		m_PublishedFileId = pCallback.m_nPublishedFileId;
+	}
+
+	void OnSetUserItemVoteResult(SetUserItemVoteResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + SetUserItemVoteResult_t.k_iCallback + " - SetUserItemVoteResult] - " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_eResult + " -- " + pCallback.m_bVoteUp);
+	}
+
+	void OnGetUserItemVoteResult(GetUserItemVoteResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + GetUserItemVoteResult_t.k_iCallback + " - GetUserItemVoteResult] - " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_eResult + " -- " + pCallback.m_bVotedUp + " -- " + pCallback.m_bVotedDown + " -- " + pCallback.m_bVoteSkipped);
 	}
 }
