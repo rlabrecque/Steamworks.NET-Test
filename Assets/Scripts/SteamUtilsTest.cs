@@ -138,7 +138,7 @@ public class SteamUtilsTest : MonoBehaviour {
 
 		if(pCallback.m_bSubmitted) {
 			uint Length = SteamUtils.GetEnteredGamepadTextLength();
-            Debug.Log("SteamUtils.GetEnteredGamepadTextLength() - " + Length);
+			Debug.Log("SteamUtils.GetEnteredGamepadTextLength() - " + Length);
 
 			string Text;
 			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
