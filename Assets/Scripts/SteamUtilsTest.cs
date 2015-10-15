@@ -94,17 +94,18 @@ public class SteamUtilsTest : MonoBehaviour {
 		}
 
 		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32)")) {
-			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32, "");
+			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32, "test");
 			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32) - " + ret);
 		}
 
-		GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength() : " + SteamUtils.GetEnteredGamepadTextLength()); // TODO - only to be called from within OnGamepadTextInputDismissed?
+		// Only called from within GamepadTextInputDismissed_t Callback!
+		/*GUILayout.Label("SteamUtils.GetEnteredGamepadTextLength() : " + SteamUtils.GetEnteredGamepadTextLength());
 
 		{
 			string Text;
 			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
 			GUILayout.Label("SteamUtils.GetEnteredGamepadTextInput(out Text, 32) - " + ret + " -- " + Text);
-		}
+		}*/
 
 		GUILayout.Label("SteamUtils.GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
 
@@ -134,5 +135,14 @@ public class SteamUtilsTest : MonoBehaviour {
 
 	void OnGamepadTextInputDismissed(GamepadTextInputDismissed_t pCallback) {
 		Debug.Log("[" + GamepadTextInputDismissed_t.k_iCallback + " - GamepadTextInputDismissed] - " + pCallback.m_bSubmitted + " -- " + pCallback.m_unSubmittedText);
+
+		if(pCallback.m_bSubmitted) {
+			uint Length = SteamUtils.GetEnteredGamepadTextLength();
+            Debug.Log("SteamUtils.GetEnteredGamepadTextLength() - " + Length);
+
+			string Text;
+			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
+			Debug.Log("SteamUtils.GetEnteredGamepadTextInput(out Text, 32) - " + ret + " -- " + Text);
+		}
 	}
 }
