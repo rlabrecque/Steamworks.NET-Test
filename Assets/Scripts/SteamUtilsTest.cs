@@ -93,9 +93,9 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.CheckFileSignature(\"FileNotFound.txt\") - " + handle);
 		}
 
-		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32)")) {
+		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32, \"test\")")) {
 			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32, "test");
-			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32) - " + ret);
+			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32, \"test\") - " + ret);
 		}
 
 		// Only called from within GamepadTextInputDismissed_t Callback!
@@ -141,8 +141,8 @@ public class SteamUtilsTest : MonoBehaviour {
 			Debug.Log("SteamUtils.GetEnteredGamepadTextLength() - " + Length);
 
 			string Text;
-			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, 32);
-			Debug.Log("SteamUtils.GetEnteredGamepadTextInput(out Text, 32) - " + ret + " -- " + Text);
+			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, pCallback.m_unSubmittedText + 1);
+			Debug.Log("SteamUtils.GetEnteredGamepadTextInput(out Text, pCallback.m_unSubmittedText + 1) - " + ret + " -- " + Text);
 		}
 	}
 }
