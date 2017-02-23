@@ -184,7 +184,7 @@ public class SteamUserTest : MonoBehaviour {
 	}
 
 	void OnSteamServerConnectFailure(SteamServerConnectFailure_t pCallback) {
-		Debug.Log("[" + SteamServerConnectFailure_t.k_iCallback + " - SteamServerConnectFailure] - " + pCallback.m_eResult);
+		Debug.Log("[" + SteamServerConnectFailure_t.k_iCallback + " - SteamServerConnectFailure] - " + pCallback.m_eResult + " -- " + pCallback.m_bStillRetrying);
 	}
 
 	void OnSteamServersDisconnected(SteamServersDisconnected_t pCallback) {

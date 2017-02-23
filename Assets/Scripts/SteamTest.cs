@@ -35,7 +35,6 @@ public class SteamTest : MonoBehaviour {
 	public EGUIState m_State { get; private set; }
 
 	private bool m_bInitialized = false;
-	private bool m_bControllerInitialized = false;
 
 	private static SteamTest m_SteamTest = null;
 
@@ -104,14 +103,6 @@ public class SteamTest : MonoBehaviour {
 		// You must launch with "-debug_steamapi" in the launch args to recieve warnings.
 		SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
 		SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
-
-		// We are going to use the controller interface, initialize it, which is a seperate step as it 
-		// create a new thread in the game proc and we don't want to force that on games that don't
-		// have native Steam controller implementations
-		m_bControllerInitialized = SteamController.Init(Application.dataPath + "/controller.vdf");
-		if (!m_bControllerInitialized) {
-			Debug.LogWarning("Steam Controller Failed to Initialize");
-		}
 		
 		// Register our Steam Callbacks
 		AppListTest = gameObject.AddComponent<SteamAppListTest>();
@@ -157,14 +148,7 @@ public class SteamTest : MonoBehaviour {
 		if (!m_bInitialized) {
 			return;
 		}
-
-		if (m_bControllerInitialized) {
-			bool ret = SteamController.Shutdown();
-			if (!ret) {
-				Debug.LogWarning("SteamController.Shutdown() returned false");
-			}
-		}
-
+		
 		SteamAPI.Shutdown();
 	}
 
@@ -209,8 +193,7 @@ public class SteamTest : MonoBehaviour {
 				ClientTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamController:
-				if (m_bControllerInitialized)
-					ControllerTest.RenderOnGUI();
+				ControllerTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
 			case EGUIState.SteamFriendsPg2:

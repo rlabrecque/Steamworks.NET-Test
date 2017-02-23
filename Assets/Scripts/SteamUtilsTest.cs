@@ -74,12 +74,7 @@ public class SteamUtilsTest : MonoBehaviour {
 		//GUILayout.Label("SteamUtils.IsAPICallCompleted() : " + SteamUtils.IsAPICallCompleted()); // N/A - These 3 functions are used to dispatch CallResults.
 		//GUILayout.Label("SteamUtils.GetAPICallFailureReason() : " + SteamUtils.GetAPICallFailureReason()); // N/A
 		//GUILayout.Label("SteamUtils.GetAPICallResult() : " + SteamUtils.GetAPICallResult()); // N/A
-
-		if (GUILayout.Button("SteamUtils.RunFrame()")) {
-			SteamUtils.RunFrame();
-			print("SteamUtils.RunFrame()");
-		}
-
+        
 		GUILayout.Label("SteamUtils.GetIPCCallCount() : " + SteamUtils.GetIPCCallCount());
 
 		//GUILayout.Label("SteamUtils.SetWarningMessageHook() : " + SteamUtils.SetWarningMessageHook()); // N/A - Check out SteamTest.cs for example usage.

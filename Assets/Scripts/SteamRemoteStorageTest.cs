@@ -8,18 +8,18 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	private string m_Message = "";
 	private int m_FileCount;
 	private int m_FileSize;
-	private int m_TotalBytes;
+	private ulong m_TotalBytes;
 	private int m_FileSizeInBytes;
 	private UGCFileWriteStreamHandle_t m_FileStream;
 	private UGCHandle_t m_UGCHandle;
 	private PublishedFileId_t m_PublishedFileId;
 	private PublishedFileUpdateHandle_t m_PublishedFileUpdateHandle;
+	private SteamAPICall_t m_FileReadAsyncHandle;
 
 	protected Callback<RemoteStorageAppSyncedClient_t> m_RemoteStorageAppSyncedClient;
 	protected Callback<RemoteStorageAppSyncedServer_t> m_RemoteStorageAppSyncedServer;
 	protected Callback<RemoteStorageAppSyncProgress_t> m_RemoteStorageAppSyncProgress;
 	protected Callback<RemoteStorageAppSyncStatusCheck_t> m_RemoteStorageAppSyncStatusCheck;
-	protected Callback<RemoteStorageConflictResolution_t> m_RemoteStorageConflictResolution;
 	protected Callback<RemoteStoragePublishedFileSubscribed_t> m_RemoteStoragePublishedFileSubscribed;
 	protected Callback<RemoteStoragePublishedFileUnsubscribed_t> m_RemoteStoragePublishedFileUnsubscribed;
 	protected Callback<RemoteStoragePublishedFileDeleted_t> m_RemoteStoragePublishedFileDeleted;
@@ -43,13 +43,14 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	private CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t> RemoteStorageEnumerateUserSharedWorkshopFilesResult;
 	private CallResult<RemoteStorageSetUserPublishedFileActionResult_t> RemoteStorageSetUserPublishedFileActionResult;
 	private CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t> RemoteStorageEnumeratePublishedFilesByUserActionResult;
+	private CallResult<RemoteStorageFileWriteAsyncComplete_t> RemoteStorageFileWriteAsyncComplete;
+	private CallResult<RemoteStorageFileReadAsyncComplete_t> RemoteStorageFileReadAsyncComplete;
 
 	public void OnEnable() {
 		m_RemoteStorageAppSyncedClient = Callback<RemoteStorageAppSyncedClient_t>.Create(OnRemoteStorageAppSyncedClient);
 		m_RemoteStorageAppSyncedServer = Callback<RemoteStorageAppSyncedServer_t>.Create(OnRemoteStorageAppSyncedServer);
 		m_RemoteStorageAppSyncProgress = Callback<RemoteStorageAppSyncProgress_t>.Create(OnRemoteStorageAppSyncProgress);
 		m_RemoteStorageAppSyncStatusCheck = Callback<RemoteStorageAppSyncStatusCheck_t>.Create(OnRemoteStorageAppSyncStatusCheck);
-		m_RemoteStorageConflictResolution = Callback<RemoteStorageConflictResolution_t>.Create(OnRemoteStorageConflictResolution);
 		m_RemoteStoragePublishedFileSubscribed = Callback<RemoteStoragePublishedFileSubscribed_t>.Create(OnRemoteStoragePublishedFileSubscribed);
 		m_RemoteStoragePublishedFileUnsubscribed = Callback<RemoteStoragePublishedFileUnsubscribed_t>.Create(OnRemoteStoragePublishedFileUnsubscribed);
 		m_RemoteStoragePublishedFileDeleted = Callback<RemoteStoragePublishedFileDeleted_t>.Create(OnRemoteStoragePublishedFileDeleted);
@@ -73,8 +74,10 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		RemoteStorageEnumerateUserSharedWorkshopFilesResult = CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t>.Create(OnRemoteStorageEnumerateUserSharedWorkshopFilesResult);
 		RemoteStorageSetUserPublishedFileActionResult = CallResult<RemoteStorageSetUserPublishedFileActionResult_t>.Create(OnRemoteStorageSetUserPublishedFileActionResult);
 		RemoteStorageEnumeratePublishedFilesByUserActionResult = CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t>.Create(OnRemoteStorageEnumeratePublishedFilesByUserActionResult);
+		RemoteStorageFileWriteAsyncComplete = CallResult<RemoteStorageFileWriteAsyncComplete_t>.Create(OnRemoteStorageFileWriteAsyncComplete);
+		RemoteStorageFileReadAsyncComplete = CallResult<RemoteStorageFileReadAsyncComplete_t>.Create(OnRemoteStorageFileReadAsyncComplete);
 	}
-	
+
 	public void RenderOnGUI(SteamTest.EGUIState state) {
 		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
@@ -88,7 +91,8 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		GUILayout.Label("m_UGCHandle: " + m_UGCHandle);
 		GUILayout.Label("m_PublishedFileId: " + m_PublishedFileId);
 		GUILayout.Label("m_PublishedFileUpdateHandle: " + m_PublishedFileUpdateHandle);
-		GUILayout.EndArea();
+		GUILayout.Label("m_FileReadAsyncHandle: " + m_FileReadAsyncHandle);
+        GUILayout.EndArea();
 
 		if (state == SteamTest.EGUIState.SteamRemoteStorage) {
 			RenderPageOne();
@@ -100,7 +104,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 	private void RenderPageOne() {
 		if (GUILayout.Button("FileWrite(MESSAGE_FILE_NAME, Data, Data.Length)")) {
-			if (System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
+			if ((ulong)System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
 				print("Remote Storage: Quota Exceeded! - Bytes: " + System.Text.Encoding.UTF8.GetByteCount(m_Message) + " - Max: " + m_TotalBytes);
 			}
 			else {
@@ -123,6 +127,26 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 				int ret = SteamRemoteStorage.FileRead(MESSAGE_FILE_NAME, Data, Data.Length);
 				m_Message = System.Text.Encoding.UTF8.GetString(Data, 0, ret);
 				print("FileRead(" + MESSAGE_FILE_NAME + ", Data, " + Data.Length + ") - " + ret);
+			}
+		}
+
+		if (GUILayout.Button("FileWriteAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length)")) {
+			byte[] Data = new byte[System.Text.Encoding.UTF8.GetByteCount(m_Message)];
+			System.Text.Encoding.UTF8.GetBytes(m_Message, 0, m_Message.Length, Data, 0);
+
+			SteamAPICall_t handle = SteamRemoteStorage.FileWriteAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length);
+			RemoteStorageFileWriteAsyncComplete.Set(handle);
+			print("FileWriteAsync(" + MESSAGE_FILE_NAME + ", Data, " + (uint)Data.Length + ") - " + handle);
+		}
+
+		if (GUILayout.Button("FileReadAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length)")) {
+			if (m_FileSize > 40) {
+				Debug.Log("RemoteStorage: File was larger than expected. . .");
+			}
+			else {
+				m_FileReadAsyncHandle = SteamRemoteStorage.FileReadAsync(MESSAGE_FILE_NAME, 0, (uint)m_FileSize);
+				RemoteStorageFileReadAsyncComplete.Set(m_FileReadAsyncHandle);
+				print("FileReadAsync(" + MESSAGE_FILE_NAME + ", 0, " + (uint)m_FileSize + ") - " + m_FileReadAsyncHandle);
 			}
 		}
 
@@ -153,7 +177,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("FileWriteStreamWriteChunk(m_FileStream, Data, Data.Length)")) {
-			if (System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
+			if ((ulong)System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
 				print("Remote Storage: Quota Exceeded! - Bytes: " + System.Text.Encoding.UTF8.GetByteCount(m_Message) + " - Max: " + m_TotalBytes);
 			}
 			else {
@@ -184,12 +208,17 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		m_FileCount = SteamRemoteStorage.GetFileCount();
 		GUILayout.Label("GetFileCount() : " + m_FileCount);
 		for (int i = 0; i < m_FileCount; ++i) {
-			string FileName = SteamRemoteStorage.GetFileNameAndSize(i, out m_FileSize);
-			GUILayout.Label("GetFileNameAndSize(i, out FileSize) : " + FileName + " -- " + m_FileSize);
+			int FileSize = 0;
+			string FileName = SteamRemoteStorage.GetFileNameAndSize(i, out FileSize);
+			GUILayout.Label("GetFileNameAndSize(i, out FileSize) : " + FileName + " -- " + FileSize);
+
+			if(FileName == MESSAGE_FILE_NAME) {
+				m_FileSize = FileSize;
+            }
 		}
 
 		{
-			int AvailableBytes;
+			ulong AvailableBytes;
 			bool ret = SteamRemoteStorage.GetQuota(out m_TotalBytes, out AvailableBytes);
 			GUILayout.Label("GetQuota(out m_TotalBytes, out AvailableBytes) : " + ret + " -- " + m_TotalBytes + " -- " + AvailableBytes);
 		}
@@ -232,7 +261,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		else {
 			GUILayout.Label("GetUGCDetails(m_UGCHandle, out AppID, Name, out FileSizeInBytes, out SteamIDOwner) : ");
 		}
-		
+
 		if (GUILayout.Button("UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close)")) {
 			byte[] Data = new byte[m_FileSizeInBytes];
 			int ret = SteamRemoteStorage.UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close);
@@ -292,7 +321,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileTags(m_PublishedFileUpdateHandle, new string[] {"First", "Second", "Third"});
 			print("UpdatePublishedFileTags(" + m_PublishedFileUpdateHandle + ", " + new string[] { "First", "Second", "Third" } + ") - " + ret);
 		}
-				
+
 		if(GUILayout.Button("CommitPublishedFileUpdate(m_PublishedFileUpdateHandle)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.CommitPublishedFileUpdate(m_PublishedFileUpdateHandle);
 			RemoteStorageUpdatePublishedFileResult.Set(handle);
@@ -412,11 +441,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	void OnRemoteStorageAppSyncStatusCheck(RemoteStorageAppSyncStatusCheck_t pCallback) {
 		Debug.Log("[" + RemoteStorageAppSyncStatusCheck_t.k_iCallback + " - RemoteStorageAppSyncStatusCheck] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult);
 	}
-
-	void OnRemoteStorageConflictResolution(RemoteStorageConflictResolution_t pCallback) {
-		Debug.Log("[" + RemoteStorageConflictResolution_t.k_iCallback + " - RemoteStorageConflictResolution] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult);
-	}
-
+    
 	void OnRemoteStorageFileShareResult(RemoteStorageFileShareResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStorageFileShareResult_t.k_iCallback + " - RemoteStorageFileShareResult] - " + pCallback.m_eResult + " -- " + pCallback.m_hFile);
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
@@ -518,6 +543,23 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	}
 
 	void OnRemoteStoragePublishedFileUpdated(RemoteStoragePublishedFileUpdated_t pCallback) {
-		Debug.Log("[" + RemoteStoragePublishedFileUpdated_t.k_iCallback + " - RemoteStoragePublishedFileUpdated] - " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_hFile);
+		Debug.Log("[" + RemoteStoragePublishedFileUpdated_t.k_iCallback + " - RemoteStoragePublishedFileUpdated] - " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_ulUnused);
+	}
+
+	void OnRemoteStorageFileWriteAsyncComplete(RemoteStorageFileWriteAsyncComplete_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + RemoteStorageFileWriteAsyncComplete_t.k_iCallback + " - RemoteStorageFileWriteAsyncComplete] - " + pCallback.m_eResult);
+	}
+
+	void OnRemoteStorageFileReadAsyncComplete(RemoteStorageFileReadAsyncComplete_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + RemoteStorageFileReadAsyncComplete_t.k_iCallback + " - RemoteStorageFileReadAsyncComplete] - " + pCallback.m_hFileReadAsync + " -- " + pCallback.m_eResult + " -- " + pCallback.m_nOffset + " -- " + pCallback.m_cubRead);
+
+		if (pCallback.m_eResult == EResult.k_EResultOK) {
+			byte[] Data = new byte[40];
+			bool ret = SteamRemoteStorage.FileReadAsyncComplete(pCallback.m_hFileReadAsync, Data, pCallback.m_cubRead);
+			print("FileReadAsyncComplete(m_FileReadAsyncHandle, Data, pCallback.m_cubRead) : " + ret);
+			if (ret) {
+				m_Message = System.Text.Encoding.UTF8.GetString(Data, (int)pCallback.m_nOffset, (int)pCallback.m_cubRead);
+			}
+		}
 	}
 }

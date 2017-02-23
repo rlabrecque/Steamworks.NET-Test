@@ -112,12 +112,7 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamScreenshots(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMSCREENSHOTS_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamScreenshots(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMSCREENSHOTS_INTERFACE_VERSION));
 		}
-
-		if (GUILayout.Button("SteamClient.RunFrame()")) {
-			SteamClient.RunFrame();
-			print("SteamClient.RunFrame()");
-		}
-
+        
 		GUILayout.Label("SteamClient.GetIPCCallCount : " + SteamClient.GetIPCCallCount());
 
 		//GUILayout.Label("SteamClient.SetWarningMessageHook : " + SteamClient.SetWarningMessageHook()); // N/A - Check out SteamTest.cs for example usage.
@@ -125,11 +120,7 @@ public class SteamClientTest : MonoBehaviour {
 		if (GUILayout.Button("SteamClient.BShutdownIfAllPipesClosed()")) {
 			print("SteamClient.BShutdownIfAllPipesClosed() : " + SteamClient.BShutdownIfAllPipesClosed());
 		}
-#if _PS3
-		if (GUILayout.Button("SteamClient.GetISteamPS3OverlayRender()")) {
-			print("SteamClient.GetISteamPS3OverlayRender() : " + SteamClient.GetISteamPS3OverlayRender());
-		}
-#endif
+
 		if (GUILayout.Button("SteamClient.GetISteamHTTP(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMHTTP_INTERFACE_VERSION + ")")) {
 			print("SteamClient.GetISteamHTTP(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMHTTP_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamHTTP(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMHTTP_INTERFACE_VERSION));
@@ -169,22 +160,7 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamHTMLSurface(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMHTMLSURFACE_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamHTMLSurface(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMHTMLSURFACE_INTERFACE_VERSION));
 		}
-
-#if DISABLED
-		// Helper functions for internal Steam usage
-		if (GUILayout.Button("SteamClient.Set_SteamAPI_CPostAPIResultInProcess()")) {
-			print("SteamClient.Set_SteamAPI_CPostAPIResultInProcess() : " + SteamClient.Set_SteamAPI_CPostAPIResultInProcess());
-		}
-
-		if (GUILayout.Button("SteamClient.Remove_SteamAPI_CPostAPIResultInProcess()")) {
-			print("SteamClient.Remove_SteamAPI_CPostAPIResultInProcess() : " + SteamClient.Remove_SteamAPI_CPostAPIResultInProcess());
-		}
-
-		if (GUILayout.Button("SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess()")) {
-			print("SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess() : " + SteamClient.Set_SteamAPI_CCheckCallbackRegisteredInProcess());
-		}
-#endif
-
+        
 		if (GUILayout.Button("SteamClient.GetISteamInventory(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), " + Constants.STEAMINVENTORY_INTERFACE_VERSION + ")")) {
 			print("SteamClient.GetISteamInventory(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMINVENTORY_INTERFACE_VERSION + ") : " +
 				SteamClient.GetISteamInventory(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMINVENTORY_INTERFACE_VERSION));
