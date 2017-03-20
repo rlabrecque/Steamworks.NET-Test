@@ -38,131 +38,164 @@ public class SteamMusicRemoteTest : MonoBehaviour {
 	public void RenderOnGUI() {
 		// Service Definition
 		if (GUILayout.Button("RegisterSteamMusicRemote(\"Steamworks.NET Test Remote\")")) {
-			print("SteamMusicRemote.RegisterSteamMusicRemote(\"Steamworks.NET Test Remote\") : " + SteamMusicRemote.RegisterSteamMusicRemote("Steamworks.NET Test Remote"));
+			bool ret = SteamMusicRemote.RegisterSteamMusicRemote("Steamworks.NET Test Remote");
+			print("SteamMusicRemote.RegisterSteamMusicRemote(" + "\"Steamworks.NET Test Remote\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("DeregisterSteamMusicRemote()")) {
-			print("SteamMusicRemote.DeregisterSteamMusicRemote() : " + SteamMusicRemote.DeregisterSteamMusicRemote());
+			bool ret = SteamMusicRemote.DeregisterSteamMusicRemote();
+			print("SteamMusicRemote.DeregisterSteamMusicRemote() : " + ret);
 		}
 
-		GUILayout.Label("SteamMusicRemote.BIsCurrentMusicRemote() : " + SteamMusicRemote.BIsCurrentMusicRemote());
-		GUILayout.Label("SteamMusicRemote.BActivationSuccess(true) : " + SteamMusicRemote.BActivationSuccess(true));
+		GUILayout.Label("BIsCurrentMusicRemote() : " + SteamMusicRemote.BIsCurrentMusicRemote());
+
+		GUILayout.Label("BActivationSuccess(true) : " + SteamMusicRemote.BActivationSuccess(true));
 
 		if (GUILayout.Button("SetDisplayName(\"Some Display Name\")")) {
-			print("SteamMusicRemote.SetDisplayName(\"Some Display Name\") : " + SteamMusicRemote.SetDisplayName("Some Display Name"));
+			bool ret = SteamMusicRemote.SetDisplayName("Some Display Name");
+			print("SteamMusicRemote.SetDisplayName(" + "\"Some Display Name\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetPNGIcon_64x64(TODO)")) {
-			print("SteamMusicRemote.SetPNGIcon_64x64(TODO) : " + SteamMusicRemote.SetPNGIcon_64x64(null, 0)); // TODO
+		if (GUILayout.Button("SetPNGIcon_64x64(null, 0)")) {
+			// TODO
+			bool ret = SteamMusicRemote.SetPNGIcon_64x64(null, 0);
+			print("SteamMusicRemote.SetPNGIcon_64x64(" + null + ", " + 0 + ") : " + ret);
 		}
 
 		// Abilities for the user interface
 		if (GUILayout.Button("EnablePlayPrevious(true)")) {
-			print("SteamMusicRemote.EnablePlayPrevious(true) : " + SteamMusicRemote.EnablePlayPrevious(true));
+			bool ret = SteamMusicRemote.EnablePlayPrevious(true);
+			print("SteamMusicRemote.EnablePlayPrevious(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("EnablePlayNext(true)")) {
-			print("SteamMusicRemote.EnablePlayNext(true) : " + SteamMusicRemote.EnablePlayNext(true));
+			bool ret = SteamMusicRemote.EnablePlayNext(true);
+			print("SteamMusicRemote.EnablePlayNext(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("EnableShuffled(true)")) {
-			print("SteamMusicRemote.EnableShuffled(true) : " + SteamMusicRemote.EnableShuffled(true));
+			bool ret = SteamMusicRemote.EnableShuffled(true);
+			print("SteamMusicRemote.EnableShuffled(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("EnableLooped(true)")) {
-			print("SteamMusicRemote.EnableLooped(true) : " + SteamMusicRemote.EnableLooped(true));
+			bool ret = SteamMusicRemote.EnableLooped(true);
+			print("SteamMusicRemote.EnableLooped(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("EnableQueue(true)")) {
-			print("SteamMusicRemote.EnableQueue(true) : " + SteamMusicRemote.EnableQueue(true));
+			bool ret = SteamMusicRemote.EnableQueue(true);
+			print("SteamMusicRemote.EnableQueue(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("EnablePlaylists(true)")) {
-			print("SteamMusicRemote.EnablePlaylists(true) : " + SteamMusicRemote.EnablePlaylists(true));
+			bool ret = SteamMusicRemote.EnablePlaylists(true);
+			print("SteamMusicRemote.EnablePlaylists(" + true + ") : " + ret);
 		}
 
 		// Status
 		if (GUILayout.Button("UpdatePlaybackStatus(AudioPlayback_Status.AudioPlayback_Paused)")) {
-			print("SteamMusicRemote.UpdatePlaybackStatus(AudioPlayback_Status.AudioPlayback_Paused) : " + SteamMusicRemote.UpdatePlaybackStatus(AudioPlayback_Status.AudioPlayback_Paused));
+			bool ret = SteamMusicRemote.UpdatePlaybackStatus(AudioPlayback_Status.AudioPlayback_Paused);
+			print("SteamMusicRemote.UpdatePlaybackStatus(" + AudioPlayback_Status.AudioPlayback_Paused + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdateShuffled(true)")) {
-			print("SteamMusicRemote.UpdateShuffled(true) : " + SteamMusicRemote.UpdateShuffled(true));
+			bool ret = SteamMusicRemote.UpdateShuffled(true);
+			print("SteamMusicRemote.UpdateShuffled(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdateLooped(true)")) {
-			print("SteamMusicRemote.UpdateLooped(true) : " + SteamMusicRemote.UpdateLooped(true));
+			bool ret = SteamMusicRemote.UpdateLooped(true);
+			print("SteamMusicRemote.UpdateLooped(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdateVolume(0.5f)")) {
-			print("SteamMusicRemote.UpdateVolume(0.5f) : " + SteamMusicRemote.UpdateVolume(0.5f));
+			bool ret = SteamMusicRemote.UpdateVolume(0.5f);
+			print("SteamMusicRemote.UpdateVolume(" + 0.5f + ") : " + ret);
 		}
 
 		// Current Entry
 		if (GUILayout.Button("CurrentEntryWillChange()")) {
-			print("SteamMusicRemote.CurrentEntryWillChange() : " + SteamMusicRemote.CurrentEntryWillChange());
+			bool ret = SteamMusicRemote.CurrentEntryWillChange();
+			print("SteamMusicRemote.CurrentEntryWillChange() : " + ret);
 		}
 
 		if (GUILayout.Button("CurrentEntryIsAvailable(true)")) {
-			print("SteamMusicRemote.CurrentEntryIsAvailable(true) : " + SteamMusicRemote.CurrentEntryIsAvailable(true));
+			bool ret = SteamMusicRemote.CurrentEntryIsAvailable(true);
+			print("SteamMusicRemote.CurrentEntryIsAvailable(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdateCurrentEntryText(\"Current Entry Text\")")) {
-			print("SteamMusicRemote.UpdateCurrentEntryText(\"Current Entry Text\") : " + SteamMusicRemote.UpdateCurrentEntryText("Current Entry Text"));
+			bool ret = SteamMusicRemote.UpdateCurrentEntryText("Current Entry Text");
+			print("SteamMusicRemote.UpdateCurrentEntryText(" + "\"Current Entry Text\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdateCurrentEntryElapsedSeconds(10)")) {
-			print("SteamMusicRemote.UpdateCurrentEntryElapsedSeconds(10) : " + SteamMusicRemote.UpdateCurrentEntryElapsedSeconds(10));
+			bool ret = SteamMusicRemote.UpdateCurrentEntryElapsedSeconds(10);
+			print("SteamMusicRemote.UpdateCurrentEntryElapsedSeconds(" + 10 + ") : " + ret);
 		}
 
-		if (GUILayout.Button("UpdateCurrentEntryCoverArt(TODO)")) {
-			print("SteamMusicRemote.UpdateCurrentEntryCoverArt(TODO) : " + SteamMusicRemote.UpdateCurrentEntryCoverArt(null, 0)); // TODO
+		if (GUILayout.Button("UpdateCurrentEntryCoverArt(null, 0)")) {
+			// TODO
+			bool ret = SteamMusicRemote.UpdateCurrentEntryCoverArt(null, 0);
+			print("SteamMusicRemote.UpdateCurrentEntryCoverArt(" + null + ", " + 0 + ") : " + ret);
 		}
 
 		if (GUILayout.Button("CurrentEntryDidChange()")) {
-			print("SteamMusicRemote.CurrentEntryDidChange() : " + SteamMusicRemote.CurrentEntryDidChange());
+			bool ret = SteamMusicRemote.CurrentEntryDidChange();
+			print("SteamMusicRemote.CurrentEntryDidChange() : " + ret);
 		}
 
 		// Queue
 		if (GUILayout.Button("QueueWillChange()")) {
-			print("SteamMusicRemote.QueueWillChange() : " + SteamMusicRemote.QueueWillChange());
+			bool ret = SteamMusicRemote.QueueWillChange();
+			print("SteamMusicRemote.QueueWillChange() : " + ret);
 		}
 
 		if (GUILayout.Button("ResetQueueEntries()")) {
-			print("SteamMusicRemote.ResetQueueEntries() : " + SteamMusicRemote.ResetQueueEntries());
+			bool ret = SteamMusicRemote.ResetQueueEntries();
+			print("SteamMusicRemote.ResetQueueEntries() : " + ret);
 		}
 
-		if (GUILayout.Button("SetQueueEntry(\"I don't know what I'm doing\")")) {
-			print("SteamMusicRemote.SetQueueEntry(\"I don't know what I'm doing\") : " + SteamMusicRemote.SetQueueEntry(0, 0, "I don't know what I'm doing"));
+		if (GUILayout.Button("SetQueueEntry(0, 0, \"I don't know what I'm doing\")")) {
+			bool ret = SteamMusicRemote.SetQueueEntry(0, 0, "I don't know what I'm doing");
+			print("SteamMusicRemote.SetQueueEntry(" + 0 + ", " + 0 + ", " + "\"I don't know what I'm doing\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetCurrentQueueEntry(0)")) {
-			print("SteamMusicRemote.SetCurrentQueueEntry(0) : " + SteamMusicRemote.SetCurrentQueueEntry(0));
+			bool ret = SteamMusicRemote.SetCurrentQueueEntry(0);
+			print("SteamMusicRemote.SetCurrentQueueEntry(" + 0 + ") : " + ret);
 		}
 
 		if (GUILayout.Button("QueueDidChange()")) {
-			print("SteamMusicRemote.QueueDidChange() : " + SteamMusicRemote.QueueDidChange());
+			bool ret = SteamMusicRemote.QueueDidChange();
+			print("SteamMusicRemote.QueueDidChange() : " + ret);
 		}
 
 		// Playlist
 		if (GUILayout.Button("PlaylistWillChange()")) {
-			print("SteamMusicRemote.PlaylistWillChange() : " + SteamMusicRemote.PlaylistWillChange());
+			bool ret = SteamMusicRemote.PlaylistWillChange();
+			print("SteamMusicRemote.PlaylistWillChange() : " + ret);
 		}
 
 		if (GUILayout.Button("ResetPlaylistEntries()")) {
-			print("SteamMusicRemote.ResetPlaylistEntries() : " + SteamMusicRemote.ResetPlaylistEntries());
+			bool ret = SteamMusicRemote.ResetPlaylistEntries();
+			print("SteamMusicRemote.ResetPlaylistEntries() : " + ret);
 		}
 
 		if (GUILayout.Button("SetPlaylistEntry(0, 0, \"I don't know what I'm doing\")")) {
-			print("SteamMusicRemote.SetPlaylistEntry(0, 0, \"I don't know what I'm doing\") : " + SteamMusicRemote.SetPlaylistEntry(0, 0, "I don't know what I'm doing"));
+			bool ret = SteamMusicRemote.SetPlaylistEntry(0, 0, "I don't know what I'm doing");
+			print("SteamMusicRemote.SetPlaylistEntry(" + 0 + ", " + 0 + ", " + "\"I don't know what I'm doing\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetCurrentPlaylistEntry(0)")) {
-			print("SteamMusicRemote.SetCurrentPlaylistEntry(0) : " + SteamMusicRemote.SetCurrentPlaylistEntry(0));
+			bool ret = SteamMusicRemote.SetCurrentPlaylistEntry(0);
+			print("SteamMusicRemote.SetCurrentPlaylistEntry(" + 0 + ") : " + ret);
 		}
 
 		if (GUILayout.Button("PlaylistDidChange()")) {
-			print("SteamMusicRemote.PlaylistDidChange() : " + SteamMusicRemote.PlaylistDidChange());
+			bool ret = SteamMusicRemote.PlaylistDidChange();
+			print("SteamMusicRemote.PlaylistDidChange() : " + ret);
 		}
 	}
 

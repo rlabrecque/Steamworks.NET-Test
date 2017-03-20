@@ -69,26 +69,35 @@ public class SteamScreenshotsTest : MonoBehaviour {
 
 		if (GUILayout.Button("TriggerScreenshot()")) {
 			SteamScreenshots.TriggerScreenshot();
-			print("SteamClient.TriggerScreenshot()");
+			print("SteamScreenshots.TriggerScreenshot()");
 		}
 
 		if (GUILayout.Button("HookScreenshots(!m_Hooked)")) {
 			SteamScreenshots.HookScreenshots(!m_Hooked);
-			print("SteamClient.HookScreenshots(" + !m_Hooked + ")");
+			print("SteamScreenshots.HookScreenshots(" + !m_Hooked + ")");
 			m_Hooked = !m_Hooked;
 		}
 
 		if (GUILayout.Button("SetLocation(m_ScreenshotHandle, \"LocationTest\")")) {
-			print("SteamClient.SetLocation(" + m_ScreenshotHandle + ", \"LocationTest\") : " + SteamScreenshots.SetLocation(m_ScreenshotHandle, "LocationTest"));
+			bool ret = SteamScreenshots.SetLocation(m_ScreenshotHandle, "LocationTest");
+			print("SteamScreenshots.SetLocation(" + m_ScreenshotHandle + ", " + "\"LocationTest\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("TagUser(m_ScreenshotHandle, (CSteamID)76561197991230424)")) {
-			print("SteamScreenshots.TagUser(" + m_ScreenshotHandle + ", " + (CSteamID)76561197991230424 + ") : " + SteamScreenshots.TagUser(m_ScreenshotHandle, (CSteamID)76561197991230424)); // rlabrecque
+		if (GUILayout.Button("TagUser(m_ScreenshotHandle, TestConstants.Instance.k_SteamId_rlabrecque)")) {
+			bool ret = SteamScreenshots.TagUser(m_ScreenshotHandle, TestConstants.Instance.k_SteamId_rlabrecque);
+			print("SteamScreenshots.TagUser(" + m_ScreenshotHandle + ", " + TestConstants.Instance.k_SteamId_rlabrecque + ") : " + ret);
 		}
 
-		if (GUILayout.Button("TagPublishedFile(m_ScreenshotHandle, new PublishedFileId_t(0UL))")) {
-			bool ret = SteamScreenshots.TagPublishedFile(m_ScreenshotHandle, new PublishedFileId_t(0UL));
-			print("TagPublishedFile(" + m_ScreenshotHandle + ", " + new PublishedFileId_t(0UL) + ") : " + ret);
+		if (GUILayout.Button("TagPublishedFile(m_ScreenshotHandle, PublishedFileId_t.Invalid)")) {
+			bool ret = SteamScreenshots.TagPublishedFile(m_ScreenshotHandle, PublishedFileId_t.Invalid);
+			print("SteamScreenshots.TagPublishedFile(" + m_ScreenshotHandle + ", " + PublishedFileId_t.Invalid + ") : " + ret);
+		}
+
+		GUILayout.Label("IsScreenshotsHooked() : " + SteamScreenshots.IsScreenshotsHooked());
+
+		if (GUILayout.Button("AddVRScreenshotToLibrary(EVRScreenshotType.k_EVRScreenshotType_None, null, null)")) {
+			ScreenshotHandle ret = SteamScreenshots.AddVRScreenshotToLibrary(EVRScreenshotType.k_EVRScreenshotType_None, null, null);
+			print("SteamScreenshots.AddVRScreenshotToLibrary(" + EVRScreenshotType.k_EVRScreenshotType_None + ", " + null + ", " + null + ") : " + ret);
 		}
 	}
 

@@ -7,8 +7,8 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	const int HeightOffset = 100;
 
 	private bool m_Init;
-	private HHTMLBrowser m_HHTMLBrowser = HHTMLBrowser.Invalid;
-	private string m_URL = "http://steamworks.github.io";
+	private HHTMLBrowser m_HHTMLBrowser;
+	private string m_URL;
 	private Texture2D m_Texture;
 	private uint m_Width;
 	private uint m_Height;
@@ -21,10 +21,11 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	private uint m_HorizontalScrollMax;
 	private uint m_HorizontalScrollCurrent;
 	private bool m_SetKeyFocus;
-	private string m_Find = "Steamworks";
-	private bool m_CurrentlyInFind = false;
-	private float m_ScaleFactor = 0f;
-	
+	private string m_Find;
+	private bool m_CurrentlyInFind;
+	private float m_ScaleFactor;
+	private bool m_BackgroundMode;
+
 	protected Callback<HTML_NeedsPaint_t> m_HTML_NeedsPaint;
 	protected Callback<HTML_StartRequest_t> m_HTML_StartRequest;
 	protected Callback<HTML_CloseBrowser_t> m_HTML_CloseBrowser;
@@ -47,9 +48,20 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	protected Callback<HTML_UpdateToolTip_t> m_HTML_UpdateToolTip;
 	protected Callback<HTML_HideToolTip_t> m_HTML_HideToolTip;
 
-	private CallResult<HTML_BrowserReady_t> m_HTML_BrowserReadyResult;
+	private CallResult<HTML_BrowserReady_t> OnHTML_BrowserReadyCallResult;
 
 	public void OnEnable() {
+		m_HHTMLBrowser = HHTMLBrowser.Invalid;
+		m_URL = "http://steamworks.github.io";
+		m_Texture = null;
+		m_Find = "Steamworks";
+		m_CurrentlyInFind = false;
+		m_ScaleFactor = 0f;
+		m_BackgroundMode = false;
+
+		m_Init = SteamHTMLSurface.Init();
+		print("SteamHTMLSurface.Init() : " + m_Init);
+
 		m_HTML_NeedsPaint = Callback<HTML_NeedsPaint_t>.Create(OnHTML_NeedsPaint);
 		m_HTML_StartRequest = Callback<HTML_StartRequest_t>.Create(OnHTML_StartRequest);
 		m_HTML_CloseBrowser = Callback<HTML_CloseBrowser_t>.Create(OnHTML_CloseBrowser);
@@ -72,23 +84,45 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		m_HTML_UpdateToolTip = Callback<HTML_UpdateToolTip_t>.Create(OnHTML_UpdateToolTip);
 		m_HTML_HideToolTip = Callback<HTML_HideToolTip_t>.Create(OnHTML_HideToolTip);
 
-		m_HTML_BrowserReadyResult = CallResult<HTML_BrowserReady_t>.Create(OnHTML_BrowserReady);
-
-		m_Init = SteamHTMLSurface.Init();
-		print("SteamHTMLSurface.Init() : " + m_Init);
-
-		m_Texture = null;
+		OnHTML_BrowserReadyCallResult = CallResult<HTML_BrowserReady_t>.Create(OnHTML_BrowserReady);
 	}
 
 	public void OnDisable() {
 		RemoveBrowser();
+		SteamHTMLSurface.Shutdown();
+	}
+
+	void RemoveBrowser() {
+		if (m_HHTMLBrowser != HHTMLBrowser.Invalid) {
+			print("SteamHTMLSurface.RemoveBrowser(" + m_HHTMLBrowser + ")");
+			SteamHTMLSurface.RemoveBrowser(m_HHTMLBrowser);
+			m_HHTMLBrowser = HHTMLBrowser.Invalid;
+		}
+		m_Texture = null;
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Init: " + m_Init);
 		GUILayout.Label("m_HHTMLBrowser: " + m_HHTMLBrowser);
+		GUILayout.Label("m_URL: " + m_URL);
+		GUILayout.Label("m_Texture: " + m_Texture);
+		GUILayout.Label("m_Width: " + m_Width);
+		GUILayout.Label("m_Height: " + m_Height);
+		GUILayout.Label("m_CanGoBack: " + m_CanGoBack);
+		GUILayout.Label("m_CanGoForward: " + m_CanGoForward);
+		GUILayout.Label("m_Rect: " + m_Rect);
+		GUILayout.Label("m_LastMousePos: " + m_LastMousePos);
+		GUILayout.Label("m_VerticalScrollMax: " + m_VerticalScrollMax);
+		GUILayout.Label("m_VeritcalScrollCurrent: " + m_VeritcalScrollCurrent);
+		GUILayout.Label("m_HorizontalScrollMax: " + m_HorizontalScrollMax);
+		GUILayout.Label("m_HorizontalScrollCurrent: " + m_HorizontalScrollCurrent);
+		GUILayout.Label("m_SetKeyFocus: " + m_SetKeyFocus);
+		GUILayout.Label("m_Find: " + m_Find);
+		GUILayout.Label("m_CurrentlyInFind: " + m_CurrentlyInFind);
+		GUILayout.Label("m_ScaleFactor: " + m_ScaleFactor);
+		GUILayout.Label("m_BackgroundMode: " + m_BackgroundMode);
 		GUILayout.EndArea();
 
 		if (m_Texture) {
@@ -100,11 +134,15 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 			return;
 		}
 
+		//SteamHTMLSurface.Init() // N/A - Called in OnEnable
+
+		//SteamHTMLSurface.Shutdown() // N/A - Called in OnDisable
+
 		if (GUILayout.Button("CreateBrowser(\"SpaceWars Test\", null)")) {
 			RemoveBrowser(); // Remove an old browser if it exists.
 			SteamAPICall_t handle = SteamHTMLSurface.CreateBrowser("SpaceWars Test", null);
-			m_HTML_BrowserReadyResult.Set(handle);
-			print("SteamHTMLSurface.CreateBrowser(\"SpaceWars Test\", null) - " + handle);
+			OnHTML_BrowserReadyCallResult.Set(handle);
+			print("SteamHTMLSurface.CreateBrowser(" + "\"SpaceWars Test\"" + ", " + null + ") : " + handle);
 		}
 
 		if (GUILayout.Button("RemoveBrowser(m_HHTMLBrowser)")) {
@@ -114,7 +152,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		m_URL = GUILayout.TextField(m_URL);
 		if (GUILayout.Button("LoadURL(m_HHTMLBrowser, m_URL, null)")) {
 			SteamHTMLSurface.LoadURL(m_HHTMLBrowser, m_URL, null);
-			print("SteamHTMLSurface.LoadURL(m_HHTMLBrowser," + m_URL + ", null)");
+			print("SteamHTMLSurface.LoadURL(" + m_HHTMLBrowser + ", " + m_URL + ", " + null + ")");
 		}
 
 		if (GUILayout.Button("SetSize(m_HHTMLBrowser, m_Width, m_Height)")) {
@@ -123,97 +161,125 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 			m_Rect = new Rect(WidthOffset, m_Height + HeightOffset, m_Width, -m_Height); // This flips the viewport since Unity renders textures upside down.
 			m_Texture = null;
 			SteamHTMLSurface.SetSize(m_HHTMLBrowser, m_Width, m_Height);
-			print("SteamHTMLSurface.SetSize(m_HHTMLBrowser, " + m_Width + ", " + m_Height + ")");
+			print("SteamHTMLSurface.SetSize(" + m_HHTMLBrowser + ", " + m_Width + ", " + m_Height + ")");
 		}
 
 		if (GUILayout.Button("StopLoad(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.StopLoad(m_HHTMLBrowser);
-			print("SteamHTMLSurface.StopLoad(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.StopLoad(" + m_HHTMLBrowser + ")");
 		}
 
 		if (GUILayout.Button("Reload(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.Reload(m_HHTMLBrowser);
-			print("SteamHTMLSurface.Reload(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.Reload(" + m_HHTMLBrowser + ")");
 		}
 
 		GUI.enabled = m_CanGoBack;
 		if (GUILayout.Button("GoBack(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.GoBack(m_HHTMLBrowser);
-			print("SteamHTMLSurface.GoBack(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.GoBack(" + m_HHTMLBrowser + ")");
 		}
+
 		GUI.enabled = m_CanGoForward;
 		if (GUILayout.Button("GoForward(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.GoForward(m_HHTMLBrowser);
-			print("SteamHTMLSurface.GoForward(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.GoForward(" + m_HHTMLBrowser + ")");
 		}
-		GUI.enabled = true;
 
+		GUI.enabled = true;
 		if (GUILayout.Button("AddHeader(m_HHTMLBrowser, \"From\", \"test@test.com\")")) {
 			SteamHTMLSurface.AddHeader(m_HHTMLBrowser, "From", "test@test.com");
-			print("SteamHTMLSurface.AddHeader(m_HHTMLBrowser, \"From\", \"test@test.com\")");
+			print("SteamHTMLSurface.AddHeader(" + m_HHTMLBrowser + ", " + "\"From\"" + ", " + "\"test@test.com\"" + ")");
 		}
 
 		if (GUILayout.Button("ExecuteJavascript(m_HHTMLBrowser, \"window.alert('Test');\")")) {
 			SteamHTMLSurface.ExecuteJavascript(m_HHTMLBrowser, "window.alert('Test');");
-			print("SteamHTMLSurface.ExecuteJavascript(m_HHTMLBrowser, \"window.alert('Test');\")");
+			print("SteamHTMLSurface.ExecuteJavascript(" + m_HHTMLBrowser + ", " + "\"window.alert('Test');\"" + ")");
 		}
 
-		if (GUILayout.Button("SetKeyFocus(m_HHTMLBrowser, " + !m_SetKeyFocus + ")")) {
+		//SteamHTMLSurface.MouseUp() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.MouseDown() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.MouseDoubleClick() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.MouseMove() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.MouseWheel() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.KeyDown() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.KeyUp() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.KeyChar() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.SetHorizontalScroll() // All interaction calls are dealt with at the end of OnGUI
+
+		//SteamHTMLSurface.SetVerticalScroll() // All interaction calls are dealt with at the end of OnGUI
+
+		if (GUILayout.Button("SetKeyFocus(m_HHTMLBrowser, !m_SetKeyFocus)")) {
 			SteamHTMLSurface.SetKeyFocus(m_HHTMLBrowser, !m_SetKeyFocus);
+			print("SteamHTMLSurface.SetKeyFocus(" + m_HHTMLBrowser + ", " + !m_SetKeyFocus + ")");
 			m_SetKeyFocus = !m_SetKeyFocus;
-			print("SteamHTMLSurface.SetKeyFocus(m_HHTMLBrowser, " + !m_SetKeyFocus + ")");
 		}
 
 		if (GUILayout.Button("ViewSource(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.ViewSource(m_HHTMLBrowser);
-			print("SteamHTMLSurface.ViewSource(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.ViewSource(" + m_HHTMLBrowser + ")");
 		}
 
 		if (GUILayout.Button("CopyToClipboard(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.CopyToClipboard(m_HHTMLBrowser);
-			print("SteamHTMLSurface.CopyToClipboard(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.CopyToClipboard(" + m_HHTMLBrowser + ")");
 		}
 
 		if (GUILayout.Button("PasteFromClipboard(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.PasteFromClipboard(m_HHTMLBrowser);
-			print("SteamHTMLSurface.PasteFromClipboard(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.PasteFromClipboard(" + m_HHTMLBrowser + ")");
 		}
 
 		m_Find = GUILayout.TextField(m_Find);
 		if (GUILayout.Button("Find(m_HHTMLBrowser, m_Find, m_CurrentlyInFind, false)")) {
-			SteamHTMLSurface.Find(m_HHTMLBrowser, m_Find, m_CurrentlyInFind, bReverse: false);
-			print("SteamHTMLSurface.Find(m_HHTMLBrowser," + m_Find + ", " + m_CurrentlyInFind + ", false)");
+			SteamHTMLSurface.Find(m_HHTMLBrowser, m_Find, m_CurrentlyInFind, false);
+			print("SteamHTMLSurface.Find(" + m_HHTMLBrowser + ", " + m_Find + ", " + m_CurrentlyInFind + ", " + false + ")");
 			m_CurrentlyInFind = true;
 		}
 
 		if (GUILayout.Button("StopFind(m_HHTMLBrowser)")) {
 			SteamHTMLSurface.StopFind(m_HHTMLBrowser);
-			print("SteamHTMLSurface.StopFind(m_HHTMLBrowser)");
+			print("SteamHTMLSurface.StopFind(" + m_HHTMLBrowser + ")");
 			m_CurrentlyInFind = false;
 		}
 
-		if (GUILayout.Button("GetLinkAtPosition(m_HHTMLBrowser, 500, 120)")) {
-			SteamHTMLSurface.GetLinkAtPosition(m_HHTMLBrowser, 500 - WidthOffset, 120 - HeightOffset);
-			print("SteamHTMLSurface.GetLinkAtPosition(m_HHTMLBrowser, 500, 120)");
+		if (GUILayout.Button("GetLinkAtPosition(m_HHTMLBrowser, (500 - WidthOffset), (120 - HeightOffset))")) {
+			SteamHTMLSurface.GetLinkAtPosition(m_HHTMLBrowser, (500 - WidthOffset), (120 - HeightOffset));
+			print("SteamHTMLSurface.GetLinkAtPosition(" + m_HHTMLBrowser + ", " + (500 - WidthOffset) + ", " + (120 - HeightOffset) + ")");
 		}
 
-		// Use with http://html-kit.com/tools/cookietester/
-		if (GUILayout.Button("SetCookie(\"html-kit.com\", \"testcookiekey\", \"testcookievalue\")")) {
-			SteamHTMLSurface.SetCookie("html-kit.com", "testcookiekey", "testcookievalue");
-			print("SteamHTMLSurface.SetCookie(\"html-kit.com\", \"testcookiekey\", \"testcookievalue\")");
+		if (GUILayout.Button("SetCookie(m_URL, \"testcookiekey\", \"testcookievalue\")")) {
+			// Use with http://httpbin.org/cookies
+			SteamHTMLSurface.SetCookie(m_URL, "testcookiekey", "testcookievalue");
+			print("SteamHTMLSurface.SetCookie(" + m_URL + ", " + "\"testcookiekey\"" + ", " + "\"testcookievalue\"" + ")");
 		}
 
 		m_ScaleFactor = GUILayout.HorizontalScrollbar(m_ScaleFactor, 0.25f, 0f, 2f);
-		if (GUILayout.Button("SetPageScaleFactor(m_HHTMLBrowser, " + m_ScaleFactor + ", 0, 0)")) {
+		if (GUILayout.Button("SetPageScaleFactor(m_HHTMLBrowser, m_ScaleFactor, 0, 0)")) {
 			SteamHTMLSurface.SetPageScaleFactor(m_HHTMLBrowser, m_ScaleFactor, 0, 0);
-			print("SteamHTMLSurface.SetPageScaleFactor(m_HHTMLBrowser, " + m_ScaleFactor + ", 0, 0)");
+			print("SteamHTMLSurface.SetPageScaleFactor(" + m_HHTMLBrowser + ", " + m_ScaleFactor + ", " + 0 + ", " + 0 + ")");
 		}
 
-		if (GUILayout.Button("SetBackgroundMode(m_HHTMLBrowser, Random.Range(0, 2) != 0)")) {
-			SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, Random.Range(0, 2) != 0);
-			print("SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, " + (Random.Range(0, 2) != 0));
+		if (GUILayout.Button("SetBackgroundMode(m_HHTMLBrowser, m_BackgroundMode)")) {
+			SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, m_BackgroundMode);
+			print("SteamHTMLSurface.SetBackgroundMode(" + m_HHTMLBrowser + ", " + m_BackgroundMode + ")");
+			m_BackgroundMode = !m_BackgroundMode;
 		}
-		
+
+		//SteamHTMLSurface.AllowStartRequest() // ['N/A - You MUST call this in response to a HTML_StartRequest_t callback']
+
+		//SteamHTMLSurface.JSDialogResponse() // [' N/A - You MUST call this in response to a HTML_JSAlert_t or HTML_JSConfirm_t callback']
+
+		//SteamHTMLSurface.FileLoadDialogResponse() // N/A - You MUST call this in response to a HTML_FileOpenDialog_t callback
+
 		if (m_HHTMLBrowser == HHTMLBrowser.Invalid) {
 			return;
 		}
@@ -292,17 +358,9 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		}
 	}
 
-	void RemoveBrowser() {
-		if (m_HHTMLBrowser != HHTMLBrowser.Invalid) {
-			print("SteamHTMLSurface.RemoveBrowser(" + m_HHTMLBrowser + ")");
-			SteamHTMLSurface.RemoveBrowser(m_HHTMLBrowser);
-			m_HHTMLBrowser = HHTMLBrowser.Invalid;
-		}
-		m_Texture = null;
-	}
-
 	void OnHTML_BrowserReady(HTML_BrowserReady_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + HTML_BrowserReady_t.k_iCallback + " - HTML_BrowserReady] - " + pCallback.unBrowserHandle);
+
 		m_HHTMLBrowser = pCallback.unBrowserHandle;
 	}
 
@@ -330,6 +388,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 
 	void OnHTML_CloseBrowser(HTML_CloseBrowser_t pCallback) {
 		Debug.Log("[" + HTML_CloseBrowser_t.k_iCallback + " - HTML_CloseBrowser] - " + pCallback.unBrowserHandle);
+
 		m_HHTMLBrowser = HHTMLBrowser.Invalid;
 	}
 
@@ -355,18 +414,21 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 
 	void OnHTML_CanGoBackAndForward(HTML_CanGoBackAndForward_t pCallback) {
 		Debug.Log("[" + HTML_CanGoBackAndForward_t.k_iCallback + " - HTML_CanGoBackAndForward] - " + pCallback.unBrowserHandle + " -- " + pCallback.bCanGoBack + " -- " + pCallback.bCanGoForward);
+
 		m_CanGoBack = pCallback.bCanGoBack;
 		m_CanGoForward = pCallback.bCanGoForward;
 	}
 
 	void OnHTML_HorizontalScroll(HTML_HorizontalScroll_t pCallback) {
 		Debug.Log("[" + HTML_HorizontalScroll_t.k_iCallback + " - HTML_HorizontalScroll] - " + pCallback.unBrowserHandle + " -- " + pCallback.unScrollMax + " -- " + pCallback.unScrollCurrent + " -- " + pCallback.flPageScale + " -- " + pCallback.bVisible + " -- " + pCallback.unPageSize);
+
 		m_HorizontalScrollMax = pCallback.unScrollMax;
 		m_HorizontalScrollCurrent = pCallback.unScrollCurrent;
 	}
 
 	void OnHTML_VerticalScroll(HTML_VerticalScroll_t pCallback) {
 		Debug.Log("[" + HTML_VerticalScroll_t.k_iCallback + " - HTML_VerticalScroll] - " + pCallback.unBrowserHandle + " -- " + pCallback.unScrollMax + " -- " + pCallback.unScrollCurrent + " -- " + pCallback.flPageScale + " -- " + pCallback.bVisible + " -- " + pCallback.unPageSize);
+
 		m_VerticalScrollMax = pCallback.unScrollMax;
 		m_VeritcalScrollCurrent = pCallback.unScrollCurrent;
 	}

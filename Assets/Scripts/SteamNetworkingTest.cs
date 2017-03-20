@@ -3,17 +3,19 @@ using System.Collections;
 using Steamworks;
 
 public class SteamNetworkingTest : MonoBehaviour {
-	// You'd typically get this from a Lobby. Hardcoding it so that we don't need to integrate the whole lobby system with the networking.
-	CSteamID m_RemoteSteamId = new CSteamID(0);
+	private CSteamID m_RemoteSteamId;
 
 	protected Callback<P2PSessionRequest_t> m_P2PSessionRequest;
 	protected Callback<P2PSessionConnectFail_t> m_P2PSessionConnectFail;
-	protected Callback<SocketStatusCallback_t> m_SocketStatusCallback_t;
-	
-	void OnEnable() {
+	protected Callback<SocketStatusCallback_t> m_SocketStatusCallback;
+
+	public void OnEnable() {
+		// You'd typically get this from a Lobby. Hardcoding it so that we don't need to integrate the whole lobby system with the networking.
+		m_RemoteSteamId = new CSteamID(0);
+
 		m_P2PSessionRequest = Callback<P2PSessionRequest_t>.Create(OnP2PSessionRequest);
 		m_P2PSessionConnectFail = Callback<P2PSessionConnectFail_t>.Create(OnP2PSessionConnectFail);
-		m_SocketStatusCallback_t = Callback<SocketStatusCallback_t>.Create(OnSocketStatusCallback);
+		m_SocketStatusCallback = Callback<SocketStatusCallback_t>.Create(OnSocketStatusCallback);
 	}
 
 	void OnDisable() {
@@ -23,8 +25,13 @@ public class SteamNetworkingTest : MonoBehaviour {
 		}
 	}
 
+	enum MsgType : uint {
+		Ping,
+		Ack,
+	}
+
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_RemoteSteamId: " + m_RemoteSteamId);
 		GUILayout.EndArea();
@@ -36,7 +43,6 @@ public class SteamNetworkingTest : MonoBehaviour {
 		}
 
 		// Session-less connection functions
-
 		if (GUILayout.Button("SendP2PPacket(m_RemoteSteamId, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable)")) {
 			byte[] bytes = new byte[4];
 			using (System.IO.MemoryStream ms = new System.IO.MemoryStream(bytes))
@@ -44,7 +50,7 @@ public class SteamNetworkingTest : MonoBehaviour {
 				b.Write((uint)MsgType.Ping);
 			}
 			bool ret = SteamNetworking.SendP2PPacket(m_RemoteSteamId, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable);
-			print("SteamNetworking.SendP2PPacket(" + m_RemoteSteamId + ", bytes, " + bytes.Length + ", EP2PSend.k_EP2PSendReliable) - " + ret);
+			print("SteamNetworking.SendP2PPacket(" + m_RemoteSteamId + ", " + bytes + ", " + (uint)bytes.Length + ", " + EP2PSend.k_EP2PSendReliable + ") : " + ret);
 		}
 
 		{
@@ -72,32 +78,57 @@ public class SteamNetworkingTest : MonoBehaviour {
 			GUI.enabled = true;
 		}
 
-		// bool AcceptP2PSessionWithUser(CSteamID steamIDRemote) // Only called from within P2PSessionRequest Callback!
+		//SteamNetworking.AcceptP2PSessionWithUser() // Only called from within P2PSessionRequest Callback!
 
 		if (GUILayout.Button("CloseP2PSessionWithUser(m_RemoteSteamId)")) {
 			bool ret = SteamNetworking.CloseP2PSessionWithUser(m_RemoteSteamId);
-			print("SteamNetworking.CloseP2PSessionWithUser(" + m_RemoteSteamId + ") - " + ret);
+			print("SteamNetworking.CloseP2PSessionWithUser(" + m_RemoteSteamId + ") : " + ret);
 		}
 
 		if (GUILayout.Button("CloseP2PChannelWithUser(m_RemoteSteamId, 0)")) {
 			bool ret = SteamNetworking.CloseP2PChannelWithUser(m_RemoteSteamId, 0);
-			print("SteamNetworking.CloseP2PChannelWithUser(" + m_RemoteSteamId + ", 0) - " + ret);
+			print("SteamNetworking.CloseP2PChannelWithUser(" + m_RemoteSteamId + ", " + 0 + ") : " + ret);
 		}
 
 		{
 			P2PSessionState_t ConnectionState;
 			bool ret = SteamNetworking.GetP2PSessionState(m_RemoteSteamId, out ConnectionState);
-			GUILayout.Label("GetP2PSessionState(m_RemoteSteamId, out ConnectionState) : " + ret + " -- " + ConnectionState.m_bConnectionActive + " -- " + ConnectionState.m_bConnecting + " -- " + ConnectionState.m_eP2PSessionError + " -- " + ConnectionState.m_bUsingRelay + " -- " + ConnectionState.m_nBytesQueuedForSend + " -- " + ConnectionState.m_nPacketsQueuedForSend + " -- " + ConnectionState.m_nRemoteIP + " -- " + ConnectionState.m_nRemotePort);
+			GUILayout.Label("GetP2PSessionState(m_RemoteSteamId, out ConnectionState) : " + ret + " -- " + ConnectionState);
 		}
 
 		if (GUILayout.Button("AllowP2PPacketRelay(true)")) {
 			bool ret = SteamNetworking.AllowP2PPacketRelay(true);
-			print("SteamNetworking.AllowP2PPacketRelay(true) - " + ret);
+			print("SteamNetworking.AllowP2PPacketRelay(" + true + ") : " + ret);
 		}
 
 		// LISTEN / CONNECT style interface functions
+		//SteamNetworking.CreateListenSocket() // TODO
 
+		//SteamNetworking.CreateP2PConnectionSocket() // TODO
 
+		//SteamNetworking.CreateConnectionSocket() // TODO
+
+		//SteamNetworking.DestroySocket() // TODO
+
+		//SteamNetworking.DestroyListenSocket() // TODO
+
+		//SteamNetworking.SendDataOnSocket() // TODO
+
+		//SteamNetworking.IsDataAvailableOnSocket() // TODO
+
+		//SteamNetworking.RetrieveDataFromSocket() // TODO
+
+		//SteamNetworking.IsDataAvailable() // TODO
+
+		//SteamNetworking.RetrieveData() // TODO
+
+		//SteamNetworking.GetSocketInfo() // TODO
+
+		//SteamNetworking.GetListenSocketInfo() // TODO
+
+		//SteamNetworking.GetSocketConnectionType() // TODO
+
+		//SteamNetworking.GetMaxPacketSize() // TODO
 	}
 
 	void OnP2PSessionRequest(P2PSessionRequest_t pCallback) {
@@ -116,10 +147,4 @@ public class SteamNetworkingTest : MonoBehaviour {
 	void OnSocketStatusCallback(SocketStatusCallback_t pCallback) {
 		Debug.Log("[" + SocketStatusCallback_t.k_iCallback + " - SocketStatusCallback] - " + pCallback.m_hSocket + " -- " + pCallback.m_hListenSocket + " -- " + pCallback.m_steamIDRemote + " -- " + pCallback.m_eSNetSocketState);
 	}
-
-	enum MsgType : uint {
-		Ping,
-		Ack,
-	}
 }
-

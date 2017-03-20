@@ -5,11 +5,12 @@ using Steamworks;
 public class SteamRemoteStorageTest : MonoBehaviour {
 	const string MESSAGE_FILE_NAME = "message.dat";
 
-	private string m_Message = "";
+	private string m_Message;
 	private int m_FileCount;
 	private int m_FileSize;
 	private ulong m_TotalBytes;
 	private int m_FileSizeInBytes;
+	private bool m_CloudEnabled;
 	private UGCFileWriteStreamHandle_t m_FileStream;
 	private UGCHandle_t m_UGCHandle;
 	private PublishedFileId_t m_PublishedFileId;
@@ -23,30 +24,32 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	protected Callback<RemoteStoragePublishedFileSubscribed_t> m_RemoteStoragePublishedFileSubscribed;
 	protected Callback<RemoteStoragePublishedFileUnsubscribed_t> m_RemoteStoragePublishedFileUnsubscribed;
 	protected Callback<RemoteStoragePublishedFileDeleted_t> m_RemoteStoragePublishedFileDeleted;
-	protected Callback<RemoteStoragePublishFileProgress_t> m_RemoteStoragePublishFileProgress;
 	protected Callback<RemoteStoragePublishedFileUpdated_t> m_RemoteStoragePublishedFileUpdated;
 
-	private CallResult<RemoteStorageFileShareResult_t> RemoteStorageFileShareResult;
-	private CallResult<RemoteStoragePublishFileResult_t> RemoteStoragePublishFileResult;
-	private CallResult<RemoteStorageDeletePublishedFileResult_t> RemoteStorageDeletePublishedFileResult;
-	private CallResult<RemoteStorageEnumerateUserPublishedFilesResult_t> RemoteStorageEnumerateUserPublishedFilesResult;
-	private CallResult<RemoteStorageSubscribePublishedFileResult_t> RemoteStorageSubscribePublishedFileResult;
-	private CallResult<RemoteStorageEnumerateUserSubscribedFilesResult_t> RemoteStorageEnumerateUserSubscribedFilesResult;
-	private CallResult<RemoteStorageUnsubscribePublishedFileResult_t> RemoteStorageUnsubscribePublishedFileResult;
-	private CallResult<RemoteStorageUpdatePublishedFileResult_t> RemoteStorageUpdatePublishedFileResult;
-	private CallResult<RemoteStorageDownloadUGCResult_t> RemoteStorageDownloadUGCResult;
-	private CallResult<RemoteStorageGetPublishedFileDetailsResult_t> RemoteStorageGetPublishedFileDetailsResult;
-	private CallResult<RemoteStorageEnumerateWorkshopFilesResult_t> RemoteStorageEnumerateWorkshopFilesResult;
-	private CallResult<RemoteStorageGetPublishedItemVoteDetailsResult_t> RemoteStorageGetPublishedItemVoteDetailsResult;
-	private CallResult<RemoteStorageUpdateUserPublishedItemVoteResult_t> RemoteStorageUpdateUserPublishedItemVoteResult;
-	private CallResult<RemoteStorageUserVoteDetails_t> RemoteStorageUserVoteDetails;
-	private CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t> RemoteStorageEnumerateUserSharedWorkshopFilesResult;
-	private CallResult<RemoteStorageSetUserPublishedFileActionResult_t> RemoteStorageSetUserPublishedFileActionResult;
-	private CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t> RemoteStorageEnumeratePublishedFilesByUserActionResult;
-	private CallResult<RemoteStorageFileWriteAsyncComplete_t> RemoteStorageFileWriteAsyncComplete;
-	private CallResult<RemoteStorageFileReadAsyncComplete_t> RemoteStorageFileReadAsyncComplete;
+	private CallResult<RemoteStorageFileShareResult_t> OnRemoteStorageFileShareResultCallResult;
+	private CallResult<RemoteStoragePublishFileResult_t> OnRemoteStoragePublishFileResultCallResult;
+	private CallResult<RemoteStorageDeletePublishedFileResult_t> OnRemoteStorageDeletePublishedFileResultCallResult;
+	private CallResult<RemoteStorageEnumerateUserPublishedFilesResult_t> OnRemoteStorageEnumerateUserPublishedFilesResultCallResult;
+	private CallResult<RemoteStorageSubscribePublishedFileResult_t> OnRemoteStorageSubscribePublishedFileResultCallResult;
+	private CallResult<RemoteStorageEnumerateUserSubscribedFilesResult_t> OnRemoteStorageEnumerateUserSubscribedFilesResultCallResult;
+	private CallResult<RemoteStorageUnsubscribePublishedFileResult_t> OnRemoteStorageUnsubscribePublishedFileResultCallResult;
+	private CallResult<RemoteStorageUpdatePublishedFileResult_t> OnRemoteStorageUpdatePublishedFileResultCallResult;
+	private CallResult<RemoteStorageDownloadUGCResult_t> OnRemoteStorageDownloadUGCResultCallResult;
+	private CallResult<RemoteStorageGetPublishedFileDetailsResult_t> OnRemoteStorageGetPublishedFileDetailsResultCallResult;
+	private CallResult<RemoteStorageEnumerateWorkshopFilesResult_t> OnRemoteStorageEnumerateWorkshopFilesResultCallResult;
+	private CallResult<RemoteStorageGetPublishedItemVoteDetailsResult_t> OnRemoteStorageGetPublishedItemVoteDetailsResultCallResult;
+	private CallResult<RemoteStorageUpdateUserPublishedItemVoteResult_t> OnRemoteStorageUpdateUserPublishedItemVoteResultCallResult;
+	private CallResult<RemoteStorageUserVoteDetails_t> OnRemoteStorageUserVoteDetailsCallResult;
+	private CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t> OnRemoteStorageEnumerateUserSharedWorkshopFilesResultCallResult;
+	private CallResult<RemoteStorageSetUserPublishedFileActionResult_t> OnRemoteStorageSetUserPublishedFileActionResultCallResult;
+	private CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t> OnRemoteStorageEnumeratePublishedFilesByUserActionResultCallResult;
+	private CallResult<RemoteStoragePublishFileProgress_t> OnRemoteStoragePublishFileProgressCallResult;
+	private CallResult<RemoteStorageFileWriteAsyncComplete_t> OnRemoteStorageFileWriteAsyncCompleteCallResult;
+	private CallResult<RemoteStorageFileReadAsyncComplete_t> OnRemoteStorageFileReadAsyncCompleteCallResult;
 
 	public void OnEnable() {
+		m_Message = "";
+
 		m_RemoteStorageAppSyncedClient = Callback<RemoteStorageAppSyncedClient_t>.Create(OnRemoteStorageAppSyncedClient);
 		m_RemoteStorageAppSyncedServer = Callback<RemoteStorageAppSyncedServer_t>.Create(OnRemoteStorageAppSyncedServer);
 		m_RemoteStorageAppSyncProgress = Callback<RemoteStorageAppSyncProgress_t>.Create(OnRemoteStorageAppSyncProgress);
@@ -54,55 +57,47 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		m_RemoteStoragePublishedFileSubscribed = Callback<RemoteStoragePublishedFileSubscribed_t>.Create(OnRemoteStoragePublishedFileSubscribed);
 		m_RemoteStoragePublishedFileUnsubscribed = Callback<RemoteStoragePublishedFileUnsubscribed_t>.Create(OnRemoteStoragePublishedFileUnsubscribed);
 		m_RemoteStoragePublishedFileDeleted = Callback<RemoteStoragePublishedFileDeleted_t>.Create(OnRemoteStoragePublishedFileDeleted);
-		m_RemoteStoragePublishFileProgress = Callback<RemoteStoragePublishFileProgress_t>.Create(OnRemoteStoragePublishFileProgress);
 		m_RemoteStoragePublishedFileUpdated = Callback<RemoteStoragePublishedFileUpdated_t>.Create(OnRemoteStoragePublishedFileUpdated);
 
-		RemoteStorageFileShareResult = CallResult<RemoteStorageFileShareResult_t>.Create(OnRemoteStorageFileShareResult);
-		RemoteStoragePublishFileResult = CallResult<RemoteStoragePublishFileResult_t>.Create(OnRemoteStoragePublishFileResult);
-		RemoteStorageDeletePublishedFileResult = CallResult<RemoteStorageDeletePublishedFileResult_t>.Create(OnRemoteStorageDeletePublishedFileResult);
-		RemoteStorageEnumerateUserPublishedFilesResult = CallResult<RemoteStorageEnumerateUserPublishedFilesResult_t>.Create(OnRemoteStorageEnumerateUserPublishedFilesResult);
-		RemoteStorageSubscribePublishedFileResult = CallResult<RemoteStorageSubscribePublishedFileResult_t>.Create(OnRemoteStorageSubscribePublishedFileResult);
-		RemoteStorageEnumerateUserSubscribedFilesResult = CallResult<RemoteStorageEnumerateUserSubscribedFilesResult_t>.Create(OnRemoteStorageEnumerateUserSubscribedFilesResult);
-		RemoteStorageUnsubscribePublishedFileResult = CallResult<RemoteStorageUnsubscribePublishedFileResult_t>.Create(OnRemoteStorageUnsubscribePublishedFileResult);
-		RemoteStorageUpdatePublishedFileResult = CallResult<RemoteStorageUpdatePublishedFileResult_t>.Create(OnRemoteStorageUpdatePublishedFileResult);
-		RemoteStorageDownloadUGCResult = CallResult<RemoteStorageDownloadUGCResult_t>.Create(OnRemoteStorageDownloadUGCResult);
-		RemoteStorageGetPublishedFileDetailsResult = CallResult<RemoteStorageGetPublishedFileDetailsResult_t>.Create(OnRemoteStorageGetPublishedFileDetailsResult);
-		RemoteStorageEnumerateWorkshopFilesResult = CallResult<RemoteStorageEnumerateWorkshopFilesResult_t>.Create(OnRemoteStorageEnumerateWorkshopFilesResult);
-		RemoteStorageGetPublishedItemVoteDetailsResult = CallResult<RemoteStorageGetPublishedItemVoteDetailsResult_t>.Create(OnRemoteStorageGetPublishedItemVoteDetailsResult);
-		RemoteStorageUpdateUserPublishedItemVoteResult = CallResult<RemoteStorageUpdateUserPublishedItemVoteResult_t>.Create(OnRemoteStorageUpdateUserPublishedItemVoteResult);
-		RemoteStorageUserVoteDetails = CallResult<RemoteStorageUserVoteDetails_t>.Create(OnRemoteStorageUserVoteDetails);
-		RemoteStorageEnumerateUserSharedWorkshopFilesResult = CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t>.Create(OnRemoteStorageEnumerateUserSharedWorkshopFilesResult);
-		RemoteStorageSetUserPublishedFileActionResult = CallResult<RemoteStorageSetUserPublishedFileActionResult_t>.Create(OnRemoteStorageSetUserPublishedFileActionResult);
-		RemoteStorageEnumeratePublishedFilesByUserActionResult = CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t>.Create(OnRemoteStorageEnumeratePublishedFilesByUserActionResult);
-		RemoteStorageFileWriteAsyncComplete = CallResult<RemoteStorageFileWriteAsyncComplete_t>.Create(OnRemoteStorageFileWriteAsyncComplete);
-		RemoteStorageFileReadAsyncComplete = CallResult<RemoteStorageFileReadAsyncComplete_t>.Create(OnRemoteStorageFileReadAsyncComplete);
+		OnRemoteStorageFileShareResultCallResult = CallResult<RemoteStorageFileShareResult_t>.Create(OnRemoteStorageFileShareResult);
+		OnRemoteStoragePublishFileResultCallResult = CallResult<RemoteStoragePublishFileResult_t>.Create(OnRemoteStoragePublishFileResult);
+		OnRemoteStorageDeletePublishedFileResultCallResult = CallResult<RemoteStorageDeletePublishedFileResult_t>.Create(OnRemoteStorageDeletePublishedFileResult);
+		OnRemoteStorageEnumerateUserPublishedFilesResultCallResult = CallResult<RemoteStorageEnumerateUserPublishedFilesResult_t>.Create(OnRemoteStorageEnumerateUserPublishedFilesResult);
+		OnRemoteStorageSubscribePublishedFileResultCallResult = CallResult<RemoteStorageSubscribePublishedFileResult_t>.Create(OnRemoteStorageSubscribePublishedFileResult);
+		OnRemoteStorageEnumerateUserSubscribedFilesResultCallResult = CallResult<RemoteStorageEnumerateUserSubscribedFilesResult_t>.Create(OnRemoteStorageEnumerateUserSubscribedFilesResult);
+		OnRemoteStorageUnsubscribePublishedFileResultCallResult = CallResult<RemoteStorageUnsubscribePublishedFileResult_t>.Create(OnRemoteStorageUnsubscribePublishedFileResult);
+		OnRemoteStorageUpdatePublishedFileResultCallResult = CallResult<RemoteStorageUpdatePublishedFileResult_t>.Create(OnRemoteStorageUpdatePublishedFileResult);
+		OnRemoteStorageDownloadUGCResultCallResult = CallResult<RemoteStorageDownloadUGCResult_t>.Create(OnRemoteStorageDownloadUGCResult);
+		OnRemoteStorageGetPublishedFileDetailsResultCallResult = CallResult<RemoteStorageGetPublishedFileDetailsResult_t>.Create(OnRemoteStorageGetPublishedFileDetailsResult);
+		OnRemoteStorageEnumerateWorkshopFilesResultCallResult = CallResult<RemoteStorageEnumerateWorkshopFilesResult_t>.Create(OnRemoteStorageEnumerateWorkshopFilesResult);
+		OnRemoteStorageGetPublishedItemVoteDetailsResultCallResult = CallResult<RemoteStorageGetPublishedItemVoteDetailsResult_t>.Create(OnRemoteStorageGetPublishedItemVoteDetailsResult);
+		OnRemoteStorageUpdateUserPublishedItemVoteResultCallResult = CallResult<RemoteStorageUpdateUserPublishedItemVoteResult_t>.Create(OnRemoteStorageUpdateUserPublishedItemVoteResult);
+		OnRemoteStorageUserVoteDetailsCallResult = CallResult<RemoteStorageUserVoteDetails_t>.Create(OnRemoteStorageUserVoteDetails);
+		OnRemoteStorageEnumerateUserSharedWorkshopFilesResultCallResult = CallResult<RemoteStorageEnumerateUserSharedWorkshopFilesResult_t>.Create(OnRemoteStorageEnumerateUserSharedWorkshopFilesResult);
+		OnRemoteStorageSetUserPublishedFileActionResultCallResult = CallResult<RemoteStorageSetUserPublishedFileActionResult_t>.Create(OnRemoteStorageSetUserPublishedFileActionResult);
+		OnRemoteStorageEnumeratePublishedFilesByUserActionResultCallResult = CallResult<RemoteStorageEnumeratePublishedFilesByUserActionResult_t>.Create(OnRemoteStorageEnumeratePublishedFilesByUserActionResult);
+		OnRemoteStoragePublishFileProgressCallResult = CallResult<RemoteStoragePublishFileProgress_t>.Create(OnRemoteStoragePublishFileProgress);
+		OnRemoteStorageFileWriteAsyncCompleteCallResult = CallResult<RemoteStorageFileWriteAsyncComplete_t>.Create(OnRemoteStorageFileWriteAsyncComplete);
+		OnRemoteStorageFileReadAsyncCompleteCallResult = CallResult<RemoteStorageFileReadAsyncComplete_t>.Create(OnRemoteStorageFileReadAsyncComplete);
 	}
 
-	public void RenderOnGUI(SteamTest.EGUIState state) {
-		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
+	public void RenderOnGUI() {
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");
-		GUILayout.Label("m_Message: ");
+		GUILayout.Label("m_Message:");
 		m_Message = GUILayout.TextField(m_Message, 40);
 		GUILayout.Label("m_FileCount: " + m_FileCount);
 		GUILayout.Label("m_FileSize: " + m_FileSize);
 		GUILayout.Label("m_TotalBytes: " + m_TotalBytes);
 		GUILayout.Label("m_FileSizeInBytes: " + m_FileSizeInBytes);
+		GUILayout.Label("m_CloudEnabled: " + m_CloudEnabled);
 		GUILayout.Label("m_FileStream: " + m_FileStream);
 		GUILayout.Label("m_UGCHandle: " + m_UGCHandle);
 		GUILayout.Label("m_PublishedFileId: " + m_PublishedFileId);
 		GUILayout.Label("m_PublishedFileUpdateHandle: " + m_PublishedFileUpdateHandle);
 		GUILayout.Label("m_FileReadAsyncHandle: " + m_FileReadAsyncHandle);
-        GUILayout.EndArea();
+		GUILayout.EndArea();
 
-		if (state == SteamTest.EGUIState.SteamRemoteStorage) {
-			RenderPageOne();
-		}
-		else {
-			RenderPageTwo();
-		}
-	}
-
-	private void RenderPageOne() {
 		if (GUILayout.Button("FileWrite(MESSAGE_FILE_NAME, Data, Data.Length)")) {
 			if ((ulong)System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
 				print("Remote Storage: Quota Exceeded! - Bytes: " + System.Text.Encoding.UTF8.GetByteCount(m_Message) + " - Max: " + m_TotalBytes);
@@ -133,10 +128,9 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		if (GUILayout.Button("FileWriteAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length)")) {
 			byte[] Data = new byte[System.Text.Encoding.UTF8.GetByteCount(m_Message)];
 			System.Text.Encoding.UTF8.GetBytes(m_Message, 0, m_Message.Length, Data, 0);
-
 			SteamAPICall_t handle = SteamRemoteStorage.FileWriteAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length);
-			RemoteStorageFileWriteAsyncComplete.Set(handle);
-			print("FileWriteAsync(" + MESSAGE_FILE_NAME + ", Data, " + (uint)Data.Length + ") - " + handle);
+			OnRemoteStorageFileWriteAsyncCompleteCallResult.Set(handle);
+			print("SteamRemoteStorage.FileWriteAsync(" + MESSAGE_FILE_NAME + ", " + Data + ", " + (uint)Data.Length + ") : " + handle);
 		}
 
 		if (GUILayout.Button("FileReadAsync(MESSAGE_FILE_NAME, Data, (uint)Data.Length)")) {
@@ -145,35 +139,37 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 			}
 			else {
 				m_FileReadAsyncHandle = SteamRemoteStorage.FileReadAsync(MESSAGE_FILE_NAME, 0, (uint)m_FileSize);
-				RemoteStorageFileReadAsyncComplete.Set(m_FileReadAsyncHandle);
+				OnRemoteStorageFileReadAsyncCompleteCallResult.Set(m_FileReadAsyncHandle);
 				print("FileReadAsync(" + MESSAGE_FILE_NAME + ", 0, " + (uint)m_FileSize + ") - " + m_FileReadAsyncHandle);
 			}
 		}
 
+		//SteamRemoteStorage.FileReadAsyncComplete() // Must be called from the RemoteStorageFileReadAsyncComplete_t CallResult.
+
 		if (GUILayout.Button("FileForget(MESSAGE_FILE_NAME)")) {
 			bool ret = SteamRemoteStorage.FileForget(MESSAGE_FILE_NAME);
-			print("FileForget(" + MESSAGE_FILE_NAME + ") - " + ret);
+			print("SteamRemoteStorage.FileForget(" + MESSAGE_FILE_NAME + ") : " + ret);
 		}
 
 		if (GUILayout.Button("FileDelete(MESSAGE_FILE_NAME)")) {
 			bool ret = SteamRemoteStorage.FileDelete(MESSAGE_FILE_NAME);
-			print("FileDelete(" + MESSAGE_FILE_NAME + ") - " + ret);
+			print("SteamRemoteStorage.FileDelete(" + MESSAGE_FILE_NAME + ") : " + ret);
 		}
 
 		if (GUILayout.Button("FileShare(MESSAGE_FILE_NAME)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.FileShare(MESSAGE_FILE_NAME);
-			RemoteStorageFileShareResult.Set(handle);
-			print("FileShare(" + MESSAGE_FILE_NAME + ") - " + handle);
+			OnRemoteStorageFileShareResultCallResult.Set(handle);
+			print("SteamRemoteStorage.FileShare(" + MESSAGE_FILE_NAME + ") : " + handle);
 		}
 
-		if (GUILayout.Button("SetSyncPlatforms(MESSAGE_FILE_NAME, k_ERemoteStoragePlatformAll)")) {
+		if (GUILayout.Button("SetSyncPlatforms(MESSAGE_FILE_NAME, ERemoteStoragePlatform.k_ERemoteStoragePlatformAll)")) {
 			bool ret = SteamRemoteStorage.SetSyncPlatforms(MESSAGE_FILE_NAME, ERemoteStoragePlatform.k_ERemoteStoragePlatformAll);
-			print("SetSyncPlatforms(" + MESSAGE_FILE_NAME + ", ERemoteStoragePlatform.k_ERemoteStoragePlatformAll) - " + ret);
+			print("SteamRemoteStorage.SetSyncPlatforms(" + MESSAGE_FILE_NAME + ", " + ERemoteStoragePlatform.k_ERemoteStoragePlatformAll + ") : " + ret);
 		}
 
 		if (GUILayout.Button("FileWriteStreamOpen(MESSAGE_FILE_NAME)")) {
 			m_FileStream = SteamRemoteStorage.FileWriteStreamOpen(MESSAGE_FILE_NAME);
-			print("FileWriteStreamOpen(" + MESSAGE_FILE_NAME + ") - " + m_FileStream);
+			print("SteamRemoteStorage.FileWriteStreamOpen(" + MESSAGE_FILE_NAME + ") : " + m_FileStream);
 		}
 
 		if (GUILayout.Button("FileWriteStreamWriteChunk(m_FileStream, Data, Data.Length)")) {
@@ -191,22 +187,29 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 		if (GUILayout.Button("FileWriteStreamClose(m_FileStream)")) {
 			bool ret = SteamRemoteStorage.FileWriteStreamClose(m_FileStream);
-			print("FileWriteStreamClose(" + m_FileStream + ") - " + ret);
+			print("SteamRemoteStorage.FileWriteStreamClose(" + m_FileStream + ") : " + ret);
 		}
 
 		if (GUILayout.Button("FileWriteStreamCancel(m_FileStream)")) {
 			bool ret = SteamRemoteStorage.FileWriteStreamCancel(m_FileStream);
-			print("FileWriteStreamCancel(" + m_FileStream + ") - " + ret);
+			print("SteamRemoteStorage.FileWriteStreamCancel(" + m_FileStream + ") : " + ret);
 		}
 
 		GUILayout.Label("FileExists(MESSAGE_FILE_NAME) : " + SteamRemoteStorage.FileExists(MESSAGE_FILE_NAME));
+
 		GUILayout.Label("FilePersisted(MESSAGE_FILE_NAME) : " + SteamRemoteStorage.FilePersisted(MESSAGE_FILE_NAME));
+
 		GUILayout.Label("GetFileSize(MESSAGE_FILE_NAME) : " + SteamRemoteStorage.GetFileSize(MESSAGE_FILE_NAME));
+
 		GUILayout.Label("GetFileTimestamp(MESSAGE_FILE_NAME) : " + SteamRemoteStorage.GetFileTimestamp(MESSAGE_FILE_NAME));
+
 		GUILayout.Label("GetSyncPlatforms(MESSAGE_FILE_NAME) : " + SteamRemoteStorage.GetSyncPlatforms(MESSAGE_FILE_NAME));
 
-		m_FileCount = SteamRemoteStorage.GetFileCount();
-		GUILayout.Label("GetFileCount() : " + m_FileCount);
+		{
+			m_FileCount = SteamRemoteStorage.GetFileCount();
+			GUILayout.Label("GetFileCount() : " + m_FileCount);
+		}
+
 		for (int i = 0; i < m_FileCount; ++i) {
 			int FileSize = 0;
 			string FileName = SteamRemoteStorage.GetFileNameAndSize(i, out FileSize);
@@ -214,7 +217,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 			if(FileName == MESSAGE_FILE_NAME) {
 				m_FileSize = FileSize;
-            }
+			}
 		}
 
 		{
@@ -226,21 +229,19 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		GUILayout.Label("IsCloudEnabledForAccount() : " + SteamRemoteStorage.IsCloudEnabledForAccount());
 
 		{
-			bool CloudEnabled = SteamRemoteStorage.IsCloudEnabledForApp();
-			GUILayout.Label("IsCloudEnabledForApp() : " + CloudEnabled);
-
-			if (GUILayout.Button("SetCloudEnabledForApp(!CloudEnabled)")) {
-				SteamRemoteStorage.SetCloudEnabledForApp(!CloudEnabled);
-				print("SetCloudEnabledForApp(!CloudEnabled)");
-			}
+			m_CloudEnabled = SteamRemoteStorage.IsCloudEnabledForApp();
+			GUILayout.Label("IsCloudEnabledForApp() : " + m_CloudEnabled);
 		}
-	}
 
-	private void RenderPageTwo() {
+		if (GUILayout.Button("SetCloudEnabledForApp(!m_CloudEnabled)")) {
+			SteamRemoteStorage.SetCloudEnabledForApp(!m_CloudEnabled);
+			print("SteamRemoteStorage.SetCloudEnabledForApp(" + !m_CloudEnabled + ")");
+		}
+
 		if (GUILayout.Button("UGCDownload(m_UGCHandle, 0)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.UGCDownload(m_UGCHandle, 0);
-			RemoteStorageDownloadUGCResult.Set(handle);
-			print("UGCDownload(" + m_UGCHandle + ", 0) - " + handle);
+			OnRemoteStorageDownloadUGCResultCallResult.Set(handle);
+			print("SteamRemoteStorage.UGCDownload(" + m_UGCHandle + ", " + 0 + ") : " + handle);
 		}
 
 		{
@@ -265,165 +266,163 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		if (GUILayout.Button("UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close)")) {
 			byte[] Data = new byte[m_FileSizeInBytes];
 			int ret = SteamRemoteStorage.UGCRead(m_UGCHandle, Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close);
-			print("UGCRead(" + m_UGCHandle + ", Data, m_FileSizeInBytes, 0, EUGCReadAction.k_EUGCRead_Close) - " + ret + " -- " + System.Text.Encoding.UTF8.GetString(Data, 0, ret));
+			print("SteamRemoteStorage.UGCRead(" + m_UGCHandle + ", " + Data + ", " + m_FileSizeInBytes + ", " + 0 + ", " + EUGCReadAction.k_EUGCRead_Close + ") : " + ret);
 		}
 
 		GUILayout.Label("GetCachedUGCCount() : " + SteamRemoteStorage.GetCachedUGCCount());
+
 		GUILayout.Label("GetCachedUGCHandle(0) : " + SteamRemoteStorage.GetCachedUGCHandle(0));
 
-#if _PS3 || _SERVER
-		//GUILayout.Label(" : " + SteamRemoteStorage.GetFileListFromServer());
-		//GUILayout.Label(" : " + SteamRemoteStorage.FileFetch(string pchFile));
-		//GUILayout.Label(" : " + SteamRemoteStorage.FilePersist(string pchFile));
-		//GUILayout.Label(" : " + SteamRemoteStorage.SynchronizeToClient());
-		//GUILayout.Label(" : " + SteamRemoteStorage.SynchronizeToServer());
-		//GUILayout.Label(" : " + SteamRemoteStorage.ResetFileRequestState());
-#endif
+		//SteamRemoteStorage.GetFileListFromServer() // PS3 Only.
 
-		if (GUILayout.Button("PublishWorkshopFile([...])")) {
+		//SteamRemoteStorage.FileFetch() // PS3 Only.
+
+		//SteamRemoteStorage.FilePersist() // PS3 Only.
+
+		//SteamRemoteStorage.SynchronizeToClient() // PS3 Only.
+
+		//SteamRemoteStorage.SynchronizeToServer() // PS3 Only.
+
+		//SteamRemoteStorage.ResetFileRequestState() // PS3 Only.
+
+		if (GUILayout.Button("PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), \"Title!\", \"Description!\", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity)")) {
 			string[] Tags = { "Test1", "Test2", "Test3" };
 			SteamAPICall_t handle = SteamRemoteStorage.PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), "Title!", "Description!", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity);
-			RemoteStoragePublishFileResult.Set(handle);
-			print("PublishWorkshopFile(" + MESSAGE_FILE_NAME + ", null, " + SteamUtils.GetAppID() + ", \"Title!\", \"Description!\", k_ERemoteStoragePublishedFileVisibilityPublic, SteamParamStringArray(list), k_EWorkshopFileTypeCommunity)");
+			OnRemoteStoragePublishFileProgressCallResult.Set(handle);
+			print("SteamRemoteStorage.PublishWorkshopFile(" + MESSAGE_FILE_NAME + ", " + null + ", " + SteamUtils.GetAppID() + ", " + "\"Title!\"" + ", " + "\"Description!\"" + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic + ", " + Tags + ", " + EWorkshopFileType.k_EWorkshopFileTypeCommunity + ") : " + handle);
 		}
 
 		if (GUILayout.Button("CreatePublishedFileUpdateRequest(m_PublishedFileId)")) {
 			m_PublishedFileUpdateHandle = SteamRemoteStorage.CreatePublishedFileUpdateRequest(m_PublishedFileId);
-			print("CreatePublishedFileUpdateRequest(" + m_PublishedFileId + ") - " + m_PublishedFileUpdateHandle);
+			print("SteamRemoteStorage.CreatePublishedFileUpdateRequest(" + m_PublishedFileId + ") : " + m_PublishedFileUpdateHandle);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFileFile(m_PublishedFileUpdateHandle, MESSAGE_FILE_NAME)")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileFile(m_PublishedFileUpdateHandle, MESSAGE_FILE_NAME);
-			print("UpdatePublishedFileFile(" + m_PublishedFileUpdateHandle + ", " + MESSAGE_FILE_NAME + ") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileFile(" + m_PublishedFileUpdateHandle + ", " + MESSAGE_FILE_NAME + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFilePreviewFile(m_PublishedFileUpdateHandle, null)")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFilePreviewFile(m_PublishedFileUpdateHandle, null);
-			print("UpdatePublishedFilePreviewFile(" + m_PublishedFileUpdateHandle + ", " + null + ") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFilePreviewFile(" + m_PublishedFileUpdateHandle + ", " + null + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFileTitle(m_PublishedFileUpdateHandle, \"New Title\")")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileTitle(m_PublishedFileUpdateHandle, "New Title");
-			print("UpdatePublishedFileTitle(" + m_PublishedFileUpdateHandle + ", \"New Title\") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileTitle(" + m_PublishedFileUpdateHandle + ", " + "\"New Title\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFileDescription(m_PublishedFileUpdateHandle, \"New Description\")")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileDescription(m_PublishedFileUpdateHandle, "New Description");
-			print("UpdatePublishedFileDescription(" + m_PublishedFileUpdateHandle + ", \"New Description\") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileDescription(" + m_PublishedFileUpdateHandle + ", " + "\"New Description\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("UpdatePublishedFileVisibility(m_PublishedFileUpdateHandle, k_ERemoteStoragePublishedFileVisibilityPublic)")) {
+		if (GUILayout.Button("UpdatePublishedFileVisibility(m_PublishedFileUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic)")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileVisibility(m_PublishedFileUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic);
-			print("UpdatePublishedFileVisibility(" + m_PublishedFileUpdateHandle + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic + ") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileVisibility(" + m_PublishedFileUpdateHandle + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic + ") : " + ret);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFileTags(m_PublishedFileUpdateHandle, new string[] {\"First\", \"Second\", \"Third\"})")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileTags(m_PublishedFileUpdateHandle, new string[] {"First", "Second", "Third"});
-			print("UpdatePublishedFileTags(" + m_PublishedFileUpdateHandle + ", " + new string[] { "First", "Second", "Third" } + ") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileTags(" + m_PublishedFileUpdateHandle + ", " + new string[] {"First", "Second", "Third"} + ") : " + ret);
 		}
 
-		if(GUILayout.Button("CommitPublishedFileUpdate(m_PublishedFileUpdateHandle)")) {
+		if (GUILayout.Button("CommitPublishedFileUpdate(m_PublishedFileUpdateHandle)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.CommitPublishedFileUpdate(m_PublishedFileUpdateHandle);
-			RemoteStorageUpdatePublishedFileResult.Set(handle);
-			print("CommitPublishedFileUpdate(" + m_PublishedFileUpdateHandle + ") - " + handle);
+			OnRemoteStorageUpdatePublishedFileResultCallResult.Set(handle);
+			print("SteamRemoteStorage.CommitPublishedFileUpdate(" + m_PublishedFileUpdateHandle + ") : " + handle);
 		}
 
 		if (GUILayout.Button("GetPublishedFileDetails(m_PublishedFileId, 0)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.GetPublishedFileDetails(m_PublishedFileId, 0);
-			RemoteStorageGetPublishedFileDetailsResult.Set(handle);
-			print("GetPublishedFileDetails(" + m_UGCHandle + ", 0) - " + handle);
+			OnRemoteStorageGetPublishedFileDetailsResultCallResult.Set(handle);
+			print("SteamRemoteStorage.GetPublishedFileDetails(" + m_PublishedFileId + ", " + 0 + ") : " + handle);
 		}
 
 		if (GUILayout.Button("DeletePublishedFile(m_PublishedFileId)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.DeletePublishedFile(m_PublishedFileId);
-			RemoteStorageDeletePublishedFileResult.Set(handle);
-			print("DeletePublishedFile(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageDeletePublishedFileResultCallResult.Set(handle);
+			print("SteamRemoteStorage.DeletePublishedFile(" + m_PublishedFileId + ") : " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserPublishedFiles(0)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserPublishedFiles(0);
-			RemoteStorageEnumerateUserPublishedFilesResult.Set(handle);
-			print("EnumerateUserPublishedFiles(0) - " + handle);
+			OnRemoteStorageEnumerateUserPublishedFilesResultCallResult.Set(handle);
+			print("SteamRemoteStorage.EnumerateUserPublishedFiles(" + 0 + ") : " + handle);
 		}
 
 		if (GUILayout.Button("SubscribePublishedFile(m_PublishedFileId)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.SubscribePublishedFile(m_PublishedFileId);
-			RemoteStorageSubscribePublishedFileResult.Set(handle);
-			print("SubscribePublishedFile(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageSubscribePublishedFileResultCallResult.Set(handle);
+			print("SteamRemoteStorage.SubscribePublishedFile(" + m_PublishedFileId + ") : " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserSubscribedFiles(0)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserSubscribedFiles(0);
-			RemoteStorageEnumerateUserSubscribedFilesResult.Set(handle);
-			print("EnumerateUserSubscribedFiles(0) - " + handle);
+			OnRemoteStorageEnumerateUserSubscribedFilesResultCallResult.Set(handle);
+			print("SteamRemoteStorage.EnumerateUserSubscribedFiles(" + 0 + ") : " + handle);
 		}
 
 		if (GUILayout.Button("UnsubscribePublishedFile(m_PublishedFileId)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.UnsubscribePublishedFile(m_PublishedFileId);
-			RemoteStorageUnsubscribePublishedFileResult.Set(handle);
-			print("UnsubscribePublishedFile(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageUnsubscribePublishedFileResultCallResult.Set(handle);
+			print("SteamRemoteStorage.UnsubscribePublishedFile(" + m_PublishedFileId + ") : " + handle);
 		}
 
 		if (GUILayout.Button("UpdatePublishedFileSetChangeDescription(m_PublishedFileUpdateHandle, \"Changelog!\")")) {
 			bool ret = SteamRemoteStorage.UpdatePublishedFileSetChangeDescription(m_PublishedFileUpdateHandle, "Changelog!");
-			print("UpdatePublishedFileSetChangeDescription(" + m_PublishedFileUpdateHandle + ", \"Changelog!\") - " + ret);
+			print("SteamRemoteStorage.UpdatePublishedFileSetChangeDescription(" + m_PublishedFileUpdateHandle + ", " + "\"Changelog!\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("GetPublishedItemVoteDetails(m_PublishedFileId)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.GetPublishedItemVoteDetails(m_PublishedFileId);
-			RemoteStorageGetPublishedItemVoteDetailsResult.Set(handle);
-			print("GetPublishedItemVoteDetails(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageGetPublishedItemVoteDetailsResultCallResult.Set(handle);
+			print("SteamRemoteStorage.GetPublishedItemVoteDetails(" + m_PublishedFileId + ") : " + handle);
 		}
 
 		if (GUILayout.Button("UpdateUserPublishedItemVote(m_PublishedFileId, true)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.UpdateUserPublishedItemVote(m_PublishedFileId, true);
-			RemoteStorageUpdateUserPublishedItemVoteResult.Set(handle);
-			print("UpdateUserPublishedItemVote(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageUpdateUserPublishedItemVoteResultCallResult.Set(handle);
+			print("SteamRemoteStorage.UpdateUserPublishedItemVote(" + m_PublishedFileId + ", " + true + ") : " + handle);
 		}
 
 		if (GUILayout.Button("GetUserPublishedItemVoteDetails(m_PublishedFileId)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.GetUserPublishedItemVoteDetails(m_PublishedFileId);
-			RemoteStorageUserVoteDetails.Set(handle);
-			print("GetUserPublishedItemVoteDetails(" + m_PublishedFileId + ") - " + handle);
+			OnRemoteStorageGetPublishedItemVoteDetailsResultCallResult.Set(handle);
+			print("SteamRemoteStorage.GetUserPublishedItemVoteDetails(" + m_PublishedFileId + ") : " + handle);
 		}
 
 		if (GUILayout.Button("EnumerateUserSharedWorkshopFiles(SteamUser.GetSteamID(), 0, null, null)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.EnumerateUserSharedWorkshopFiles(SteamUser.GetSteamID(), 0, null, null);
-			RemoteStorageEnumerateUserSharedWorkshopFilesResult.Set(handle);
-			print("EnumerateUserSharedWorkshopFiles(" + SteamUser.GetSteamID() + ", 0, System.IntPtr.Zero, System.IntPtr.Zero) - " + handle);
+			OnRemoteStorageEnumerateUserPublishedFilesResultCallResult.Set(handle);
+			print("SteamRemoteStorage.EnumerateUserSharedWorkshopFiles(" + SteamUser.GetSteamID() + ", " + 0 + ", " + null + ", " + null + ") : " + handle);
 		}
 
-		if (GUILayout.Button("PublishVideo([...])")) {
+		if (GUILayout.Button("PublishVideo(EWorkshopVideoProvider.k_EWorkshopVideoProviderYoutube, \"William Hunter\", \"Rmvb4Hktv7U\", null, SteamUtils.GetAppID(), \"Test Video\", \"Desc\", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, null)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.PublishVideo(EWorkshopVideoProvider.k_EWorkshopVideoProviderYoutube, "William Hunter", "Rmvb4Hktv7U", null, SteamUtils.GetAppID(), "Test Video", "Desc", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, null);
-			RemoteStoragePublishFileResult.Set(handle);
-			print("PublishVideo(k_EWorkshopVideoProviderYoutube, \"William Hunter\", \"Rmvb4Hktv7U\", null, SteamUtils.GetAppID(), \"Test Video\", \"Desc\", k_ERemoteStoragePublishedFileVisibilityPublic, null) - " + handle);
+			OnRemoteStoragePublishFileProgressCallResult.Set(handle);
+			print("SteamRemoteStorage.PublishVideo(" + EWorkshopVideoProvider.k_EWorkshopVideoProviderYoutube + ", " + "\"William Hunter\"" + ", " + "\"Rmvb4Hktv7U\"" + ", " + null + ", " + SteamUtils.GetAppID() + ", " + "\"Test Video\"" + ", " + "\"Desc\"" + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic + ", " + null + ") : " + handle);
 		}
 
-		if (GUILayout.Button("SetUserPublishedFileAction(m_PublishedFileId, k_EWorkshopFileActionPlayed)")) {
+		if (GUILayout.Button("SetUserPublishedFileAction(m_PublishedFileId, EWorkshopFileAction.k_EWorkshopFileActionPlayed)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.SetUserPublishedFileAction(m_PublishedFileId, EWorkshopFileAction.k_EWorkshopFileActionPlayed);
-			RemoteStorageSetUserPublishedFileActionResult.Set(handle);
-			print("SetUserPublishedFileAction(" + m_PublishedFileId + ", " + EWorkshopFileAction.k_EWorkshopFileActionPlayed + ") - " + handle);
+			OnRemoteStorageSetUserPublishedFileActionResultCallResult.Set(handle);
+			print("SteamRemoteStorage.SetUserPublishedFileAction(" + m_PublishedFileId + ", " + EWorkshopFileAction.k_EWorkshopFileActionPlayed + ") : " + handle);
 		}
 
-		if (GUILayout.Button("EnumeratePublishedFilesByUserAction(k_EWorkshopFileActionPlayed, 0)")) {
+		if (GUILayout.Button("EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0);
-			RemoteStorageEnumeratePublishedFilesByUserActionResult.Set(handle);
-			print("EnumeratePublishedFilesByUserAction(EWorkshopFileAction.k_EWorkshopFileActionPlayed, 0) - " + handle);
+			OnRemoteStorageEnumeratePublishedFilesByUserActionResultCallResult.Set(handle);
+			print("SteamRemoteStorage.EnumeratePublishedFilesByUserAction(" + EWorkshopFileAction.k_EWorkshopFileActionPlayed + ", " + 0 + ") : " + handle);
 		}
 
-		if (GUILayout.Button("EnumeratePublishedWorkshopFiles(k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, IntPtr.Zero, IntPtr.Zero)")) {
+		if (GUILayout.Button("EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType.k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, null, null)")) {
 			SteamAPICall_t handle = SteamRemoteStorage.EnumeratePublishedWorkshopFiles(EWorkshopEnumerationType.k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, null, null);
-			RemoteStorageEnumerateWorkshopFilesResult.Set(handle);
-			print("EnumeratePublishedWorkshopFiles(k_EWorkshopEnumerationTypeRankedByVote, 0, 3, 0, IntPtr.Zero, IntPtr.Zero) - " + handle);
+			OnRemoteStorageEnumerateWorkshopFilesResultCallResult.Set(handle);
+			print("SteamRemoteStorage.EnumeratePublishedWorkshopFiles(" + EWorkshopEnumerationType.k_EWorkshopEnumerationTypeRankedByVote + ", " + 0 + ", " + 3 + ", " + 0 + ", " + null + ", " + null + ") : " + handle);
 		}
 
-		// There is absolutely no documentation on how to use this function, or what CallResult it gives you...
-		// If you figure out how to use this then let me know!
-		/*if (GUILayout.Button("UGCDownloadToLocation(m_UGCHandle, \"C:\\\", 0)")) {
-			SteamAPICall_t handle = SteamRemoteStorage.UGCDownloadToLocation(m_UGCHandle, "C:\\", 0);
-
-			print("UGCDownloadToLocation(m_UGCHandle, \"C:\\\", 0)");
-		}*/
+		//SteamRemoteStorage.UGCDownloadToLocation() // There is absolutely no documentation on how to use this function
 	}
 
 	void OnRemoteStorageAppSyncedClient(RemoteStorageAppSyncedClient_t pCallback) {
@@ -441,9 +440,10 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	void OnRemoteStorageAppSyncStatusCheck(RemoteStorageAppSyncStatusCheck_t pCallback) {
 		Debug.Log("[" + RemoteStorageAppSyncStatusCheck_t.k_iCallback + " - RemoteStorageAppSyncStatusCheck] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult);
 	}
-    
+
 	void OnRemoteStorageFileShareResult(RemoteStorageFileShareResult_t pCallback, bool bIOFailure) {
-		Debug.Log("[" + RemoteStorageFileShareResult_t.k_iCallback + " - RemoteStorageFileShareResult] - " + pCallback.m_eResult + " -- " + pCallback.m_hFile);
+		Debug.Log("[" + RemoteStorageFileShareResult_t.k_iCallback + " - RemoteStorageFileShareResult] - " + pCallback.m_eResult + " -- " + pCallback.m_hFile + " -- " + pCallback.m_rgchFilename);
+
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_UGCHandle = pCallback.m_hFile;
 		}
@@ -451,6 +451,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 	void OnRemoteStoragePublishFileResult(RemoteStoragePublishFileResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStoragePublishFileResult_t.k_iCallback + " - RemoteStoragePublishFileResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_bUserNeedsToAcceptWorkshopLegalAgreement);
+
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_PublishedFileId = pCallback.m_nPublishedFileId;
 		}
@@ -486,6 +487,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 	void OnRemoteStorageGetPublishedFileDetailsResult(RemoteStorageGetPublishedFileDetailsResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStorageGetPublishedFileDetailsResult_t.k_iCallback + " - RemoteStorageGetPublishedFileDetailsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nCreatorAppID + " -- " + pCallback.m_nConsumerAppID + " -- " + pCallback.m_rgchTitle + " -- " + pCallback.m_rgchDescription + " -- " + pCallback.m_hFile + " -- " + pCallback.m_hPreviewFile + " -- " + pCallback.m_ulSteamIDOwner + " -- " + pCallback.m_rtimeCreated + " -- " + pCallback.m_rtimeUpdated + " -- " + pCallback.m_eVisibility + " -- " + pCallback.m_bBanned + " -- " + pCallback.m_rgchTags + " -- " + pCallback.m_bTagsTruncated + " -- " + pCallback.m_pchFileName + " -- " + pCallback.m_nFileSize + " -- " + pCallback.m_nPreviewFileSize + " -- " + pCallback.m_rgchURL + " -- " + pCallback.m_eFileType + " -- " + pCallback.m_bAcceptedForUse);
+
 		if (pCallback.m_eResult == EResult.k_EResultOK) {
 			m_UGCHandle = pCallback.m_hFile;
 		}
@@ -493,6 +495,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 	void OnRemoteStorageEnumerateWorkshopFilesResult(RemoteStorageEnumerateWorkshopFilesResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStorageEnumerateWorkshopFilesResult_t.k_iCallback + " - RemoteStorageEnumerateWorkshopFilesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId + " -- " + pCallback.m_rgScore + " -- " + pCallback.m_nAppId + " -- " + pCallback.m_unStartIndex);
+
 		for (int i = 0; i < pCallback.m_nResultsReturned; ++i) {
 			print(i + ": " + pCallback.m_rgPublishedFileId[i]);
 		}
@@ -503,7 +506,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	}
 
 	void OnRemoteStorageGetPublishedItemVoteDetailsResult(RemoteStorageGetPublishedItemVoteDetailsResult_t pCallback, bool bIOFailure) {
-		Debug.Log("[" + RemoteStorageGetPublishedItemVoteDetailsResult_t.k_iCallback + " - RemoteStorageGetPublishedItemVoteDetailsResult_t] - " + pCallback.m_eResult + " -- " + pCallback.m_unPublishedFileId + " -- " + pCallback.m_nVotesFor + " -- " + pCallback.m_nVotesAgainst + " -- " + pCallback.m_nReports + " -- " + pCallback.m_fScore);
+		Debug.Log("[" + RemoteStorageGetPublishedItemVoteDetailsResult_t.k_iCallback + " - RemoteStorageGetPublishedItemVoteDetailsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_unPublishedFileId + " -- " + pCallback.m_nVotesFor + " -- " + pCallback.m_nVotesAgainst + " -- " + pCallback.m_nReports + " -- " + pCallback.m_fScore);
 	}
 
 	void OnRemoteStoragePublishedFileSubscribed(RemoteStoragePublishedFileSubscribed_t pCallback) {
@@ -538,7 +541,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		Debug.Log("[" + RemoteStorageEnumeratePublishedFilesByUserActionResult_t.k_iCallback + " - RemoteStorageEnumeratePublishedFilesByUserActionResult] - " + pCallback.m_eResult + " -- " + pCallback.m_eAction + " -- " + pCallback.m_nResultsReturned + " -- " + pCallback.m_nTotalResultCount + " -- " + pCallback.m_rgPublishedFileId + " -- " + pCallback.m_rgRTimeUpdated);
 	}
 
-	void OnRemoteStoragePublishFileProgress(RemoteStoragePublishFileProgress_t pCallback) {
+	void OnRemoteStoragePublishFileProgress(RemoteStoragePublishFileProgress_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoteStoragePublishFileProgress_t.k_iCallback + " - RemoteStoragePublishFileProgress] - " + pCallback.m_dPercentFile + " -- " + pCallback.m_bPreview);
 	}
 

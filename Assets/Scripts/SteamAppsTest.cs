@@ -5,47 +5,64 @@ using Steamworks;
 public class SteamAppsTest : MonoBehaviour {
 	protected Callback<DlcInstalled_t> m_DlcInstalled;
 	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
-	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
 	protected Callback<NewLaunchQueryParameters_t> m_NewLaunchQueryParameters;
+	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
+
+	private CallResult<FileDetailsResult_t> OnFileDetailsResultCallResult;
 
 	public void OnEnable() {
 		m_DlcInstalled = Callback<DlcInstalled_t>.Create(OnDlcInstalled);
 		m_RegisterActivationCodeResponse = Callback<RegisterActivationCodeResponse_t>.Create(OnRegisterActivationCodeResponse);
-		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
 		m_NewLaunchQueryParameters = Callback<NewLaunchQueryParameters_t>.Create(OnNewLaunchQueryParameters);
+		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
+
+		OnFileDetailsResultCallResult = CallResult<FileDetailsResult_t>.Create(OnFileDetailsResult);
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.Label("SteamApps.BIsSubscribed() : " + SteamApps.BIsSubscribed());
-		GUILayout.Label("SteamApps.BIsLowViolence() : " + SteamApps.BIsLowViolence());
-		GUILayout.Label("SteamApps.BIsCybercafe() : " + SteamApps.BIsCybercafe());
-		GUILayout.Label("SteamApps.BIsVACBanned() : " + SteamApps.BIsVACBanned());
-		GUILayout.Label("SteamApps.GetCurrentGameLanguage() : " + SteamApps.GetCurrentGameLanguage());
-		GUILayout.Label("SteamApps.GetAvailableGameLanguages() : " + SteamApps.GetAvailableGameLanguages());
-		GUILayout.Label("SteamApps.BIsSubscribedApp(SteamUtils.GetAppID()) : " + SteamApps.BIsSubscribedApp(SteamUtils.GetAppID()));
-		GUILayout.Label("SteamApps.BIsDlcInstalled(110902) : " + SteamApps.BIsDlcInstalled((AppId_t)110902)); // pieterw test DLC
-		GUILayout.Label("SteamApps.GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()) : " + SteamApps.GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()));
-		GUILayout.Label("SteamApps.BIsSubscribedFromFreeWeekend() : " + SteamApps.BIsSubscribedFromFreeWeekend());
-		GUILayout.Label("SteamApps.GetDLCCount() : " + SteamApps.GetDLCCount());
+		GUILayout.Label("BIsSubscribed() : " + SteamApps.BIsSubscribed());
+
+		GUILayout.Label("BIsLowViolence() : " + SteamApps.BIsLowViolence());
+
+		GUILayout.Label("BIsCybercafe() : " + SteamApps.BIsCybercafe());
+
+		GUILayout.Label("BIsVACBanned() : " + SteamApps.BIsVACBanned());
+
+		GUILayout.Label("GetCurrentGameLanguage() : " + SteamApps.GetCurrentGameLanguage());
+
+		GUILayout.Label("GetAvailableGameLanguages() : " + SteamApps.GetAvailableGameLanguages());
+
+		GUILayout.Label("BIsSubscribedApp(SteamUtils.GetAppID()) : " + SteamApps.BIsSubscribedApp(SteamUtils.GetAppID()));
+
+		GUILayout.Label("BIsDlcInstalled(TestConstants.Instance.k_AppId_PieterwTestDLC) : " + SteamApps.BIsDlcInstalled(TestConstants.Instance.k_AppId_PieterwTestDLC));
+
+		GUILayout.Label("GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()) : " + SteamApps.GetEarliestPurchaseUnixTime(SteamUtils.GetAppID()));
+
+		GUILayout.Label("BIsSubscribedFromFreeWeekend() : " + SteamApps.BIsSubscribedFromFreeWeekend());
+
+		GUILayout.Label("GetDLCCount() : " + SteamApps.GetDLCCount());
 
 		for (int iDLC = 0; iDLC < SteamApps.GetDLCCount(); ++iDLC) {
 			AppId_t AppID;
 			bool Available;
 			string Name;
 			bool ret = SteamApps.BGetDLCDataByIndex(iDLC, out AppID, out Available, out Name, 128);
-			GUILayout.Label("SteamApps.BGetDLCDataByIndex(" + iDLC + ", out AppID, out Available, out Name, 128) : " + ret + " -- " + AppID + " -- " + Available + " -- " + Name);
+			GUILayout.Label("BGetDLCDataByIndex(" + iDLC + ", out AppID, out Available, out Name, 128) : " + ret + " -- " + AppID + " -- " + Available + " -- " + Name);
 		}
 
-		if (GUILayout.Button("SteamApps.InstallDLC(110902)")) {
-			SteamApps.InstallDLC((AppId_t)110902); // pieterw test DLC
+		if (GUILayout.Button("InstallDLC(TestConstants.Instance.k_AppId_PieterwTestDLC)")) {
+			SteamApps.InstallDLC(TestConstants.Instance.k_AppId_PieterwTestDLC);
+			print("SteamApps.InstallDLC(" + TestConstants.Instance.k_AppId_PieterwTestDLC + ")");
 		}
 
-		if (GUILayout.Button("SteamApps.UninstallDLC(110902)")) {
-			SteamApps.UninstallDLC((AppId_t)110902); // pieterw test DLC
+		if (GUILayout.Button("UninstallDLC(TestConstants.Instance.k_AppId_PieterwTestDLC)")) {
+			SteamApps.UninstallDLC(TestConstants.Instance.k_AppId_PieterwTestDLC);
+			print("SteamApps.UninstallDLC(" + TestConstants.Instance.k_AppId_PieterwTestDLC + ")");
 		}
 
-		if (GUILayout.Button("SteamApps.RequestAppProofOfPurchaseKey(SteamUtils.GetAppID())")) {
+		if (GUILayout.Button("RequestAppProofOfPurchaseKey(SteamUtils.GetAppID())")) {
 			SteamApps.RequestAppProofOfPurchaseKey(SteamUtils.GetAppID());
+			print("SteamApps.RequestAppProofOfPurchaseKey(" + SteamUtils.GetAppID() + ")");
 		}
 
 		{
@@ -54,11 +71,12 @@ public class SteamAppsTest : MonoBehaviour {
 			if (Name == null) {
 				Name = "";
 			}
-			GUILayout.Label("SteamApps.GetCurrentBetaName(out Name, 128) : " + ret + " -- " + Name);
+			GUILayout.Label("GetCurrentBetaName(out Name, 128) : " + ret + " -- " + Name);
 		}
 
-		if (GUILayout.Button("SteamApps.MarkContentCorrupt(true)")) {
-			print("SteamApps.MarkContentCorrupt(true) : " + SteamApps.MarkContentCorrupt(true));
+		if (GUILayout.Button("MarkContentCorrupt(true)")) {
+			bool ret = SteamApps.MarkContentCorrupt(true);
+			print("SteamApps.MarkContentCorrupt(" + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SteamApps.GetInstalledDepots(SteamUtils.GetAppID(), Depots, 32)")) {
@@ -75,31 +93,38 @@ public class SteamAppsTest : MonoBehaviour {
 			if (Folder == null) {
 				Folder = "";
 			}
-
-			GUILayout.Label("SteamApps.GetAppInstallDir(480, out Folder, 260) : " + ret + " -- " + Folder);
+			GUILayout.Label("GetAppInstallDir(SteamUtils.GetAppID(), out Folder, 260) : " + ret + " -- " + Folder);
 		}
 
-		GUILayout.Label("SteamApps.BIsAppInstalled(480) : " + SteamApps.BIsAppInstalled(SteamUtils.GetAppID()));
-		GUILayout.Label("SteamApps.GetAppOwner() : " + SteamApps.GetAppOwner());
+		GUILayout.Label("BIsAppInstalled(SteamUtils.GetAppID()) : " + SteamApps.BIsAppInstalled(SteamUtils.GetAppID()));
 
-		// Run the test and then use steam://run/480//?test=testing;param2=value2; in your browser to try this out
-		GUILayout.Label("SteamApps.GetLaunchQueryParam(\"test\") : " + SteamApps.GetLaunchQueryParam("test"));
+		GUILayout.Label("GetAppOwner() : " + SteamApps.GetAppOwner());
+
+		{
+			// Run the test and then use steam://run/480//?test=testing;param2=value2; in your browser to try this out
+			string ret = SteamApps.GetLaunchQueryParam("test");
+			GUILayout.Label("GetLaunchQueryParam(\"test\") : " + ret);
+		}
 
 		{
 			ulong BytesDownloaded;
 			ulong BytesTotal;
-			bool ret = SteamApps.GetDlcDownloadProgress((AppId_t)110902, out BytesDownloaded, out BytesTotal);
-			GUILayout.Label("SteamApps.GetDlcDownloadProgress((AppId_t)110902, out BytesDownloaded, out BytesTotal): " + ret + " -- " + BytesDownloaded + " -- " + BytesTotal);
+			bool ret = SteamApps.GetDlcDownloadProgress(TestConstants.Instance.k_AppId_PieterwTestDLC, out BytesDownloaded, out BytesTotal);
+			GUILayout.Label("GetDlcDownloadProgress(TestConstants.Instance.k_AppId_PieterwTestDLC, out BytesDownloaded, out BytesTotal) : " + ret + " -- " + BytesDownloaded + " -- " + BytesTotal);
 		}
 
-		GUILayout.Label("SteamApps.GetAppBuildId(): " + SteamApps.GetAppBuildId());
-#if _PS3
-		if (GUILayout.Button("SteamApps.RegisterActivationCode(\"???\")")) {
-			SteamAPICall_t handle = SteamApps.RegisterActivationCode("???");
-			new CallResult<RegisterActivationCodeResponse_t>(OnRegisterActivationCodeResponse, handle);
-			new CallResult<AppProofOfPurchaseKeyResponse_t>(OnAppProofOfPurchaseKeyResponse, handle);
+		GUILayout.Label("GetAppBuildId() : " + SteamApps.GetAppBuildId());
+
+		if (GUILayout.Button("RequestAllProofOfPurchaseKeys()")) {
+			SteamApps.RequestAllProofOfPurchaseKeys();
+			print("SteamApps.RequestAllProofOfPurchaseKeys()");
 		}
-#endif
+
+		if (GUILayout.Button("GetFileDetails(\"steam_api.dll\")")) {
+			SteamAPICall_t handle = SteamApps.GetFileDetails("steam_api.dll");
+			OnFileDetailsResultCallResult.Set(handle);
+			print("SteamApps.GetFileDetails(" + "\"steam_api.dll\"" + ") : " + handle);
+		}
 	}
 
 	void OnDlcInstalled(DlcInstalled_t pCallback) {
@@ -110,11 +135,15 @@ public class SteamAppsTest : MonoBehaviour {
 		Debug.Log("[" + RegisterActivationCodeResponse_t.k_iCallback + " - RegisterActivationCodeResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_unPackageRegistered);
 	}
 
-	void OnAppProofOfPurchaseKeyResponse(AppProofOfPurchaseKeyResponse_t pCallback) {
-		Debug.Log("[" + AppProofOfPurchaseKeyResponse_t.k_iCallback + " - AppProofOfPurchaseKeyResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_rgchKey);
-	}
-
 	void OnNewLaunchQueryParameters(NewLaunchQueryParameters_t pCallback) {
 		Debug.Log("[" + NewLaunchQueryParameters_t.k_iCallback + " - NewLaunchQueryParameters]");
+	}
+
+	void OnAppProofOfPurchaseKeyResponse(AppProofOfPurchaseKeyResponse_t pCallback) {
+		Debug.Log("[" + AppProofOfPurchaseKeyResponse_t.k_iCallback + " - AppProofOfPurchaseKeyResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_cchKeyLength + " -- " + pCallback.m_rgchKey);
+	}
+
+	void OnFileDetailsResult(FileDetailsResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + FileDetailsResult_t.k_iCallback + " - FileDetailsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_ulFileSize + " -- " + pCallback.m_FileSHA + " -- " + pCallback.m_unFlags);
 	}
 }

@@ -9,7 +9,6 @@ public class SteamTest : MonoBehaviour {
 		SteamClient,
 		SteamController,
 		SteamFriends,
-		SteamFriendsPg2,
 		SteamHTMLSurface,
 		SteamHTTP,
 		SteamInventory,
@@ -19,13 +18,11 @@ public class SteamTest : MonoBehaviour {
 		SteamMusicRemote,
 		SteamNetworking,
 		SteamRemoteStorage,
-		SteamRemoteStoragePg2,
 		SteamScreenshots,
 		SteamUGC,
 		SteamUnifiedMessages,
 		SteamUser,
 		SteamUserStatsTest,
-		SteamUserStatsTestPg2,
 		SteamUtils,
 		SteamVideo,
 
@@ -196,8 +193,7 @@ public class SteamTest : MonoBehaviour {
 				ControllerTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamFriends:
-			case EGUIState.SteamFriendsPg2:
-				FriendsTest.RenderOnGUI(m_State);
+				FriendsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamHTMLSurface:
 				HTMLSurfaceTest.RenderOnGUI();
@@ -224,8 +220,7 @@ public class SteamTest : MonoBehaviour {
 				NetworkingTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamRemoteStorage:
-			case EGUIState.SteamRemoteStoragePg2:
-				RemoteStorageTest.RenderOnGUI(m_State);
+				RemoteStorageTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamScreenshots:
 				ScreenshotsTest.RenderOnGUI();
@@ -240,8 +235,7 @@ public class SteamTest : MonoBehaviour {
 				UserTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUserStatsTest:
-			case EGUIState.SteamUserStatsTestPg2:
-				UserStatsTest.RenderOnGUI(m_State);
+				UserStatsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUtils:
 				UtilsTest.RenderOnGUI();

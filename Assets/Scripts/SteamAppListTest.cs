@@ -7,21 +7,23 @@ public class SteamAppListTest : MonoBehaviour {
 
 	protected Callback<SteamAppInstalled_t> m_SteamAppInstalled;
 	protected Callback<SteamAppUninstalled_t> m_SteamAppUninstalled;
-	
+
 	public void OnEnable() {
+		m_AppList = new AppId_t[1];
+
 		m_SteamAppInstalled = Callback<SteamAppInstalled_t>.Create(OnSteamAppInstalled);
 		m_SteamAppUninstalled = Callback<SteamAppUninstalled_t>.Create(OnSteamAppUninstalled);
 	}
 
 	public void RenderOnGUI() {
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.Label("Variables:");
+		GUILayout.Label("m_AppList: " + m_AppList);
+		GUILayout.EndArea();
+
 		GUILayout.Label("GetNumInstalledApps() : " + SteamAppList.GetNumInstalledApps());
 
-		{
-			m_AppList = new AppId_t[1];
-			uint ret = SteamAppList.GetInstalledApps(m_AppList, 1);
-			GUILayout.Label("GetInstalledApps(m_AppList, 1) : " + ret + " -- " + m_AppList[0]);
-
-		}
+		GUILayout.Label("GetInstalledApps(m_AppList, (uint)m_AppList.Length) : " + SteamAppList.GetInstalledApps(m_AppList, (uint)m_AppList.Length));
 
 		{
 			string Name;
@@ -35,7 +37,7 @@ public class SteamAppListTest : MonoBehaviour {
 			GUILayout.Label("GetAppInstallDir(m_AppList[0], out Directory, 260) : " + ret + " -- " + Directory);
 		}
 
-		GUILayout.Label("GetAppBuildId() : " + SteamAppList.GetAppBuildId(m_AppList[0]));
+		GUILayout.Label("GetAppBuildId(m_AppList[0]) : " + SteamAppList.GetAppBuildId(m_AppList[0]));
 	}
 
 	void OnSteamAppInstalled(SteamAppInstalled_t pCallback) {

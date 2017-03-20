@@ -23,18 +23,42 @@ public class SteamUtilsTest : MonoBehaviour {
 		OnCheckFileSignatureCallResult = CallResult<CheckFileSignature_t>.Create(OnCheckFileSignature);
 	}
 
+	public static Texture2D GetSteamImageAsTexture2D(int iImage) {
+		Texture2D ret = null;
+		uint ImageWidth;
+		uint ImageHeight;
+		bool bIsValid = SteamUtils.GetImageSize(iImage, out ImageWidth, out ImageHeight);
+
+		if (bIsValid) {
+			byte[] Image = new byte[ImageWidth * ImageHeight * 4];
+
+			bIsValid = SteamUtils.GetImageRGBA(iImage, Image, (int)(ImageWidth * ImageHeight * 4));
+			if (bIsValid) {
+				ret = new Texture2D((int)ImageWidth, (int)ImageHeight, TextureFormat.RGBA32, false, true);
+				ret.LoadRawTextureData(Image);
+				ret.Apply();
+			}
+		}
+
+		return ret;
+	}
+
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Image:");
 		GUILayout.Label(m_Image);
 		GUILayout.EndArea();
 
-		GUILayout.Label("SteamUtils.GetSecondsSinceAppActive() : " + SteamUtils.GetSecondsSinceAppActive());
-		GUILayout.Label("SteamUtils.GetSecondsSinceComputerActive() : " + SteamUtils.GetSecondsSinceComputerActive());
-		GUILayout.Label("SteamUtils.GetConnectedUniverse() : " + SteamUtils.GetConnectedUniverse());
-		GUILayout.Label("SteamUtils.GetServerRealTime() : " + SteamUtils.GetServerRealTime());
-		GUILayout.Label("SteamUtils.GetIPCountry() : " + SteamUtils.GetIPCountry());
+		GUILayout.Label("GetSecondsSinceAppActive() : " + SteamUtils.GetSecondsSinceAppActive());
+
+		GUILayout.Label("GetSecondsSinceComputerActive() : " + SteamUtils.GetSecondsSinceComputerActive());
+
+		GUILayout.Label("GetConnectedUniverse() : " + SteamUtils.GetConnectedUniverse());
+
+		GUILayout.Label("GetServerRealTime() : " + SteamUtils.GetServerRealTime());
+
+		GUILayout.Label("GetIPCountry() : " + SteamUtils.GetIPCountry());
 
 		{
 			uint ImageWidth = 0;
@@ -60,37 +84,41 @@ public class SteamUtilsTest : MonoBehaviour {
 			uint IP;
 			ushort Port;
 			bool ret = SteamUtils.GetCSERIPPort(out IP, out Port);
-			GUILayout.Label("SteamUtils.GetCSERIPPort(out IP, out Port) : " + ret + " -- " + IP + " -- " + Port);
+			GUILayout.Label("GetCSERIPPort(out IP, out Port) : " + ret + " -- " + IP + " -- " + Port);
 		}
 
-		GUILayout.Label("SteamUtils.GetCurrentBatteryPower() : " + SteamUtils.GetCurrentBatteryPower());
-		GUILayout.Label("SteamUtils.GetAppID() : " + SteamUtils.GetAppID());
+		GUILayout.Label("GetCurrentBatteryPower() : " + SteamUtils.GetCurrentBatteryPower());
 
-		if (GUILayout.Button("SteamUtils.SetOverlayNotificationPosition(k_EPositionTopRight)")) {
+		GUILayout.Label("GetAppID() : " + SteamUtils.GetAppID());
+
+		if (GUILayout.Button("SetOverlayNotificationPosition(ENotificationPosition.k_EPositionTopRight)")) {
 			SteamUtils.SetOverlayNotificationPosition(ENotificationPosition.k_EPositionTopRight);
-			print("SteamUtils.SetOverlayNotificationPosition(k_EPositionTopRight)");
+			print("SteamUtils.SetOverlayNotificationPosition(" + ENotificationPosition.k_EPositionTopRight + ")");
 		}
 
 		//GUILayout.Label("SteamUtils.IsAPICallCompleted() : " + SteamUtils.IsAPICallCompleted()); // N/A - These 3 functions are used to dispatch CallResults.
+
 		//GUILayout.Label("SteamUtils.GetAPICallFailureReason() : " + SteamUtils.GetAPICallFailureReason()); // N/A
+
 		//GUILayout.Label("SteamUtils.GetAPICallResult() : " + SteamUtils.GetAPICallResult()); // N/A
-        
-		GUILayout.Label("SteamUtils.GetIPCCallCount() : " + SteamUtils.GetIPCCallCount());
+
+		GUILayout.Label("GetIPCCallCount() : " + SteamUtils.GetIPCCallCount());
 
 		//GUILayout.Label("SteamUtils.SetWarningMessageHook() : " + SteamUtils.SetWarningMessageHook()); // N/A - Check out SteamTest.cs for example usage.
 
-		GUILayout.Label("SteamUtils.IsOverlayEnabled() : " + SteamUtils.IsOverlayEnabled());
-		GUILayout.Label("SteamUtils.BOverlayNeedsPresent() : " + SteamUtils.BOverlayNeedsPresent());
+		GUILayout.Label("IsOverlayEnabled() : " + SteamUtils.IsOverlayEnabled());
 
-		if (GUILayout.Button("SteamUtils.CheckFileSignature(\"FileNotFound.txt\")")) {
+		GUILayout.Label("BOverlayNeedsPresent() : " + SteamUtils.BOverlayNeedsPresent());
+
+		if (GUILayout.Button("CheckFileSignature(\"FileNotFound.txt\")")) {
 			SteamAPICall_t handle = SteamUtils.CheckFileSignature("FileNotFound.txt");
 			OnCheckFileSignatureCallResult.Set(handle);
-			print("SteamUtils.CheckFileSignature(\"FileNotFound.txt\") - " + handle);
+			print("SteamUtils.CheckFileSignature(" + "\"FileNotFound.txt\"" + ") : " + handle);
 		}
 
-		if(GUILayout.Button("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32, \"test\")")) {
+		if (GUILayout.Button("ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32, \"test\")")) {
 			bool ret = SteamUtils.ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, "Description Test!", 32, "test");
-			print("SteamUtils.ShowGamepadTextInput(k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, \"Description Test!\", 32, \"test\") - " + ret);
+			print("SteamUtils.ShowGamepadTextInput(" + EGamepadTextInputMode.k_EGamepadTextInputModeNormal + ", " + EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine + ", " + "\"Description Test!\"" + ", " + 32 + ", " + "\"test\"" + ") : " + ret);
 		}
 
 		// Only called from within GamepadTextInputDismissed_t Callback!
@@ -102,13 +130,20 @@ public class SteamUtilsTest : MonoBehaviour {
 			GUILayout.Label("SteamUtils.GetEnteredGamepadTextInput(out Text, 32) - " + ret + " -- " + Text);
 		}*/
 
-		GUILayout.Label("SteamUtils.GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
+		GUILayout.Label("GetSteamUILanguage() : " + SteamUtils.GetSteamUILanguage());
 
-		GUILayout.Label("SteamUtils.IsSteamRunningInVR() : " + SteamUtils.IsSteamRunningInVR());
+		GUILayout.Label("IsSteamRunningInVR() : " + SteamUtils.IsSteamRunningInVR());
 
-		if (GUILayout.Button("SteamUtils.SetOverlayNotificationInset(400, 400)")) {
+		if (GUILayout.Button("SetOverlayNotificationInset(400, 400)")) {
 			SteamUtils.SetOverlayNotificationInset(400, 400);
-			print("SteamUtils.SetOverlayNotificationInset(400, 400)");
+			print("SteamUtils.SetOverlayNotificationInset(" + 400 + ", " + 400 + ")");
+		}
+
+		GUILayout.Label("IsSteamInBigPictureMode() : " + SteamUtils.IsSteamInBigPictureMode());
+
+		if (GUILayout.Button("StartVRDashboard()")) {
+			SteamUtils.StartVRDashboard();
+			print("SteamUtils.StartVRDashboard()");
 		}
 	}
 
@@ -119,6 +154,10 @@ public class SteamUtilsTest : MonoBehaviour {
 	void OnLowBatteryPower(LowBatteryPower_t pCallback) {
 		Debug.Log("[" + LowBatteryPower_t.k_iCallback + " - LowBatteryPower] - " + pCallback.m_nMinutesBatteryLeft);
 	}
+
+	//void OnSteamAPICallCompleted(SteamAPICallCompleted_t pCallback) {
+	//	Debug.Log("[" + SteamAPICallCompleted_t.k_iCallback + " - SteamAPICallCompleted] - " + pCallback.m_hAsyncCall + " -- " + pCallback.m_iCallback + " -- " + pCallback.m_cubParam);
+	//}
 
 	void OnSteamShutdown(SteamShutdown_t pCallback) {
 		Debug.Log("[" + SteamShutdown_t.k_iCallback + " - SteamShutdown]");

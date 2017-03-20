@@ -13,6 +13,7 @@ public class SteamMatchmakingTest : MonoBehaviour {
 	protected Callback<LobbyChatMsg_t> m_LobbyChatMsg;
 	protected Callback<LobbyGameCreated_t> m_LobbyGameCreated;
 	protected Callback<LobbyKicked_t> m_LobbyKicked;
+	//protected Callback<PSNGameBootInviteResult_t> m_PSNGameBootInviteResult;
 	protected Callback<FavoritesListAccountsUpdated_t> m_FavoritesListAccountsUpdated;
 
 	private CallResult<LobbyEnter_t> OnLobbyEnterCallResult;
@@ -28,6 +29,7 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		m_LobbyChatMsg = Callback<LobbyChatMsg_t>.Create(OnLobbyChatMsg);
 		m_LobbyGameCreated = Callback<LobbyGameCreated_t>.Create(OnLobbyGameCreated);
 		m_LobbyKicked = Callback<LobbyKicked_t>.Create(OnLobbyKicked);
+		//m_PSNGameBootInviteResult = Callback<PSNGameBootInviteResult_t>.Create(OnPSNGameBootInviteResult); // PS3 Only.
 		m_FavoritesListAccountsUpdated = Callback<FavoritesListAccountsUpdated_t>.Create(OnFavoritesListAccountsUpdated);
 
 		OnLobbyEnterCallResult = CallResult<LobbyEnter_t>.Create(OnLobbyEnter);
@@ -55,13 +57,15 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		}
 
 		// 3494815209 = 208.78.165.233 = Valve Payload Server (Virginia srcds150 #1)
-		if (GUILayout.Button("AddFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime")) {
+		if (GUILayout.Button("AddFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime)")) {
 			uint CurrentUnixTime = (uint)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
-			print("SteamMatchmaking.AddFavoriteGame(" + (AppId_t)480 + ", 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite, " + CurrentUnixTime + ") : " + SteamMatchmaking.AddFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime));
+			int ret = SteamMatchmaking.AddFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime);
+			print("SteamMatchmaking.AddFavoriteGame(" + (AppId_t)480 + ", " + 3494815209 + ", " + 27015 + ", " + 27015 + ", " + Constants.k_unFavoriteFlagFavorite + ", " + CurrentUnixTime + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RemoveFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite)")) {
-			print("SteamMatchmaking.RemoveFavoriteGame(" + (AppId_t)480 + ", 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite) : " + SteamMatchmaking.RemoveFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite));
+			bool ret = SteamMatchmaking.RemoveFavoriteGame((AppId_t)480, 3494815209, 27015, 27015, Constants.k_unFavoriteFlagFavorite);
+			print("SteamMatchmaking.RemoveFavoriteGame(" + (AppId_t)480 + ", " + 3494815209 + ", " + 27015 + ", " + 27015 + ", " + Constants.k_unFavoriteFlagFavorite + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RequestLobbyList()")) {
@@ -72,48 +76,48 @@ public class SteamMatchmakingTest : MonoBehaviour {
 
 		if (GUILayout.Button("AddRequestLobbyListStringFilter(\"SomeStringKey\", \"SomeValue\", ELobbyComparison.k_ELobbyComparisonNotEqual)")) {
 			SteamMatchmaking.AddRequestLobbyListStringFilter("SomeStringKey", "SomeValue", ELobbyComparison.k_ELobbyComparisonNotEqual);
-			print("SteamMatchmaking.AddRequestLobbyListStringFilter(\"SomeStringKey\", \"SomeValue\", ELobbyComparison.k_ELobbyComparisonNotEqual)");
+			print("SteamMatchmaking.AddRequestLobbyListStringFilter(" + "\"SomeStringKey\"" + ", " + "\"SomeValue\"" + ", " + ELobbyComparison.k_ELobbyComparisonNotEqual + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListNumericalFilter(\"SomeIntKey\", 0, ELobbyComparison.k_ELobbyComparisonNotEqual)")) {
 			SteamMatchmaking.AddRequestLobbyListNumericalFilter("SomeIntKey", 0, ELobbyComparison.k_ELobbyComparisonNotEqual);
-			print("SteamMatchmaking.AddRequestLobbyListNumericalFilter(\"SomeIntKey\", 0, ELobbyComparison.k_ELobbyComparisonNotEqual)");
+			print("SteamMatchmaking.AddRequestLobbyListNumericalFilter(" + "\"SomeIntKey\"" + ", " + 0 + ", " + ELobbyComparison.k_ELobbyComparisonNotEqual + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListNearValueFilter(\"SomeIntKey\", 0)")) {
 			SteamMatchmaking.AddRequestLobbyListNearValueFilter("SomeIntKey", 0);
-			print("SteamMatchmaking.AddRequestLobbyListNearValueFilter(\"SomeIntKey\", 0)");
+			print("SteamMatchmaking.AddRequestLobbyListNearValueFilter(" + "\"SomeIntKey\"" + ", " + 0 + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListFilterSlotsAvailable(3)")) {
 			SteamMatchmaking.AddRequestLobbyListFilterSlotsAvailable(3);
-			print("SteamMatchmaking.AddRequestLobbyListFilterSlotsAvailable(3)");
+			print("SteamMatchmaking.AddRequestLobbyListFilterSlotsAvailable(" + 3 + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListDistanceFilter(ELobbyDistanceFilter.k_ELobbyDistanceFilterWorldwide)")) {
 			SteamMatchmaking.AddRequestLobbyListDistanceFilter(ELobbyDistanceFilter.k_ELobbyDistanceFilterWorldwide);
-			print("SteamMatchmaking.AddRequestLobbyListDistanceFilter(ELobbyDistanceFilter.k_ELobbyDistanceFilterWorldwide)");
+			print("SteamMatchmaking.AddRequestLobbyListDistanceFilter(" + ELobbyDistanceFilter.k_ELobbyDistanceFilterWorldwide + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListResultCountFilter(1)")) {
 			SteamMatchmaking.AddRequestLobbyListResultCountFilter(1);
-			print("SteamMatchmaking.AddRequestLobbyListResultCountFilter(1)");
+			print("SteamMatchmaking.AddRequestLobbyListResultCountFilter(" + 1 + ")");
 		}
 
 		if (GUILayout.Button("AddRequestLobbyListCompatibleMembersFilter((CSteamID)0)")) {
 			SteamMatchmaking.AddRequestLobbyListCompatibleMembersFilter((CSteamID)0);
-			print("SteamMatchmaking.AddRequestLobbyListCompatibleMembersFilter((CSteamID)0)");
+			print("SteamMatchmaking.AddRequestLobbyListCompatibleMembersFilter(" + (CSteamID)0 + ")");
 		}
 
 		if (GUILayout.Button("GetLobbyByIndex(0)")) {
 			m_Lobby = SteamMatchmaking.GetLobbyByIndex(0);
-			print("SteamMatchmaking.SteamMatchmaking.GetLobbyByIndex(0) : " + m_Lobby);
+			print("SteamMatchmaking.GetLobbyByIndex(" + 0 + ") : " + m_Lobby);
 		}
 
 		if (GUILayout.Button("CreateLobby(ELobbyType.k_ELobbyTypePublic, 1)")) {
 			SteamAPICall_t handle = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 1);
 			OnLobbyCreatedCallResult.Set(handle);
-			print("SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, 1) : " + handle);
+			print("SteamMatchmaking.CreateLobby(" + ELobbyType.k_ELobbyTypePublic + ", " + 1 + ") : " + handle);
 		}
 
 		if (GUILayout.Button("JoinLobby(m_Lobby)")) {
@@ -129,17 +133,19 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("InviteUserToLobby(m_Lobby, SteamUser.GetSteamID())")) {
-			print("SteamMatchmaking.InviteUserToLobby(" + m_Lobby + ", SteamUser.GetSteamID()) : " + SteamMatchmaking.InviteUserToLobby(m_Lobby, SteamUser.GetSteamID()));
+			bool ret = SteamMatchmaking.InviteUserToLobby(m_Lobby, SteamUser.GetSteamID());
+			print("SteamMatchmaking.InviteUserToLobby(" + m_Lobby + ", " + SteamUser.GetSteamID() + ") : " + ret);
 		}
 
 		GUILayout.Label("GetNumLobbyMembers(m_Lobby) : " + SteamMatchmaking.GetNumLobbyMembers(m_Lobby));
 
 		GUILayout.Label("GetLobbyMemberByIndex(m_Lobby, 0) : " + SteamMatchmaking.GetLobbyMemberByIndex(m_Lobby, 0));
 
-		GUILayout.Label("SteamMatchmaking.GetLobbyData(m_Lobby, \"name\") : " + SteamMatchmaking.GetLobbyData(m_Lobby, "name"));
+		GUILayout.Label("GetLobbyData(m_Lobby, \"name\") : " + SteamMatchmaking.GetLobbyData(m_Lobby, "name"));
 
 		if (GUILayout.Button("SetLobbyData(m_Lobby, \"name\", \"Test Lobby!\")")) {
-			print("SteamMatchmaking.SetLobbyData(" + m_Lobby + ", \"name\", \"Test Lobby!\") : " + SteamMatchmaking.SetLobbyData(m_Lobby, "name", "Test Lobby!"));
+			bool ret = SteamMatchmaking.SetLobbyData(m_Lobby, "name", "Test Lobby!");
+			print("SteamMatchmaking.SetLobbyData(" + m_Lobby + ", " + "\"name\"" + ", " + "\"Test Lobby!\"" + ") : " + ret);
 		}
 
 		GUILayout.Label("GetLobbyDataCount(m_Lobby) : " + SteamMatchmaking.GetLobbyDataCount(m_Lobby));
@@ -148,36 +154,37 @@ public class SteamMatchmakingTest : MonoBehaviour {
 			string Key;
 			string Value;
 			bool ret = SteamMatchmaking.GetLobbyDataByIndex(m_Lobby, 0, out Key, 255, out Value, 255);
-			GUILayout.Label("SteamMatchmaking.GetLobbyDataByIndex(m_Lobby, 0, out Key, 255, out Value, 255) : " + ret + " -- " + Key + " -- " + Value);
+			GUILayout.Label("GetLobbyDataByIndex(m_Lobby, 0, out Key, 255, out Value, 255) : " + ret + " -- " + Key + " -- " + Value);
 		}
 
 		if (GUILayout.Button("DeleteLobbyData(m_Lobby, \"name\")")) {
-			print("SteamMatchmaking.DeleteLobbyData(" + m_Lobby + ", \"name\") : " + SteamMatchmaking.DeleteLobbyData(m_Lobby, "name"));
+			bool ret = SteamMatchmaking.DeleteLobbyData(m_Lobby, "name");
+			print("SteamMatchmaking.DeleteLobbyData(" + m_Lobby + ", " + "\"name\"" + ") : " + ret);
 		}
 
-		{
-			GUILayout.Label("SteamMatchmaking.GetLobbyMemberData(m_Lobby, SteamUser.GetSteamID(), \"test\") : " + SteamMatchmaking.GetLobbyMemberData(m_Lobby, SteamUser.GetSteamID(), "test"));
-		}
+		GUILayout.Label("GetLobbyMemberData(m_Lobby, SteamUser.GetSteamID(), \"test\") : " + SteamMatchmaking.GetLobbyMemberData(m_Lobby, SteamUser.GetSteamID(), "test"));
 
 		if (GUILayout.Button("SetLobbyMemberData(m_Lobby, \"test\", \"This is a test Key!\")")) {
 			SteamMatchmaking.SetLobbyMemberData(m_Lobby, "test", "This is a test Key!");
-			print("SteamMatchmaking.SetLobbyMemberData(" + m_Lobby + ", \"test\", \"This is a test Key!\")");
+			print("SteamMatchmaking.SetLobbyMemberData(" + m_Lobby + ", " + "\"test\"" + ", " + "\"This is a test Key!\"" + ")");
 		}
 
 		if (GUILayout.Button("SendLobbyChatMsg(m_Lobby, MsgBody, MsgBody.Length)")) {
 			byte[] MsgBody = System.Text.Encoding.UTF8.GetBytes("Test Message!");
-			print("SteamMatchmaking.SendLobbyChatMsg(" + m_Lobby + ", MsgBody, MsgBody.Length) : " + SteamMatchmaking.SendLobbyChatMsg(m_Lobby, MsgBody, MsgBody.Length));
+			bool ret = SteamMatchmaking.SendLobbyChatMsg(m_Lobby, MsgBody, MsgBody.Length);
+			print("SteamMatchmaking.SendLobbyChatMsg(" + m_Lobby + ", " + MsgBody + ", " + MsgBody.Length + ") : " + ret);
 		}
 
-		//GetLobbyChatEntry(CSteamID steamIDLobby, int iChatID, out CSteamID pSteamIDUser, byte[] pvData, int cubData, out EChatEntryType peChatEntryType); // Only called from within OnLobbyChatMsg!
-		
+		//SteamMatchmaking.GetLobbyChatEntry() // Only called from within OnLobbyChatMsg!
+
 		if (GUILayout.Button("RequestLobbyData(m_Lobby)")) {
-			print("SteamMatchmaking.RequestLobbyData(" + m_Lobby + ") : " + SteamMatchmaking.RequestLobbyData(m_Lobby));
+			bool ret = SteamMatchmaking.RequestLobbyData(m_Lobby);
+			print("SteamMatchmaking.RequestLobbyData(" + m_Lobby + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetLobbyGameServer(m_Lobby, 2130706433, 1337, CSteamID.NonSteamGS)")) {
-			SteamMatchmaking.SetLobbyGameServer(m_Lobby, 2130706433, 1337, CSteamID.NonSteamGS); //127.0.0.1
-			print("SteamMatchmaking.SetLobbyGameServer(" + m_Lobby + ", 2130706433, 1337, CSteamID.NonSteamGS)");
+		if (GUILayout.Button("SetLobbyGameServer(m_Lobby, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015, CSteamID.NonSteamGS)")) {
+			SteamMatchmaking.SetLobbyGameServer(m_Lobby, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015, CSteamID.NonSteamGS);
+			print("SteamMatchmaking.SetLobbyGameServer(" + m_Lobby + ", " + TestConstants.k_IpAdress127_0_0_1 + ", " + TestConstants.k_Port27015 + ", " + CSteamID.NonSteamGS + ")");
 		}
 
 		{
@@ -189,30 +196,38 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("SetLobbyMemberLimit(m_Lobby, 6)")) {
-			print("SteamMatchmaking.SteamMatchmaking.SetLobbyMemberLimit(" + m_Lobby + ", 6) : " + SteamMatchmaking.SetLobbyMemberLimit(m_Lobby, 6));
+			bool ret = SteamMatchmaking.SetLobbyMemberLimit(m_Lobby, 6);
+			print("SteamMatchmaking.SetLobbyMemberLimit(" + m_Lobby + ", " + 6 + ") : " + ret);
 		}
 
 		GUILayout.Label("GetLobbyMemberLimit(m_Lobby) : " + SteamMatchmaking.GetLobbyMemberLimit(m_Lobby));
-		
-		if (GUILayout.Button("SetLobbyType(m_Lobby, ELobbyType.k_ELobbyTypePublic))")) {
-			print("SteamMatchmaking.SetLobbyType(" + m_Lobby + ", ELobbyType.k_ELobbyTypePublic)) : " + SteamMatchmaking.SetLobbyType(m_Lobby, ELobbyType.k_ELobbyTypePublic));
+
+		if (GUILayout.Button("SetLobbyType(m_Lobby, ELobbyType.k_ELobbyTypePublic)")) {
+			bool ret = SteamMatchmaking.SetLobbyType(m_Lobby, ELobbyType.k_ELobbyTypePublic);
+			print("SteamMatchmaking.SetLobbyType(" + m_Lobby + ", " + ELobbyType.k_ELobbyTypePublic + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetLobbyJoinable(m_Lobby, true)")) {
-			print("SteamMatchmaking.SetLobbyJoinable(" + m_Lobby + ", true) : " + SteamMatchmaking.SetLobbyJoinable(m_Lobby, true));
+			bool ret = SteamMatchmaking.SetLobbyJoinable(m_Lobby, true);
+			print("SteamMatchmaking.SetLobbyJoinable(" + m_Lobby + ", " + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("GetLobbyOwner(m_Lobby)")) {
-			print("SteamMatchmaking.GetLobbyOwner(" + m_Lobby + ") : " + SteamMatchmaking.GetLobbyOwner(m_Lobby));
+			CSteamID ret = SteamMatchmaking.GetLobbyOwner(m_Lobby);
+			print("SteamMatchmaking.GetLobbyOwner(" + m_Lobby + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetLobbyOwner(m_Lobby, SteamUser.GetSteamID())")) {
-			print("SteamMatchmaking.SteamMatchmaking.SetLobbyOwner(" + m_Lobby + ", SteamUser.GetSteamID()) : " + SteamMatchmaking.SetLobbyOwner(m_Lobby, SteamUser.GetSteamID()));
+			bool ret = SteamMatchmaking.SetLobbyOwner(m_Lobby, SteamUser.GetSteamID());
+			print("SteamMatchmaking.SetLobbyOwner(" + m_Lobby + ", " + SteamUser.GetSteamID() + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetLinkedLobby(m_Lobby, m_Lobby)")) {
-			print("SteamMatchmaking.SteamMatchmaking.SetLinkedLobby(" + m_Lobby + ", " + m_Lobby + ") : " + SteamMatchmaking.SetLinkedLobby(m_Lobby, m_Lobby));
+			bool ret = SteamMatchmaking.SetLinkedLobby(m_Lobby, m_Lobby);
+			print("SteamMatchmaking.SetLinkedLobby(" + m_Lobby + ", " + m_Lobby + ") : " + ret);
 		}
+
+		//SteamMatchmaking.CheckForPSNGameBootInvite() // PS3 Only.
 	}
 
 	void OnFavoritesListChanged(FavoritesListChanged_t pCallback) {
@@ -225,11 +240,13 @@ public class SteamMatchmakingTest : MonoBehaviour {
 
 	void OnLobbyEnter(LobbyEnter_t pCallback) {
 		Debug.Log("[" + LobbyEnter_t.k_iCallback + " - LobbyEnter] - " + pCallback.m_ulSteamIDLobby + " -- " + pCallback.m_rgfChatPermissions + " -- " + pCallback.m_bLocked + " -- " + pCallback.m_EChatRoomEnterResponse);
+
 		m_Lobby = (CSteamID)pCallback.m_ulSteamIDLobby;
 	}
 
 	void OnLobbyEnter(LobbyEnter_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LobbyEnter_t.k_iCallback + " - LobbyEnter] - " + pCallback.m_ulSteamIDLobby + " -- " + pCallback.m_rgfChatPermissions + " -- " + pCallback.m_bLocked + " -- " + pCallback.m_EChatRoomEnterResponse);
+
 		m_Lobby = (CSteamID)pCallback.m_ulSteamIDLobby;
 	}
 
@@ -243,11 +260,12 @@ public class SteamMatchmakingTest : MonoBehaviour {
 
 	void OnLobbyChatMsg(LobbyChatMsg_t pCallback) {
 		Debug.Log("[" + LobbyChatMsg_t.k_iCallback + " - LobbyChatMsg] - " + pCallback.m_ulSteamIDLobby + " -- " + pCallback.m_ulSteamIDUser + " -- " + pCallback.m_eChatEntryType + " -- " + pCallback.m_iChatID);
+
 		CSteamID SteamIDUser;
 		byte[] Data = new byte[4096];
 		EChatEntryType ChatEntryType;
 		int ret = SteamMatchmaking.GetLobbyChatEntry((CSteamID)pCallback.m_ulSteamIDLobby, (int)pCallback.m_iChatID, out SteamIDUser, Data, Data.Length, out ChatEntryType);
-		Debug.Log("SteamMatchmaking.GetLobbyChatEntry(" + (CSteamID)pCallback.m_ulSteamIDLobby + ", " + (int)pCallback.m_iChatID + ", out SteamIDUser, Data, Data.Length, out ChatEntryType) : " + ret + " -- " + SteamIDUser + " -- " + System.Text.Encoding.UTF8.GetString(Data) + " -- " + ChatEntryType);
+		Debug.Log("GetLobbyChatEntry(" + (CSteamID)pCallback.m_ulSteamIDLobby + ", " + (int)pCallback.m_iChatID + ", out SteamIDUser, Data, Data.Length, out ChatEntryType) : " + ret + " -- " + SteamIDUser + " -- " + System.Text.Encoding.UTF8.GetString(Data) + " -- " + ChatEntryType);
 	}
 
 	void OnLobbyGameCreated(LobbyGameCreated_t pCallback) {
@@ -264,11 +282,15 @@ public class SteamMatchmakingTest : MonoBehaviour {
 
 	void OnLobbyCreated(LobbyCreated_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + LobbyCreated_t.k_iCallback + " - LobbyCreated] - " + pCallback.m_eResult + " -- " + pCallback.m_ulSteamIDLobby);
+
 		m_Lobby = (CSteamID)pCallback.m_ulSteamIDLobby;
 	}
-	
+
+	//void OnPSNGameBootInviteResult(PSNGameBootInviteResult_t pCallback) {
+	//	Debug.Log("[" + PSNGameBootInviteResult_t.k_iCallback + " - PSNGameBootInviteResult] - " + pCallback.m_bGameBootInviteExists + " -- " + pCallback.m_steamIDLobby);
+	//}
+
 	void OnFavoritesListAccountsUpdated(FavoritesListAccountsUpdated_t pCallback) {
 		Debug.Log("[" + FavoritesListAccountsUpdated_t.k_iCallback + " - FavoritesListAccountsUpdated] - " + pCallback.m_eResult);
 	}
-
 }

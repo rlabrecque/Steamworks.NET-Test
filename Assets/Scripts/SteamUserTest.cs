@@ -39,18 +39,25 @@ public class SteamUserTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
-		GUILayout.Label("m_HAuthTicket: " + m_HAuthTicket);
+		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.Label("Variables:");
+		GUILayout.Label("m_Ticket: " + m_Ticket);
 		GUILayout.Label("m_pcbTicket: " + m_pcbTicket);
+		GUILayout.Label("m_HAuthTicket: " + m_HAuthTicket);
+		GUILayout.Label("m_VoiceLoopback: " + m_VoiceLoopback);
 		GUILayout.EndArea();
 
 		GUILayout.Label("GetHSteamUser() : " + SteamUser.GetHSteamUser());
+
 		GUILayout.Label("BLoggedOn() : " + SteamUser.BLoggedOn());
+
 		GUILayout.Label("GetSteamID() : " + SteamUser.GetSteamID());
 
-		//GUILayout.Label("InitiateGameConnection() : " + SteamUser.InitiateGameConnection()); // N/A - Too Hard to test like this.
-		//GUILayout.Label("TerminateGameConnection() : " + SteamUser.TerminateGameConnection()); // ^
-		//GUILayout.Label("TrackAppUsageEvent() : " + SteamUser.TrackAppUsageEvent()); // Legacy function with no documentation
+		//SteamUser.InitiateGameConnection() // N/A - Too Hard to test like this.
+
+		//SteamUser.TerminateGameConnection() // ^
+
+		//SteamUser.TrackAppUsageEvent() // Legacy function with no documentation
 
 		{
 			string Buffer;
@@ -93,7 +100,7 @@ public class SteamUserTest : MonoBehaviour {
 						if (!m_VoiceLoopback) {
 							m_VoiceLoopback = new GameObject("Voice Loopback");
 							source = m_VoiceLoopback.AddComponent<AudioSource>();
-							source.clip = AudioClip.Create("Testing!", 11025, 1, 11025, false, false);
+							source.clip = AudioClip.Create("Testing!", 11025, 1, 11025, false);
 						}
 						else {
 							source = m_VoiceLoopback.GetComponent<AudioSource>();
@@ -141,44 +148,51 @@ public class SteamUserTest : MonoBehaviour {
 		}
 
 		GUILayout.Label("UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()) : " + SteamUser.UserHasLicenseForApp(SteamUser.GetSteamID(), SteamUtils.GetAppID()));
+
 		GUILayout.Label("BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
 
-		if (GUILayout.Button("AdvertiseGame(2, 127.0.0.1, 27015)")) {
-			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, 2130706433, 27015);
-			print("SteamUser.AdvertiseGame(2, 2130706433, 27015)");
+		if (GUILayout.Button("AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015)")) {
+			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015);
+			print("SteamUser.AdvertiseGame(" + CSteamID.NonSteamGS + ", " + TestConstants.k_IpAdress127_0_0_1 + ", " + TestConstants.k_Port27015 + ")");
 		}
 
-		if(GUILayout.Button("RequestEncryptedAppTicket()")) {
+		if (GUILayout.Button("RequestEncryptedAppTicket(k_unSecretData, sizeof(uint))")) {
 			byte[] k_unSecretData = System.BitConverter.GetBytes(0x5444);
 			SteamAPICall_t handle = SteamUser.RequestEncryptedAppTicket(k_unSecretData, sizeof(uint));
 			OnEncryptedAppTicketResponseCallResult.Set(handle);
-			print("SteamUser.RequestEncryptedAppTicket(k_unSecretData, " + sizeof(uint) + ") - " + handle);
+			print("SteamUser.RequestEncryptedAppTicket(" + k_unSecretData + ", " + sizeof(uint) + ") : " + handle);
 		}
 
-		if (GUILayout.Button("GetEncryptedAppTicket()")) {
+		if (GUILayout.Button("GetEncryptedAppTicket(rgubTicket, 1024, out cubTicket)")) {
 			byte[] rgubTicket = new byte[1024];
 			uint cubTicket;
 			bool ret = SteamUser.GetEncryptedAppTicket(rgubTicket, 1024, out cubTicket);
-			print("SteamUser.GetEncryptedAppTicket() - " + ret + " -- " + cubTicket);
+			print("SteamUser.GetEncryptedAppTicket(" + rgubTicket + ", " + 1024 + ", " + "out cubTicket" + ") : " + ret + " -- " + cubTicket);
 		}
 
-		//GUILayout.Label("GetGameBadgeLevel(1, false) : " + SteamUser.GetGameBadgeLevel(1, false)); // SpaceWar does not have trading cards, so this function will only ever return 0 and produce an annoying warning.
+		// SpaceWar does not have trading cards, so this function will only ever return 0 and produce an annoying warning.
+		if (GUILayout.Button("GetGameBadgeLevel(1, false)")) {
+			int ret = SteamUser.GetGameBadgeLevel(1, false);
+			print("SteamUser.GetGameBadgeLevel(" + 1 + ", " + false + ") : " + ret);
+		}
+
 		GUILayout.Label("GetPlayerSteamLevel() : " + SteamUser.GetPlayerSteamLevel());
 
 		if (GUILayout.Button("RequestStoreAuthURL(\"https://steampowered.com\")")) {
 			SteamAPICall_t handle = SteamUser.RequestStoreAuthURL("https://steampowered.com");
 			OnStoreAuthURLResponseCallResult.Set(handle);
-			print("SteamUser.RequestStoreAuthURL(\"https://steampowered.com\") - " + handle);
+			print("SteamUser.RequestStoreAuthURL(" + "\"https://steampowered.com\"" + ") : " + handle);
 		}
 
-#if _PS3
-		//GUILayout.Label("LogOn() : " + SteamUser.LogOn());
-		//GUILayout.Label("LogOnAndLinkSteamAccountToPSN : " + SteamUser.LogOnAndLinkSteamAccountToPSN());
-		//GUILayout.Label("LogOnAndCreateNewSteamAccountIfNeeded : " + SteamUser.LogOnAndCreateNewSteamAccountIfNeeded());
-		//GUILayout.Label("GetConsoleSteamID : " + SteamUser.GetConsoleSteamID());
-#endif
+		GUILayout.Label("BIsPhoneVerified() : " + SteamUser.BIsPhoneVerified());
+
+		GUILayout.Label("BIsTwoFactorEnabled() : " + SteamUser.BIsTwoFactorEnabled());
+
+		GUILayout.Label("BIsPhoneIdentifying() : " + SteamUser.BIsPhoneIdentifying());
+
+		GUILayout.Label("BIsPhoneRequiringVerification() : " + SteamUser.BIsPhoneRequiringVerification());
 	}
-	
+
 	void OnSteamServersConnected(SteamServersConnected_t pCallback) {
 		Debug.Log("[" + SteamServersConnected_t.k_iCallback + " - SteamServersConnected]");
 	}
@@ -200,7 +214,7 @@ public class SteamUserTest : MonoBehaviour {
 	}
 
 	void OnLicensesUpdated(LicensesUpdated_t pCallback) {
-		Debug.Log("[" + LicensesUpdated_t.k_iCallback + " - LicensesUpdated_t]");
+		Debug.Log("[" + LicensesUpdated_t.k_iCallback + " - LicensesUpdated]");
 	}
 
 	void OnValidateAuthTicketResponse(ValidateAuthTicketResponse_t pCallback) {
@@ -224,7 +238,7 @@ public class SteamUserTest : MonoBehaviour {
 			// this code is just to demonstrate the ticket cracking library
 
 			// included is the "secret" key for spacewar. normally this is secret
-			byte[] rgubKey = new byte[32] { 0xed, 0x93, 0x86, 0x07, 0x36, 0x47, 0xce, 0xa5, 0x8b, 0x77, 0x21, 0x49, 0x0d, 0x59, 0xed, 0x44, 0x57, 0x23, 0xf0, 0xf6, 0x6e, 0x74, 0x14, 0xe1, 0x53, 0x3b, 0xa3, 0x3c, 0xd8, 0x03, 0xbd, 0xbd };		
+			byte[] rgubKey = new byte[32] { 0xed, 0x93, 0x86, 0x07, 0x36, 0x47, 0xce, 0xa5, 0x8b, 0x77, 0x21, 0x49, 0x0d, 0x59, 0xed, 0x44, 0x57, 0x23, 0xf0, 0xf6, 0x6e, 0x74, 0x14, 0xe1, 0x53, 0x3b, 0xa3, 0x3c, 0xd8, 0x03, 0xbd, 0xbd };       
 
 			byte[] rgubDecrypted = new byte[1024];
 			uint cubDecrypted = 1024;
