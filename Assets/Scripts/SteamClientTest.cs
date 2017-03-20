@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamClientTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private HSteamPipe m_Pipe;
 	private HSteamUser m_GlobalUser;
 	private HSteamPipe m_LocalPipe;
@@ -12,13 +13,16 @@ public class SteamClientTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Pipe: " + m_Pipe);
 		GUILayout.Label("m_GlobalUser: " + m_GlobalUser);
 		GUILayout.Label("m_LocalPipe: " + m_LocalPipe);
 		GUILayout.Label("m_LocalUser: " + m_LocalUser);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		GUILayout.Label("DON'T TOUCH THESE IF YOU DO NOT KNOW WHAT THEY DO, YOU COULD CRASH YOUR STEAM CLIENT");
 
@@ -175,6 +179,9 @@ public class SteamClientTest : MonoBehaviour {
 			System.IntPtr ret = SteamClient.GetISteamVideo(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMVIDEO_INTERFACE_VERSION);
 			print("SteamClient.GetISteamVideo(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMVIDEO_INTERFACE_VERSION + ") : " + ret);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 }

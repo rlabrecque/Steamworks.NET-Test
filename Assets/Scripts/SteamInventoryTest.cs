@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamInventoryTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private SteamInventoryResult_t m_SteamInventoryResult;
 	private SteamItemDetails_t[] m_SteamItemDetails;
 	private SteamItemDef_t[] m_SteamItemDef;
@@ -53,13 +54,16 @@ public class SteamInventoryTest : MonoBehaviour {
 	};
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_SteamInventoryResult: " + m_SteamInventoryResult);
 		GUILayout.Label("m_SteamItemDetails: " + m_SteamItemDetails);
 		GUILayout.Label("m_SteamItemDef: " + m_SteamItemDef);
 		GUILayout.Label("m_SerializedBuffer: " + m_SerializedBuffer);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		// INVENTORY ASYNC RESULT MANAGEMENT
 
@@ -231,6 +235,9 @@ public class SteamInventoryTest : MonoBehaviour {
 		}
 
 		//SteamInventory.GetEligiblePromoItemDefinitionIDs() // Should be handled within the SteamInventoryEligiblePromoItemDefIDs_t CallResult!
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnSteamInventoryResultReady(SteamInventoryResultReady_t pCallback) {

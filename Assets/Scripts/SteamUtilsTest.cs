@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamUtilsTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private Texture2D m_Image;
 
 	protected Callback<IPCountry_t> m_IPCountry;
@@ -44,11 +45,14 @@ public class SteamUtilsTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Image:");
 		GUILayout.Label(m_Image);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		GUILayout.Label("GetSecondsSinceAppActive() : " + SteamUtils.GetSecondsSinceAppActive());
 
@@ -145,6 +149,9 @@ public class SteamUtilsTest : MonoBehaviour {
 			SteamUtils.StartVRDashboard();
 			print("SteamUtils.StartVRDashboard()");
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnIPCountry(IPCountry_t pCallback) {

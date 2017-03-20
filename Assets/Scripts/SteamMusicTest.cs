@@ -3,6 +3,8 @@ using System.Collections;
 using Steamworks;
 
 public class SteamMusicTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
+
 	protected Callback<PlaybackStatusHasChanged_t> m_PlaybackStatusHasChanged;
 	protected Callback<VolumeHasChanged_t> m_VolumeHasChanged;
 
@@ -12,6 +14,9 @@ public class SteamMusicTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
+
 		GUILayout.Label("BIsEnabled() : " + SteamMusic.BIsEnabled());
 
 		GUILayout.Label("BIsPlaying() : " + SteamMusic.BIsPlaying());
@@ -44,6 +49,9 @@ public class SteamMusicTest : MonoBehaviour {
 		}
 
 		GUILayout.Label("GetVolume() : " + SteamMusic.GetVolume());
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnPlaybackStatusHasChanged(PlaybackStatusHasChanged_t pCallback) {

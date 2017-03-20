@@ -5,6 +5,7 @@ using Steamworks;
 public class SteamRemoteStorageTest : MonoBehaviour {
 	const string MESSAGE_FILE_NAME = "message.dat";
 
+	private Vector2 m_ScrollPos;
 	private string m_Message;
 	private int m_FileCount;
 	private int m_FileSize;
@@ -82,7 +83,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Message:");
 		m_Message = GUILayout.TextField(m_Message, 40);
@@ -97,6 +98,9 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		GUILayout.Label("m_PublishedFileUpdateHandle: " + m_PublishedFileUpdateHandle);
 		GUILayout.Label("m_FileReadAsyncHandle: " + m_FileReadAsyncHandle);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (GUILayout.Button("FileWrite(MESSAGE_FILE_NAME, Data, Data.Length)")) {
 			if ((ulong)System.Text.Encoding.UTF8.GetByteCount(m_Message) > m_TotalBytes) {
@@ -423,6 +427,9 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		}
 
 		//SteamRemoteStorage.UGCDownloadToLocation() // There is absolutely no documentation on how to use this function
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnRemoteStorageAppSyncedClient(RemoteStorageAppSyncedClient_t pCallback) {

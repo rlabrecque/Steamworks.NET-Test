@@ -3,6 +3,8 @@ using System.Collections;
 using Steamworks;
 
 public class SteamVideoTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
+
 	protected Callback<BroadcastUploadStart_t> m_BroadcastUploadStart;
 	protected Callback<BroadcastUploadStop_t> m_BroadcastUploadStop;
 	protected Callback<GetVideoURLResult_t> m_GetVideoURLResult;
@@ -14,6 +16,9 @@ public class SteamVideoTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
+
 		if (GUILayout.Button("GetVideoURL(TestConstants.Instance.k_AppId_FreeToPlay)")) {
 			SteamVideo.GetVideoURL(TestConstants.Instance.k_AppId_FreeToPlay);
 			print("SteamVideo.GetVideoURL(" + TestConstants.Instance.k_AppId_FreeToPlay + ")");
@@ -24,6 +29,9 @@ public class SteamVideoTest : MonoBehaviour {
 			bool ret = SteamVideo.IsBroadcasting(out NumViewers);
 			GUILayout.Label("IsBroadcasting(out NumViewers) : " + ret + " -- " + NumViewers);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnBroadcastUploadStart(BroadcastUploadStart_t pCallback) {

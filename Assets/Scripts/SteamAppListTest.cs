@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamAppListTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private AppId_t[] m_AppList;
 
 	protected Callback<SteamAppInstalled_t> m_SteamAppInstalled;
@@ -16,10 +17,13 @@ public class SteamAppListTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_AppList: " + m_AppList);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		GUILayout.Label("GetNumInstalledApps() : " + SteamAppList.GetNumInstalledApps());
 
@@ -38,6 +42,9 @@ public class SteamAppListTest : MonoBehaviour {
 		}
 
 		GUILayout.Label("GetAppBuildId(m_AppList[0]) : " + SteamAppList.GetAppBuildId(m_AppList[0]));
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnSteamAppInstalled(SteamAppInstalled_t pCallback) {

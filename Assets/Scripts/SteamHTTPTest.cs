@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamHTTPTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private HTTPRequestHandle m_RequestHandle;
 	private ulong m_ContextValue;
 	private uint m_Offset;
@@ -36,7 +37,7 @@ public class SteamHTTPTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_RequestHandle: " + m_RequestHandle);
 		GUILayout.Label("m_ContextValue: " + m_ContextValue);
@@ -44,6 +45,9 @@ public class SteamHTTPTest : MonoBehaviour {
 		GUILayout.Label("m_BufferSize: " + m_BufferSize);
 		GUILayout.Label("m_CookieContainer: " + m_CookieContainer);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (GUILayout.Button("CreateHTTPRequest(EHTTPMethod.k_EHTTPMethodGET, \"http://httpbin.org/get\")")) {
 			HTTPRequestHandle ret = SteamHTTP.CreateHTTPRequest(EHTTPMethod.k_EHTTPMethodGET, "http://httpbin.org/get");
@@ -192,6 +196,9 @@ public class SteamHTTPTest : MonoBehaviour {
 			bool ret = SteamHTTP.GetHTTPRequestWasTimedOut(m_RequestHandle, out WasTimedOut);
 			GUILayout.Label("GetHTTPRequestWasTimedOut(m_RequestHandle, out WasTimedOut) : " + ret + " -- " + WasTimedOut);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnHTTPRequestCompleted(HTTPRequestCompleted_t pCallback, bool bIOFailure) {

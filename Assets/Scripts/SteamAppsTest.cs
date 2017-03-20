@@ -3,6 +3,8 @@ using System.Collections;
 using Steamworks;
 
 public class SteamAppsTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
+
 	protected Callback<DlcInstalled_t> m_DlcInstalled;
 	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
 	protected Callback<NewLaunchQueryParameters_t> m_NewLaunchQueryParameters;
@@ -20,6 +22,9 @@ public class SteamAppsTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
+
 		GUILayout.Label("BIsSubscribed() : " + SteamApps.BIsSubscribed());
 
 		GUILayout.Label("BIsLowViolence() : " + SteamApps.BIsLowViolence());
@@ -125,6 +130,9 @@ public class SteamAppsTest : MonoBehaviour {
 			OnFileDetailsResultCallResult.Set(handle);
 			print("SteamApps.GetFileDetails(" + "\"steam_api.dll\"" + ") : " + handle);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnDlcInstalled(DlcInstalled_t pCallback) {

@@ -102,7 +102,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Init: " + m_Init);
 		GUILayout.Label("m_HHTMLBrowser: " + m_HHTMLBrowser);

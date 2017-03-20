@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamUGCTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private UGCQueryHandle_t m_UGCQueryHandle;
 	private PublishedFileId_t m_PublishedFileId;
 	private UGCUpdateHandle_t m_UGCUpdateHandle;
@@ -54,12 +55,15 @@ public class SteamUGCTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_UGCQueryHandle: " + m_UGCQueryHandle);
 		GUILayout.Label("m_PublishedFileId: " + m_PublishedFileId);
 		GUILayout.Label("m_UGCUpdateHandle: " + m_UGCUpdateHandle);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (GUILayout.Button("CreateQueryUserUGCRequest(SteamUser.GetSteamID().GetAccountID(), EUserUGCList.k_EUserUGCList_Published, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Screenshots, EUserUGCListSortOrder.k_EUserUGCListSortOrder_CreationOrderDesc, AppId_t.Invalid, SteamUtils.GetAppID(), 1)")) {
 			m_UGCQueryHandle = SteamUGC.CreateQueryUserUGCRequest(SteamUser.GetSteamID().GetAccountID(), EUserUGCList.k_EUserUGCList_Published, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Screenshots, EUserUGCListSortOrder.k_EUserUGCListSortOrder_CreationOrderDesc, AppId_t.Invalid, SteamUtils.GetAppID(), 1);
@@ -427,6 +431,9 @@ public class SteamUGCTest : MonoBehaviour {
 			OnStopPlaytimeTrackingResultCallResult.Set(handle);
 			print("SteamUGC.StopPlaytimeTrackingForAllItems() : " + handle);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t pCallback, bool bIOFailure) {

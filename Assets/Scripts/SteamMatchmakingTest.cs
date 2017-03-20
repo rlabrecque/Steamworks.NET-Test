@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamMatchmakingTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private CSteamID m_Lobby;
 
 	protected Callback<FavoritesListChanged_t> m_FavoritesListChanged;
@@ -38,10 +39,13 @@ public class SteamMatchmakingTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Lobby: " + m_Lobby);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		GUILayout.Label("GetFavoriteGameCount() : " + SteamMatchmaking.GetFavoriteGameCount());
 
@@ -228,6 +232,9 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		}
 
 		//SteamMatchmaking.CheckForPSNGameBootInvite() // PS3 Only.
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnFavoritesListChanged(FavoritesListChanged_t pCallback) {

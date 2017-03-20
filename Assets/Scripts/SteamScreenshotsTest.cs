@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamScreenshotsTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private ScreenshotHandle m_ScreenshotHandle;
 	private bool m_Hooked;
 
@@ -50,11 +51,14 @@ public class SteamScreenshotsTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_ScreenshotHandle: " + m_ScreenshotHandle);
 		GUILayout.Label("m_Hooked: " + m_Hooked);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (GUILayout.Button("WriteScreenshot(RGB, (uint)RGB.Length, Screen.width, Screen.height)")) {
 			// We start a Coroutine with the actual implementation of this test because Texture2D.ReadPixels() has to be called at the end of the frame.
@@ -99,6 +103,9 @@ public class SteamScreenshotsTest : MonoBehaviour {
 			ScreenshotHandle ret = SteamScreenshots.AddVRScreenshotToLibrary(EVRScreenshotType.k_EVRScreenshotType_None, null, null);
 			print("SteamScreenshots.AddVRScreenshotToLibrary(" + EVRScreenshotType.k_EVRScreenshotType_None + ", " + null + ", " + null + ") : " + ret);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnScreenshotReady(ScreenshotReady_t pCallback) {

@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamMatchmakingServersTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private HServerListRequest m_ServerListRequest;
 	private HServerQuery m_ServerQuery;
 	private ISteamMatchmakingServerListResponse m_ServerListResponse;
@@ -112,7 +113,7 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_ServerListRequest: " + m_ServerListRequest);
 		GUILayout.Label("m_ServerQuery: " + m_ServerQuery);
@@ -121,6 +122,9 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 		GUILayout.Label("m_PlayersResponse: " + m_PlayersResponse);
 		GUILayout.Label("m_RulesResponse: " + m_RulesResponse);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (GUILayout.Button("RequestInternetServerList(TestConstants.Instance.k_AppId_TeamFortress2, filters, (uint)filters.Length, m_ServerListResponse)")) {
 			ReleaseRequest();
@@ -214,6 +218,9 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 		if (GUILayout.Button("CancelServerQuery(m_ServerQuery)")) {
 			CancelServerQuery(); // We do this instead, because we want to make sure that m_ServerListRequested gets set to Invalid after releasing, and we call it from a number of places.
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 }

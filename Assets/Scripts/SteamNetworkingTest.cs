@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamNetworkingTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private CSteamID m_RemoteSteamId;
 
 	protected Callback<P2PSessionRequest_t> m_P2PSessionRequest;
@@ -31,14 +32,19 @@ public class SteamNetworkingTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_RemoteSteamId: " + m_RemoteSteamId);
 		GUILayout.EndArea();
 
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
+
 		if (!m_RemoteSteamId.IsValid()) {
 			GUILayout.Label("Please fill m_RemoteSteamId with a valid 64bit SteamId to use SteamNetworkingTest.");
 			GUILayout.Label("Alternatively it will be filled automatically when a session request is recieved.");
+			GUILayout.EndScrollView();
+			GUILayout.EndVertical();
 			return;
 		}
 
@@ -129,6 +135,9 @@ public class SteamNetworkingTest : MonoBehaviour {
 		//SteamNetworking.GetSocketConnectionType() // TODO
 
 		//SteamNetworking.GetMaxPacketSize() // TODO
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnP2PSessionRequest(P2PSessionRequest_t pCallback) {

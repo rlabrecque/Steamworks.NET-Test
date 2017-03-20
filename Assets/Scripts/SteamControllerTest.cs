@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamControllerTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private bool m_ControllerInitialized;
 	private int m_nControllers;
 
@@ -113,11 +114,14 @@ public class SteamControllerTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_ControllerInitialized: " + m_ControllerInitialized);
 		GUILayout.Label("m_nControllers: " + m_nControllers);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		if (!m_ControllerInitialized) {
 			return;
@@ -241,6 +245,9 @@ public class SteamControllerTest : MonoBehaviour {
 		GUILayout.Label("GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
 
 		GUILayout.Label("GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 }

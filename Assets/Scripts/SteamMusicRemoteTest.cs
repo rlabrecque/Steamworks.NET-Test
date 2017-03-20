@@ -3,6 +3,8 @@ using System.Collections;
 using Steamworks;
 
 public class SteamMusicRemoteTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
+
 	protected Callback<MusicPlayerRemoteWillActivate_t> m_MusicPlayerRemoteWillActivate;
 	protected Callback<MusicPlayerRemoteWillDeactivate_t> m_MusicPlayerRemoteWillDeactivate;
 	protected Callback<MusicPlayerRemoteToFront_t> m_MusicPlayerRemoteToFront;
@@ -36,6 +38,9 @@ public class SteamMusicRemoteTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
+
 		// Service Definition
 		if (GUILayout.Button("RegisterSteamMusicRemote(\"Steamworks.NET Test Remote\")")) {
 			bool ret = SteamMusicRemote.RegisterSteamMusicRemote("Steamworks.NET Test Remote");
@@ -197,6 +202,9 @@ public class SteamMusicRemoteTest : MonoBehaviour {
 			bool ret = SteamMusicRemote.PlaylistDidChange();
 			print("SteamMusicRemote.PlaylistDidChange() : " + ret);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnMusicPlayerRemoteWillActivate(MusicPlayerRemoteWillActivate_t pCallback) {

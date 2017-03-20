@@ -3,6 +3,7 @@ using System.Collections;
 using Steamworks;
 
 public class SteamFriendsTest : MonoBehaviour {
+	private Vector2 m_ScrollPos;
 	private CSteamID m_Friend;
 	private CSteamID m_Clan;
 	private CSteamID m_CoPlayFriend;
@@ -65,7 +66,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	}
 
 	public void RenderOnGUI() {
-		GUILayout.BeginArea(new Rect(Screen.width - 120, 0, 120, Screen.height));
+		GUILayout.BeginArea(new Rect(Screen.width - 200, 0, 200, Screen.height));
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Friend: " + m_Friend);
 		GUILayout.Label("m_Clan: " + m_Clan);
@@ -77,6 +78,9 @@ public class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("m_LargeAvatar:");
 		GUILayout.Label(m_LargeAvatar);
 		GUILayout.EndArea();
+
+		GUILayout.BeginVertical("box");
+		m_ScrollPos = GUILayout.BeginScrollView(m_ScrollPos, GUILayout.Width(Screen.width - 215), GUILayout.Height(Screen.height - 33));
 
 		GUILayout.Label("GetPersonaName() : " + SteamFriends.GetPersonaName());
 
@@ -345,6 +349,9 @@ public class SteamFriendsTest : MonoBehaviour {
 			OnFriendsEnumerateFollowingListCallResult.Set(handle);
 			print("SteamFriends.EnumerateFollowingList(" + 0 + ") : " + handle);
 		}
+
+		GUILayout.EndScrollView();
+		GUILayout.EndVertical();
 	}
 
 	void OnPersonaStateChange(PersonaStateChange_t pCallback) {
