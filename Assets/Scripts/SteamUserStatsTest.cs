@@ -371,6 +371,8 @@ public class SteamUserStatsTest : MonoBehaviour {
 
 	void OnUserAchievementIconFetched(UserAchievementIconFetched_t pCallback) {
 		Debug.Log("[" + UserAchievementIconFetched_t.k_iCallback + " - UserAchievementIconFetched] - " + pCallback.m_nGameID + " -- " + pCallback.m_rgchAchievementName + " -- " + pCallback.m_bAchieved + " -- " + pCallback.m_nIconHandle);
+
+		m_Icon = SteamUtilsTest.GetSteamImageAsTexture2D(pCallback.m_nIconHandle);
 	}
 
 	void OnGlobalAchievementPercentagesReady(GlobalAchievementPercentagesReady_t pCallback, bool bIOFailure) {
