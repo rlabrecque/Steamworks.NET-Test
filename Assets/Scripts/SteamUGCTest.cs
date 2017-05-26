@@ -20,6 +20,8 @@ public class SteamUGCTest : MonoBehaviour {
 	private CallResult<GetUserItemVoteResult_t> OnGetUserItemVoteResultCallResult;
 	private CallResult<StartPlaytimeTrackingResult_t> OnStartPlaytimeTrackingResultCallResult;
 	private CallResult<StopPlaytimeTrackingResult_t> OnStopPlaytimeTrackingResultCallResult;
+	private CallResult<AddUGCDependencyResult_t> OnAddUGCDependencyResultCallResult;
+	private CallResult<RemoveUGCDependencyResult_t> OnRemoveUGCDependencyResultCallResult;
 
 	public void OnEnable() {
 		// These come from ISteamRemoteStorage but they are used here as well...
@@ -38,6 +40,8 @@ public class SteamUGCTest : MonoBehaviour {
 		OnGetUserItemVoteResultCallResult = CallResult<GetUserItemVoteResult_t>.Create(OnGetUserItemVoteResult);
 		OnStartPlaytimeTrackingResultCallResult = CallResult<StartPlaytimeTrackingResult_t>.Create(OnStartPlaytimeTrackingResult);
 		OnStopPlaytimeTrackingResultCallResult = CallResult<StopPlaytimeTrackingResult_t>.Create(OnStopPlaytimeTrackingResult);
+		OnAddUGCDependencyResultCallResult = CallResult<AddUGCDependencyResult_t>.Create(OnAddUGCDependencyResult);
+		OnRemoveUGCDependencyResultCallResult = CallResult<RemoveUGCDependencyResult_t>.Create(OnRemoveUGCDependencyResult);
 	}
 
 	// These come from ISteamRemoteStorage but they are used here as well...
@@ -70,9 +74,9 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.CreateQueryUserUGCRequest(" + SteamUser.GetSteamID().GetAccountID() + ", " + EUserUGCList.k_EUserUGCList_Published + ", " + EUGCMatchingUGCType.k_EUGCMatchingUGCType_Screenshots + ", " + EUserUGCListSortOrder.k_EUserUGCListSortOrder_CreationOrderDesc + ", " + AppId_t.Invalid + ", " + SteamUtils.GetAppID() + ", " + 1 + ") : " + m_UGCQueryHandle);
 		}
 
-		if (GUILayout.Button("CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_AllGuides, AppId_t.Invalid, SteamUtils.GetAppID(), 1)")) {
-			m_UGCQueryHandle = SteamUGC.CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_AllGuides, AppId_t.Invalid, SteamUtils.GetAppID(), 1);
-			print("SteamUGC.CreateQueryAllUGCRequest(" + EUGCQuery.k_EUGCQuery_RankedByPublicationDate + ", " + EUGCMatchingUGCType.k_EUGCMatchingUGCType_AllGuides + ", " + AppId_t.Invalid + ", " + SteamUtils.GetAppID() + ", " + 1 + ") : " + m_UGCQueryHandle);
+		if (GUILayout.Button("CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items, AppId_t.Invalid, SteamUtils.GetAppID(), 1)")) {
+			m_UGCQueryHandle = SteamUGC.CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items, AppId_t.Invalid, SteamUtils.GetAppID(), 1);
+			print("SteamUGC.CreateQueryAllUGCRequest(" + EUGCQuery.k_EUGCQuery_RankedByPublicationDate + ", " + EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items + ", " + AppId_t.Invalid + ", " + SteamUtils.GetAppID() + ", " + 1 + ") : " + m_UGCQueryHandle);
 		}
 
 		if (GUILayout.Button("CreateQueryUGCDetailsRequest(PublishedFileIDs, (uint)PublishedFileIDs.Length)")) {
@@ -194,6 +198,11 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetReturnTotalOnly(" + m_UGCQueryHandle + ", " + true + ") : " + ret);
 		}
 
+		if (GUILayout.Button("SetReturnPlaytimeStats(m_UGCQueryHandle, 7)")) {
+			bool ret = SteamUGC.SetReturnPlaytimeStats(m_UGCQueryHandle, 7);
+			print("SteamUGC.SetReturnPlaytimeStats(" + m_UGCQueryHandle + ", " + 7 + ") : " + ret);
+		}
+
 		if (GUILayout.Button("SetLanguage(m_UGCQueryHandle, \"english\")")) {
 			bool ret = SteamUGC.SetLanguage(m_UGCQueryHandle, "english");
 			print("SteamUGC.SetLanguage(" + m_UGCQueryHandle + ", " + "\"english\"" + ") : " + ret);
@@ -214,9 +223,9 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetMatchAnyTag(" + m_UGCQueryHandle + ", " + true + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetSearchText(m_UGCQueryHandle, \"AciD\")")) {
-			bool ret = SteamUGC.SetSearchText(m_UGCQueryHandle, "AciD");
-			print("SteamUGC.SetSearchText(" + m_UGCQueryHandle + ", " + "\"AciD\"" + ") : " + ret);
+		if (GUILayout.Button("SetSearchText(m_UGCQueryHandle, \"Test\")")) {
+			bool ret = SteamUGC.SetSearchText(m_UGCQueryHandle, "Test");
+			print("SteamUGC.SetSearchText(" + m_UGCQueryHandle + ", " + "\"Test\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetRankedByTrendDays(m_UGCQueryHandle, 7)")) {
@@ -235,15 +244,15 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.RequestUGCDetails(" + m_PublishedFileId + ", " + 5 + ") : " + handle);
 		}
 
-		if (GUILayout.Button("CreateItem((AppId_t)480, EWorkshopFileType.k_EWorkshopFileTypeWebGuide)")) {
-			SteamAPICall_t handle = SteamUGC.CreateItem((AppId_t)480, EWorkshopFileType.k_EWorkshopFileTypeWebGuide);
+		if (GUILayout.Button("CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeCommunity)")) {
+			SteamAPICall_t handle = SteamUGC.CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeCommunity);
 			OnCreateItemResultCallResult.Set(handle);
-			print("SteamUGC.CreateItem(" + (AppId_t)480 + ", " + EWorkshopFileType.k_EWorkshopFileTypeWebGuide + ") : " + handle);
+			print("SteamUGC.CreateItem(" + SteamUtils.GetAppID() + ", " + EWorkshopFileType.k_EWorkshopFileTypeCommunity + ") : " + handle);
 		}
 
-		if (GUILayout.Button("StartItemUpdate((AppId_t)480, m_PublishedFileId)")) {
-			m_UGCUpdateHandle = SteamUGC.StartItemUpdate((AppId_t)480, m_PublishedFileId);
-			print("SteamUGC.StartItemUpdate(" + (AppId_t)480 + ", " + m_PublishedFileId + ") : " + m_UGCUpdateHandle);
+		if (GUILayout.Button("StartItemUpdate(SteamUtils.GetAppID(), m_PublishedFileId)")) {
+			m_UGCUpdateHandle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), m_PublishedFileId);
+			print("SteamUGC.StartItemUpdate(" + SteamUtils.GetAppID() + ", " + m_PublishedFileId + ") : " + m_UGCUpdateHandle);
 		}
 
 		if (GUILayout.Button("SetItemTitle(m_UGCUpdateHandle, \"This is a Test\")")) {
@@ -266,9 +275,9 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemMetadata(" + m_UGCUpdateHandle + ", " + "\"This is the test metadata.\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetItemVisibility(m_UGCUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPrivate)")) {
-			bool ret = SteamUGC.SetItemVisibility(m_UGCUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPrivate);
-			print("SteamUGC.SetItemVisibility(" + m_UGCUpdateHandle + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPrivate + ") : " + ret);
+		if (GUILayout.Button("SetItemVisibility(m_UGCUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic)")) {
+			bool ret = SteamUGC.SetItemVisibility(m_UGCUpdateHandle, ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic);
+			print("SteamUGC.SetItemVisibility(" + m_UGCUpdateHandle + ", " + ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetItemTags(m_UGCUpdateHandle, new string[] {\"Tag One\", \"Tag Two\", \"Test Tags\", \"Sorry\"})")) {
@@ -281,9 +290,9 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemContent(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/Scenes" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetItemPreview(m_UGCUpdateHandle, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.SetItemPreview(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf");
-			print("SteamUGC.SetItemPreview(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/controller.vdf" + ") : " + ret);
+		if (GUILayout.Button("SetItemPreview(m_UGCUpdateHandle, Application.dataPath + \"/PreviewImage.jpg\")")) {
+			bool ret = SteamUGC.SetItemPreview(m_UGCUpdateHandle, Application.dataPath + "/PreviewImage.jpg");
+			print("SteamUGC.SetItemPreview(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/PreviewImage.jpg" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RemoveItemKeyValueTags(m_UGCUpdateHandle, \"TestKey\")")) {
@@ -296,24 +305,24 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.AddItemKeyValueTag(" + m_UGCUpdateHandle + ", " + "\"TestKey\"" + ", " + "\"TestValue\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("AddItemPreviewFile(m_UGCUpdateHandle, Application.dataPath + \"/controller.vdf\", EItemPreviewType.k_EItemPreviewType_Image)")) {
-			bool ret = SteamUGC.AddItemPreviewFile(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf", EItemPreviewType.k_EItemPreviewType_Image);
-			print("SteamUGC.AddItemPreviewFile(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/controller.vdf" + ", " + EItemPreviewType.k_EItemPreviewType_Image + ") : " + ret);
+		if (GUILayout.Button("AddItemPreviewFile(m_UGCUpdateHandle, Application.dataPath + \"/PreviewImage.jpg\", EItemPreviewType.k_EItemPreviewType_Image)")) {
+			bool ret = SteamUGC.AddItemPreviewFile(m_UGCUpdateHandle, Application.dataPath + "/PreviewImage.jpg", EItemPreviewType.k_EItemPreviewType_Image);
+			print("SteamUGC.AddItemPreviewFile(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/PreviewImage.jpg" + ", " + EItemPreviewType.k_EItemPreviewType_Image + ") : " + ret);
 		}
 
-		if (GUILayout.Button("AddItemPreviewVideo(m_UGCUpdateHandle, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.AddItemPreviewVideo(m_UGCUpdateHandle, Application.dataPath + "/controller.vdf");
-			print("SteamUGC.AddItemPreviewVideo(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/controller.vdf" + ") : " + ret);
+		if (GUILayout.Button("AddItemPreviewVideo(m_UGCUpdateHandle, \"jHgZh4GV9G0\")")) {
+			bool ret = SteamUGC.AddItemPreviewVideo(m_UGCUpdateHandle, "jHgZh4GV9G0");
+			print("SteamUGC.AddItemPreviewVideo(" + m_UGCUpdateHandle + ", " + "\"jHgZh4GV9G0\"" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("UpdateItemPreviewFile(m_UGCUpdateHandle, 0, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.UpdateItemPreviewFile(m_UGCUpdateHandle, 0, Application.dataPath + "/controller.vdf");
-			print("SteamUGC.UpdateItemPreviewFile(" + m_UGCUpdateHandle + ", " + 0 + ", " + Application.dataPath + "/controller.vdf" + ") : " + ret);
+		if (GUILayout.Button("UpdateItemPreviewFile(m_UGCUpdateHandle, 0, Application.dataPath + \"/PreviewImage.jpg\")")) {
+			bool ret = SteamUGC.UpdateItemPreviewFile(m_UGCUpdateHandle, 0, Application.dataPath + "/PreviewImage.jpg");
+			print("SteamUGC.UpdateItemPreviewFile(" + m_UGCUpdateHandle + ", " + 0 + ", " + Application.dataPath + "/PreviewImage.jpg" + ") : " + ret);
 		}
 
-		if (GUILayout.Button("UpdateItemPreviewVideo(m_UGCUpdateHandle, 0, Application.dataPath + \"/controller.vdf\")")) {
-			bool ret = SteamUGC.UpdateItemPreviewVideo(m_UGCUpdateHandle, 0, Application.dataPath + "/controller.vdf");
-			print("SteamUGC.UpdateItemPreviewVideo(" + m_UGCUpdateHandle + ", " + 0 + ", " + Application.dataPath + "/controller.vdf" + ") : " + ret);
+		if (GUILayout.Button("UpdateItemPreviewVideo(m_UGCUpdateHandle, 0, \"jHgZh4GV9G0\")")) {
+			bool ret = SteamUGC.UpdateItemPreviewVideo(m_UGCUpdateHandle, 0, "jHgZh4GV9G0");
+			print("SteamUGC.UpdateItemPreviewVideo(" + m_UGCUpdateHandle + ", " + 0 + ", " + "\"jHgZh4GV9G0\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RemoveItemPreview(m_UGCUpdateHandle, 0)")) {
@@ -432,6 +441,18 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.StopPlaytimeTrackingForAllItems() : " + handle);
 		}
 
+		if (GUILayout.Button("AddDependency(m_PublishedFileId, TestConstants.Instance.k_PublishedFileId_Champions)")) {
+			SteamAPICall_t handle = SteamUGC.AddDependency(m_PublishedFileId, TestConstants.Instance.k_PublishedFileId_Champions);
+			OnAddUGCDependencyResultCallResult.Set(handle);
+			print("SteamUGC.AddDependency(" + m_PublishedFileId + ", " + TestConstants.Instance.k_PublishedFileId_Champions + ") : " + handle);
+		}
+
+		if (GUILayout.Button("RemoveDependency(m_PublishedFileId, TestConstants.Instance.k_PublishedFileId_Champions)")) {
+			SteamAPICall_t handle = SteamUGC.RemoveDependency(m_PublishedFileId, TestConstants.Instance.k_PublishedFileId_Champions);
+			OnRemoveUGCDependencyResultCallResult.Set(handle);
+			print("SteamUGC.RemoveDependency(" + m_PublishedFileId + ", " + TestConstants.Instance.k_PublishedFileId_Champions + ") : " + handle);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -482,5 +503,13 @@ public class SteamUGCTest : MonoBehaviour {
 
 	void OnStopPlaytimeTrackingResult(StopPlaytimeTrackingResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + StopPlaytimeTrackingResult_t.k_iCallback + " - StopPlaytimeTrackingResult] - " + pCallback.m_eResult);
+	}
+
+	void OnAddUGCDependencyResult(AddUGCDependencyResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + AddUGCDependencyResult_t.k_iCallback + " - AddUGCDependencyResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nChildPublishedFileId);
+	}
+
+	void OnRemoveUGCDependencyResult(RemoveUGCDependencyResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + RemoveUGCDependencyResult_t.k_iCallback + " - RemoveUGCDependencyResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nChildPublishedFileId);
 	}
 }

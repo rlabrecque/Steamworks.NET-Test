@@ -88,6 +88,16 @@ public class SteamInventoryTest : MonoBehaviour {
 			}
 		}
 
+		if (GUILayout.Button("GetResultItemProperty(m_SteamInventoryResult, 0, null, out ValueBuffer, ref ValueBufferSize)")) {
+			string ValueBuffer;
+			uint ValueBufferSize = 0;
+			bool ret = SteamInventory.GetResultItemProperty(m_SteamInventoryResult, 0, null, out ValueBuffer, ref ValueBufferSize);
+			if(ret) {
+			ret = SteamInventory.GetResultItemProperty(m_SteamInventoryResult, 0, null, out ValueBuffer, ref ValueBufferSize);
+			}
+			print("SteamInventory.GetResultItemProperty(" + m_SteamInventoryResult + ", " + 0 + ", " + null + ", " + "out ValueBuffer" + ", " + "ref ValueBufferSize" + ") : " + ret + " -- " + ValueBuffer + " -- " + ValueBufferSize);
+		}
+
 		if (GUILayout.Button("GetResultTimestamp(m_SteamInventoryResult)")) {
 			uint ret = SteamInventory.GetResultTimestamp(m_SteamInventoryResult);
 			print("SteamInventory.GetResultTimestamp(" + m_SteamInventoryResult + ") : " + ret);

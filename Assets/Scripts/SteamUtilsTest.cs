@@ -150,6 +150,13 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.StartVRDashboard()");
 		}
 
+		GUILayout.Label("IsVRHeadsetStreamingEnabled() : " + SteamUtils.IsVRHeadsetStreamingEnabled());
+
+		if (GUILayout.Button("SetVRHeadsetStreamingEnabled(!SteamUtils.IsVRHeadsetStreamingEnabled())")) {
+			SteamUtils.SetVRHeadsetStreamingEnabled(!SteamUtils.IsVRHeadsetStreamingEnabled());
+			print("SteamUtils.SetVRHeadsetStreamingEnabled(" + !SteamUtils.IsVRHeadsetStreamingEnabled() + ")");
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}

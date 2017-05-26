@@ -245,4 +245,12 @@ public class SteamTest : MonoBehaviour {
 				break;
 		}
 	}
+
+	public static void PrintArray(string name, IList arr) {
+		System.Text.StringBuilder strBuilder = new System.Text.StringBuilder(name + '\n');
+		for (int i = 0; i < arr.Count; ++i) {
+			strBuilder.AppendLine(arr[i].ToString());
+		}
+		print(strBuilder);
+	}
 }

@@ -8,11 +8,13 @@ public class SteamVideoTest : MonoBehaviour {
 	protected Callback<BroadcastUploadStart_t> m_BroadcastUploadStart;
 	protected Callback<BroadcastUploadStop_t> m_BroadcastUploadStop;
 	protected Callback<GetVideoURLResult_t> m_GetVideoURLResult;
+	protected Callback<GetOPFSettingsResult_t> m_GetOPFSettingsResult;
 
 	public void OnEnable() {
 		m_BroadcastUploadStart = Callback<BroadcastUploadStart_t>.Create(OnBroadcastUploadStart);
 		m_BroadcastUploadStop = Callback<BroadcastUploadStop_t>.Create(OnBroadcastUploadStop);
 		m_GetVideoURLResult = Callback<GetVideoURLResult_t>.Create(OnGetVideoURLResult);
+		m_GetOPFSettingsResult = Callback<GetOPFSettingsResult_t>.Create(OnGetOPFSettingsResult);
 	}
 
 	public void RenderOnGUI() {
@@ -30,6 +32,21 @@ public class SteamVideoTest : MonoBehaviour {
 			GUILayout.Label("IsBroadcasting(out NumViewers) : " + ret + " -- " + NumViewers);
 		}
 
+		if (GUILayout.Button("GetOPFSettings(TestConstants.Instance.k_AppId_FreeToPlay)")) {
+			SteamVideo.GetOPFSettings(TestConstants.Instance.k_AppId_FreeToPlay);
+			print("SteamVideo.GetOPFSettings(" + TestConstants.Instance.k_AppId_FreeToPlay + ")");
+		}
+
+		if (GUILayout.Button("GetOPFStringForApp(TestConstants.Instance.k_AppId_FreeToPlay, out Buffer, ref ValueBufferSize)")) {
+			string Buffer;
+			int ValueBufferSize = 0;
+			bool ret = SteamVideo.GetOPFStringForApp(TestConstants.Instance.k_AppId_FreeToPlay, out Buffer, ref ValueBufferSize);
+			if(ret) {
+			ret = SteamVideo.GetOPFStringForApp(TestConstants.Instance.k_AppId_FreeToPlay, out Buffer, ref ValueBufferSize);
+			}
+			print("SteamVideo.GetOPFStringForApp(" + TestConstants.Instance.k_AppId_FreeToPlay + ", " + "out Buffer" + ", " + "ref ValueBufferSize" + ") : " + ret + " -- " + Buffer + " -- " + ValueBufferSize);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -44,5 +61,9 @@ public class SteamVideoTest : MonoBehaviour {
 
 	void OnGetVideoURLResult(GetVideoURLResult_t pCallback) {
 		Debug.Log("[" + GetVideoURLResult_t.k_iCallback + " - GetVideoURLResult] - " + pCallback.m_eResult + " -- " + pCallback.m_unVideoAppID + " -- " + pCallback.m_rgchURL);
+	}
+
+	void OnGetOPFSettingsResult(GetOPFSettingsResult_t pCallback) {
+		Debug.Log("[" + GetOPFSettingsResult_t.k_iCallback + " - GetOPFSettingsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_unVideoAppID);
 	}
 }

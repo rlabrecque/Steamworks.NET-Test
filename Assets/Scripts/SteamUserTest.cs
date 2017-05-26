@@ -81,17 +81,14 @@ public class SteamUserTest : MonoBehaviour {
 
 		{
 			uint Compressed;
-			uint Uncompressed;
-			EVoiceResult ret = SteamUser.GetAvailableVoice(out Compressed, out Uncompressed, 11025);
-			GUILayout.Label("GetAvailableVoice(out Compressed, out Uncompressed, 11025) : " + ret + " -- " + Compressed + " -- " + Uncompressed);
+			EVoiceResult ret = SteamUser.GetAvailableVoice(out Compressed);
+			GUILayout.Label("GetAvailableVoice(out Compressed) : " + ret + " -- " + Compressed);
 
 			if (ret == EVoiceResult.k_EVoiceResultOK && Compressed > 0) {
 				byte[] DestBuffer = new byte[1024];
-				byte[] UncompressedDestBuffer = new byte[1024];
 				uint BytesWritten;
-				uint UncompressedBytesWritten;
-				ret = SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, (uint)DestBuffer.Length, out UncompressedBytesWritten, 11025);
-				//print("SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten, true, UncompressedDestBuffer, (uint)DestBuffer.Length, out UncompressedBytesWritten, 11025) : " + ret + " -- " + BytesWritten + " -- " + UncompressedBytesWritten);
+				ret = SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten);
+				//print("SteamUser.GetVoice(true, DestBuffer, 1024, out BytesWritten) : " + ret + " -- " + BytesWritten);
 
 				if (ret == EVoiceResult.k_EVoiceResultOK && BytesWritten > 0) {
 					byte[] DestBuffer2 = new byte[11025 * 2];
