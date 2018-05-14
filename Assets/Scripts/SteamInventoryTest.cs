@@ -12,6 +12,8 @@ public class SteamInventoryTest : MonoBehaviour {
 	protected Callback<SteamInventoryResultReady_t> m_SteamInventoryResultReady;
 	protected Callback<SteamInventoryFullUpdate_t> m_SteamInventoryFullUpdate;
 	protected Callback<SteamInventoryDefinitionUpdate_t> m_SteamInventoryDefinitionUpdate;
+	protected Callback<SteamInventoryStartPurchaseResult_t> m_SteamInventoryStartPurchaseResult;
+	protected Callback<SteamInventoryRequestPricesResult_t> m_SteamInventoryRequestPricesResult;
 
 	private CallResult<SteamInventoryEligiblePromoItemDefIDs_t> OnSteamInventoryEligiblePromoItemDefIDsCallResult;
 
@@ -24,6 +26,8 @@ public class SteamInventoryTest : MonoBehaviour {
 		m_SteamInventoryResultReady = Callback<SteamInventoryResultReady_t>.Create(OnSteamInventoryResultReady);
 		m_SteamInventoryFullUpdate = Callback<SteamInventoryFullUpdate_t>.Create(OnSteamInventoryFullUpdate);
 		m_SteamInventoryDefinitionUpdate = Callback<SteamInventoryDefinitionUpdate_t>.Create(OnSteamInventoryDefinitionUpdate);
+		m_SteamInventoryStartPurchaseResult = Callback<SteamInventoryStartPurchaseResult_t>.Create(OnSteamInventoryStartPurchaseResult);
+		m_SteamInventoryRequestPricesResult = Callback<SteamInventoryRequestPricesResult_t>.Create(OnSteamInventoryRequestPricesResult);
 
 		OnSteamInventoryEligiblePromoItemDefIDsCallResult = CallResult<SteamInventoryEligiblePromoItemDefIDs_t>.Create(OnSteamInventoryEligiblePromoItemDefIDs);
 	}
@@ -246,6 +250,30 @@ public class SteamInventoryTest : MonoBehaviour {
 
 		//SteamInventory.GetEligiblePromoItemDefinitionIDs() // Should be handled within the SteamInventoryEligiblePromoItemDefIDs_t CallResult!
 
+		//SteamInventory.StartPurchase() // TODO
+
+		//SteamInventory.RequestPrices() // TODO
+
+		//SteamInventory.GetNumItemsWithPrices() // TODO
+
+		//SteamInventory.GetItemsWithPrices() // TODO
+
+		//SteamInventory.GetItemPrice() // TODO
+
+		//SteamInventory.StartUpdateProperties() // TODO
+
+		//SteamInventory.RemoveProperty() // TODO
+
+		//SteamInventory.SetProperty() // TODO
+
+		//SteamInventory.SetProperty() // TODO
+
+		//SteamInventory.SetProperty() // TODO
+
+		//SteamInventory.SetProperty() // TODO
+
+		//SteamInventory.SubmitUpdateProperties() // TODO
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -273,5 +301,13 @@ public class SteamInventoryTest : MonoBehaviour {
 		SteamItemDef_t[] ItemDefIDs = new SteamItemDef_t[ItemDefIDsArraySize];
 		bool ret = SteamInventory.GetEligiblePromoItemDefinitionIDs(pCallback.m_steamID, ItemDefIDs, ref ItemDefIDsArraySize);
 		print("SteamInventory.GetEligiblePromoItemDefinitionIDs(pCallback.m_steamID, ItemDefIDs, ref ItemDefIDsArraySize) - " + ret + " -- " + ItemDefIDsArraySize);
+	}
+
+	void OnSteamInventoryStartPurchaseResult(SteamInventoryStartPurchaseResult_t pCallback) {
+		Debug.Log("[" + SteamInventoryStartPurchaseResult_t.k_iCallback + " - SteamInventoryStartPurchaseResult] - " + pCallback.m_result + " -- " + pCallback.m_ulOrderID + " -- " + pCallback.m_ulTransID);
+	}
+
+	void OnSteamInventoryRequestPricesResult(SteamInventoryRequestPricesResult_t pCallback) {
+		Debug.Log("[" + SteamInventoryRequestPricesResult_t.k_iCallback + " - SteamInventoryRequestPricesResult] - " + pCallback.m_result + " -- " + pCallback.m_rgchCurrency);
 	}
 }

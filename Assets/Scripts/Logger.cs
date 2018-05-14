@@ -5,11 +5,11 @@ public class Logger : MonoBehaviour {
 #if !UNITY_EDITOR
 	static Queue<string> queue = new Queue<string>(6);
 	void OnEnable() {
-		Application.RegisterLogCallback(HandleLog);
+		Application.logMessageReceived += HandleLog;
 	}
 
 	void OnDisable() {
-		Application.RegisterLogCallback(null);
+		Application.logMessageReceived -= HandleLog;
 	}
 
 	void OnGUI() {

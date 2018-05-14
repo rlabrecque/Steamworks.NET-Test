@@ -135,11 +135,6 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamHTTP(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMHTTP_INTERFACE_VERSION + ") : " + ret);
 		}
 
-		if (GUILayout.Button("GetISteamUnifiedMessages(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUNIFIEDMESSAGES_INTERFACE_VERSION)")) {
-			System.IntPtr ret = SteamClient.GetISteamUnifiedMessages(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUNIFIEDMESSAGES_INTERFACE_VERSION);
-			print("SteamClient.GetISteamUnifiedMessages(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMUNIFIEDMESSAGES_INTERFACE_VERSION + ") : " + ret);
-		}
-
 		if (GUILayout.Button("GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION)")) {
 			System.IntPtr ret = SteamClient.GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION);
 			print("SteamClient.GetISteamController(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMCONTROLLER_INTERFACE_VERSION + ") : " + ret);
@@ -178,6 +173,11 @@ public class SteamClientTest : MonoBehaviour {
 		if (GUILayout.Button("GetISteamVideo(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMVIDEO_INTERFACE_VERSION)")) {
 			System.IntPtr ret = SteamClient.GetISteamVideo(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMVIDEO_INTERFACE_VERSION);
 			print("SteamClient.GetISteamVideo(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMVIDEO_INTERFACE_VERSION + ") : " + ret);
+		}
+
+		if (GUILayout.Button("GetISteamParentalSettings(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMPARENTALSETTINGS_INTERFACE_VERSION)")) {
+			System.IntPtr ret = SteamClient.GetISteamParentalSettings(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMPARENTALSETTINGS_INTERFACE_VERSION);
+			print("SteamClient.GetISteamParentalSettings(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMPARENTALSETTINGS_INTERFACE_VERSION + ") : " + ret);
 		}
 
 		GUILayout.EndScrollView();

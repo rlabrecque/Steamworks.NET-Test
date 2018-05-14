@@ -22,6 +22,10 @@ public class SteamUGCTest : MonoBehaviour {
 	private CallResult<StopPlaytimeTrackingResult_t> OnStopPlaytimeTrackingResultCallResult;
 	private CallResult<AddUGCDependencyResult_t> OnAddUGCDependencyResultCallResult;
 	private CallResult<RemoveUGCDependencyResult_t> OnRemoveUGCDependencyResultCallResult;
+	private CallResult<AddAppDependencyResult_t> OnAddAppDependencyResultCallResult;
+	private CallResult<RemoveAppDependencyResult_t> OnRemoveAppDependencyResultCallResult;
+	private CallResult<GetAppDependenciesResult_t> OnGetAppDependenciesResultCallResult;
+	private CallResult<DeleteItemResult_t> OnDeleteItemResultCallResult;
 
 	public void OnEnable() {
 		// These come from ISteamRemoteStorage but they are used here as well...
@@ -42,6 +46,10 @@ public class SteamUGCTest : MonoBehaviour {
 		OnStopPlaytimeTrackingResultCallResult = CallResult<StopPlaytimeTrackingResult_t>.Create(OnStopPlaytimeTrackingResult);
 		OnAddUGCDependencyResultCallResult = CallResult<AddUGCDependencyResult_t>.Create(OnAddUGCDependencyResult);
 		OnRemoveUGCDependencyResultCallResult = CallResult<RemoveUGCDependencyResult_t>.Create(OnRemoveUGCDependencyResult);
+		OnAddAppDependencyResultCallResult = CallResult<AddAppDependencyResult_t>.Create(OnAddAppDependencyResult);
+		OnRemoveAppDependencyResultCallResult = CallResult<RemoveAppDependencyResult_t>.Create(OnRemoveAppDependencyResult);
+		OnGetAppDependenciesResultCallResult = CallResult<GetAppDependenciesResult_t>.Create(OnGetAppDependenciesResult);
+		OnDeleteItemResultCallResult = CallResult<DeleteItemResult_t>.Create(OnDeleteItemResult);
 	}
 
 	// These come from ISteamRemoteStorage but they are used here as well...
@@ -453,6 +461,30 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.RemoveDependency(" + m_PublishedFileId + ", " + TestConstants.Instance.k_PublishedFileId_Champions + ") : " + handle);
 		}
 
+		if (GUILayout.Button("AddAppDependency(m_PublishedFileId, SteamUtils.GetAppID())")) {
+			SteamAPICall_t handle = SteamUGC.AddAppDependency(m_PublishedFileId, SteamUtils.GetAppID());
+			OnAddAppDependencyResultCallResult.Set(handle);
+			print("SteamUGC.AddAppDependency(" + m_PublishedFileId + ", " + SteamUtils.GetAppID() + ") : " + handle);
+		}
+
+		if (GUILayout.Button("RemoveAppDependency(m_PublishedFileId, SteamUtils.GetAppID())")) {
+			SteamAPICall_t handle = SteamUGC.RemoveAppDependency(m_PublishedFileId, SteamUtils.GetAppID());
+			OnRemoveAppDependencyResultCallResult.Set(handle);
+			print("SteamUGC.RemoveAppDependency(" + m_PublishedFileId + ", " + SteamUtils.GetAppID() + ") : " + handle);
+		}
+
+		if (GUILayout.Button("GetAppDependencies(m_PublishedFileId)")) {
+			SteamAPICall_t handle = SteamUGC.GetAppDependencies(m_PublishedFileId);
+			OnGetAppDependenciesResultCallResult.Set(handle);
+			print("SteamUGC.GetAppDependencies(" + m_PublishedFileId + ") : " + handle);
+		}
+
+		if (GUILayout.Button("DeleteItem(m_PublishedFileId)")) {
+			SteamAPICall_t handle = SteamUGC.DeleteItem(m_PublishedFileId);
+			OnDeleteItemResultCallResult.Set(handle);
+			print("SteamUGC.DeleteItem(" + m_PublishedFileId + ") : " + handle);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -474,7 +506,7 @@ public class SteamUGCTest : MonoBehaviour {
 	}
 
 	void OnSubmitItemUpdateResult(SubmitItemUpdateResult_t pCallback, bool bIOFailure) {
-		Debug.Log("[" + SubmitItemUpdateResult_t.k_iCallback + " - SubmitItemUpdateResult] - " + pCallback.m_eResult + " -- " + pCallback.m_bUserNeedsToAcceptWorkshopLegalAgreement);
+		Debug.Log("[" + SubmitItemUpdateResult_t.k_iCallback + " - SubmitItemUpdateResult] - " + pCallback.m_eResult + " -- " + pCallback.m_bUserNeedsToAcceptWorkshopLegalAgreement + " -- " + pCallback.m_nPublishedFileId);
 	}
 
 	void OnItemInstalled(ItemInstalled_t pCallback) {
@@ -511,5 +543,21 @@ public class SteamUGCTest : MonoBehaviour {
 
 	void OnRemoveUGCDependencyResult(RemoveUGCDependencyResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + RemoveUGCDependencyResult_t.k_iCallback + " - RemoveUGCDependencyResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nChildPublishedFileId);
+	}
+
+	void OnAddAppDependencyResult(AddAppDependencyResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + AddAppDependencyResult_t.k_iCallback + " - AddAppDependencyResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nAppID);
+	}
+
+	void OnRemoveAppDependencyResult(RemoveAppDependencyResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + RemoveAppDependencyResult_t.k_iCallback + " - RemoveAppDependencyResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_nAppID);
+	}
+
+	void OnGetAppDependenciesResult(GetAppDependenciesResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + GetAppDependenciesResult_t.k_iCallback + " - GetAppDependenciesResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_rgAppIDs + " -- " + pCallback.m_nNumAppDependencies + " -- " + pCallback.m_nTotalNumAppDependencies);
+	}
+
+	void OnDeleteItemResult(DeleteItemResult_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + DeleteItemResult_t.k_iCallback + " - DeleteItemResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
 	}
 }

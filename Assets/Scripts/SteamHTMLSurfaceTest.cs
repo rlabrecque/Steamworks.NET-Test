@@ -47,6 +47,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	protected Callback<HTML_ShowToolTip_t> m_HTML_ShowToolTip;
 	protected Callback<HTML_UpdateToolTip_t> m_HTML_UpdateToolTip;
 	protected Callback<HTML_HideToolTip_t> m_HTML_HideToolTip;
+	protected Callback<HTML_BrowserRestarted_t> m_HTML_BrowserRestarted;
 
 	private CallResult<HTML_BrowserReady_t> OnHTML_BrowserReadyCallResult;
 
@@ -83,6 +84,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 		m_HTML_ShowToolTip = Callback<HTML_ShowToolTip_t>.Create(OnHTML_ShowToolTip);
 		m_HTML_UpdateToolTip = Callback<HTML_UpdateToolTip_t>.Create(OnHTML_UpdateToolTip);
 		m_HTML_HideToolTip = Callback<HTML_HideToolTip_t>.Create(OnHTML_HideToolTip);
+		m_HTML_BrowserRestarted = Callback<HTML_BrowserRestarted_t>.Create(OnHTML_BrowserRestarted);
 
 		OnHTML_BrowserReadyCallResult = CallResult<HTML_BrowserReady_t>.Create(OnHTML_BrowserReady);
 	}
@@ -272,6 +274,11 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 			SteamHTMLSurface.SetBackgroundMode(m_HHTMLBrowser, m_BackgroundMode);
 			print("SteamHTMLSurface.SetBackgroundMode(" + m_HHTMLBrowser + ", " + m_BackgroundMode + ")");
 			m_BackgroundMode = !m_BackgroundMode;
+		}
+
+		if (GUILayout.Button("SetDPIScalingFactor(m_HHTMLBrowser, 1.0f)")) {
+			SteamHTMLSurface.SetDPIScalingFactor(m_HHTMLBrowser, 1.0f);
+			print("SteamHTMLSurface.SetDPIScalingFactor(" + m_HHTMLBrowser + ", " + 1.0f + ")");
 		}
 
 		//SteamHTMLSurface.AllowStartRequest() // ['N/A - You MUST call this in response to a HTML_StartRequest_t callback']
@@ -480,5 +487,9 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 
 	void OnHTML_HideToolTip(HTML_HideToolTip_t pCallback) {
 		Debug.Log("[" + HTML_HideToolTip_t.k_iCallback + " - HTML_HideToolTip] - " + pCallback.unBrowserHandle);
+	}
+
+	void OnHTML_BrowserRestarted(HTML_BrowserRestarted_t pCallback) {
+		Debug.Log("[" + HTML_BrowserRestarted_t.k_iCallback + " - HTML_BrowserRestarted] - " + pCallback.unBrowserHandle + " -- " + pCallback.unOldBrowserHandle);
 	}
 }

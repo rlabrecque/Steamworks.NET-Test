@@ -155,6 +155,14 @@ public class SteamControllerTest : MonoBehaviour {
 
 			GUILayout.Label("GetCurrentActionSet(m_ControllerHandles[i]) : " + SteamController.GetCurrentActionSet(m_ControllerHandles[i]));
 
+			//SteamController.ActivateActionSetLayer() // TODO
+
+			//SteamController.DeactivateActionSetLayer() // TODO
+
+			//SteamController.DeactivateAllActionSetLayers() // TODO
+
+			//SteamController.GetActiveActionSetLayers() // TODO
+
 			//SteamController.GetDigitalActionHandle() // Called in Precache()
 
 			GUILayout.Label("InGameControls Digital Actions:");
@@ -245,6 +253,8 @@ public class SteamControllerTest : MonoBehaviour {
 		GUILayout.Label("GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
 
 		GUILayout.Label("GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
+
+		//SteamController.GetInputTypeForHandle() // TODO
 
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();

@@ -350,6 +350,10 @@ public class SteamFriendsTest : MonoBehaviour {
 			print("SteamFriends.EnumerateFollowingList(" + 0 + ") : " + handle);
 		}
 
+		GUILayout.Label("IsClanPublic(m_Clan) : " + SteamFriends.IsClanPublic(m_Clan));
+
+		GUILayout.Label("IsClanOfficialGameGroup(m_Clan) : " + SteamFriends.IsClanOfficialGameGroup(m_Clan));
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}

@@ -2,6 +2,11 @@ using UnityEngine;
 using System.Collections;
 using Steamworks;
 
+internal class MonoPInvokeCallbackAttribute : System.Attribute
+{
+	public MonoPInvokeCallbackAttribute() { }
+}
+
 public class SteamTest : MonoBehaviour {
 	public enum EGUIState {
 		SteamAppList,
@@ -20,7 +25,6 @@ public class SteamTest : MonoBehaviour {
 		SteamRemoteStorage,
 		SteamScreenshots,
 		SteamUGC,
-		SteamUnifiedMessages,
 		SteamUser,
 		SteamUserStatsTest,
 		SteamUtils,
@@ -51,13 +55,14 @@ public class SteamTest : MonoBehaviour {
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
 	private SteamUGCTest UGCTest;
-	private SteamUnifiedMessagesTest UnifiedMessagesTest;
 	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUtilsTest UtilsTest;
 	private SteamVideoTest VideoTest;
 
 	SteamAPIWarningMessageHook_t SteamAPIWarningMessageHook;
+
+	[MonoPInvokeCallback]
 	static void SteamAPIDebugTextHook(int nSeverity, System.Text.StringBuilder pchDebugText) {
 		Debug.LogWarning(pchDebugText);
 	}
@@ -84,7 +89,7 @@ public class SteamTest : MonoBehaviour {
 		try {
 			m_bInitialized = SteamAPI.Init();
 		}
-		catch (System.DllNotFoundException e) { // We catch this exception here, as it will be the first occurence of it.
+		catch (System.DllNotFoundException e) { // We catch this exception here, as it will be the first occurrence of it.
 			Debug.LogError("[Steamworks] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + e, this);
 
 			Application.Quit();
@@ -118,7 +123,6 @@ public class SteamTest : MonoBehaviour {
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
 		UGCTest = gameObject.AddComponent<SteamUGCTest>();
-		UnifiedMessagesTest = gameObject.AddComponent<SteamUnifiedMessagesTest>();
 		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
@@ -227,9 +231,6 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamUGC:
 				UGCTest.RenderOnGUI();
-				break;
-			case EGUIState.SteamUnifiedMessages:
-				UnifiedMessagesTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUser:
 				UserTest.RenderOnGUI();
