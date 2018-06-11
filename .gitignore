@@ -1,9 +1,9 @@
 # Folders
-.DS_Store/
-.vs/
-Library/
-obj/
-Temp/
+/.DS_Store/
+/.vs/
+/Library/
+/obj/
+/Temp/
 
 # Files
 *.csproj
@@ -11,3 +11,7 @@ Temp/
 *.VC.db
 
 /steam_appid.txt
+
+
+#VSCode
+/.vscode/
