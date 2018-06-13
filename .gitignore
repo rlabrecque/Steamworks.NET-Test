@@ -4,6 +4,7 @@
 Library/
 obj/
 Temp/
+Build/
 
 # Files
 *.csproj
