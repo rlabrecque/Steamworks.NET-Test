@@ -22,6 +22,7 @@ public class SteamTest : MonoBehaviour {
 		SteamMusic,
 		SteamMusicRemote,
 		SteamNetworking,
+		SteamParentalSettings,
 		SteamRemoteStorage,
 		SteamScreenshots,
 		SteamUGC,
@@ -52,6 +53,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamMusicTest MusicTest;
 	private SteamMusicRemoteTest MusicRemoteTest;
 	private SteamNetworkingTest NetworkingTest;
+	private SteamParentalSettingsTest ParentalSettingsTest;
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
 	private SteamUGCTest UGCTest;
@@ -120,6 +122,7 @@ public class SteamTest : MonoBehaviour {
 		MusicTest = gameObject.AddComponent<SteamMusicTest>();
 		MusicRemoteTest = gameObject.AddComponent<SteamMusicRemoteTest>();
 		NetworkingTest = gameObject.AddComponent<SteamNetworkingTest>();
+		ParentalSettingsTest = gameObject.AddComponent<SteamParentalSettingsTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
 		UGCTest = gameObject.AddComponent<SteamUGCTest>();
@@ -222,6 +225,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamNetworking:
 				NetworkingTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamParentalSettings:
+				ParentalSettingsTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamRemoteStorage:
 				RemoteStorageTest.RenderOnGUI();
