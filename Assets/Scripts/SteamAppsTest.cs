@@ -7,7 +7,7 @@ public class SteamAppsTest : MonoBehaviour {
 
 	protected Callback<DlcInstalled_t> m_DlcInstalled;
 	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
-	protected Callback<NewLaunchQueryParameters_t> m_NewLaunchQueryParameters;
+	protected Callback<NewUrlLaunchParameters_t> m_NewUrlLaunchParameters;
 	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
 
 	private CallResult<FileDetailsResult_t> OnFileDetailsResultCallResult;
@@ -15,7 +15,7 @@ public class SteamAppsTest : MonoBehaviour {
 	public void OnEnable() {
 		m_DlcInstalled = Callback<DlcInstalled_t>.Create(OnDlcInstalled);
 		m_RegisterActivationCodeResponse = Callback<RegisterActivationCodeResponse_t>.Create(OnRegisterActivationCodeResponse);
-		m_NewLaunchQueryParameters = Callback<NewLaunchQueryParameters_t>.Create(OnNewLaunchQueryParameters);
+		m_NewUrlLaunchParameters = Callback<NewUrlLaunchParameters_t>.Create(OnNewUrlLaunchParameters);
 		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
 
 		OnFileDetailsResultCallResult = CallResult<FileDetailsResult_t>.Create(OnFileDetailsResult);
@@ -131,6 +131,17 @@ public class SteamAppsTest : MonoBehaviour {
 			print("SteamApps.GetFileDetails(" + "\"steam_api.dll\"" + ") : " + handle);
 		}
 
+		{
+			string CommandLine;
+			int ret = SteamApps.GetLaunchCommandLine(out CommandLine, 260);
+			if (CommandLine == null) {
+				CommandLine = "";
+			}
+			GUILayout.Label("GetLaunchCommandLine(out CommandLine, 260) : " + ret + " -- " + CommandLine);
+		}
+
+		GUILayout.Label("BIsSubscribedFromFamilySharing() : " + SteamApps.BIsSubscribedFromFamilySharing());
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -143,8 +154,8 @@ public class SteamAppsTest : MonoBehaviour {
 		Debug.Log("[" + RegisterActivationCodeResponse_t.k_iCallback + " - RegisterActivationCodeResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_unPackageRegistered);
 	}
 
-	void OnNewLaunchQueryParameters(NewLaunchQueryParameters_t pCallback) {
-		Debug.Log("[" + NewLaunchQueryParameters_t.k_iCallback + " - NewLaunchQueryParameters]");
+	void OnNewUrlLaunchParameters(NewUrlLaunchParameters_t pCallback) {
+		Debug.Log("[" + NewUrlLaunchParameters_t.k_iCallback + " - NewUrlLaunchParameters]");
 	}
 
 	void OnAppProofOfPurchaseKeyResponse(AppProofOfPurchaseKeyResponse_t pCallback) {

@@ -22,6 +22,7 @@ public class SteamUserTest : MonoBehaviour {
 
 	private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 	private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
+	private CallResult<MarketEligibilityResponse_t> OnMarketEligibilityResponseCallResult;
 
 	public void OnEnable() {
 		m_SteamServersConnected = Callback<SteamServersConnected_t>.Create(OnSteamServersConnected);
@@ -37,6 +38,7 @@ public class SteamUserTest : MonoBehaviour {
 
 		OnEncryptedAppTicketResponseCallResult = CallResult<EncryptedAppTicketResponse_t>.Create(OnEncryptedAppTicketResponse);
 		OnStoreAuthURLResponseCallResult = CallResult<StoreAuthURLResponse_t>.Create(OnStoreAuthURLResponse);
+		OnMarketEligibilityResponseCallResult = CallResult<MarketEligibilityResponse_t>.Create(OnMarketEligibilityResponse);
 	}
 
 	public void RenderOnGUI() {
@@ -193,6 +195,12 @@ public class SteamUserTest : MonoBehaviour {
 
 		GUILayout.Label("BIsPhoneRequiringVerification() : " + SteamUser.BIsPhoneRequiringVerification());
 
+		if (GUILayout.Button("GetMarketEligibility()")) {
+			SteamAPICall_t handle = SteamUser.GetMarketEligibility();
+			OnMarketEligibilityResponseCallResult.Set(handle);
+			print("SteamUser.GetMarketEligibility() : " + handle);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -287,5 +295,9 @@ public class SteamUserTest : MonoBehaviour {
 
 	void OnStoreAuthURLResponse(StoreAuthURLResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + StoreAuthURLResponse_t.k_iCallback + " - StoreAuthURLResponse] - " + pCallback.m_szURL);
+	}
+
+	void OnMarketEligibilityResponse(MarketEligibilityResponse_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + MarketEligibilityResponse_t.k_iCallback + " - MarketEligibilityResponse] - " + pCallback.m_bAllowed + " -- " + pCallback.m_eNotAllowedReason + " -- " + pCallback.m_rtAllowedAtTime + " -- " + pCallback.m_cdaySteamGuardRequiredDays + " -- " + pCallback.m_cdayNewDeviceCooldown);
 	}
 }

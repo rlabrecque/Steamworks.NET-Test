@@ -87,6 +87,11 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.CreateQueryAllUGCRequest(" + EUGCQuery.k_EUGCQuery_RankedByPublicationDate + ", " + EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items + ", " + AppId_t.Invalid + ", " + SteamUtils.GetAppID() + ", " + 1 + ") : " + m_UGCQueryHandle);
 		}
 
+		if (GUILayout.Button("CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items, AppId_t.Invalid, SteamUtils.GetAppID(), null)")) {
+			m_UGCQueryHandle = SteamUGC.CreateQueryAllUGCRequest(EUGCQuery.k_EUGCQuery_RankedByPublicationDate, EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items, AppId_t.Invalid, SteamUtils.GetAppID(), null);
+			print("SteamUGC.CreateQueryAllUGCRequest(" + EUGCQuery.k_EUGCQuery_RankedByPublicationDate + ", " + EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items + ", " + AppId_t.Invalid + ", " + SteamUtils.GetAppID() + ", " + null + ") : " + m_UGCQueryHandle);
+		}
+
 		if (GUILayout.Button("CreateQueryUGCDetailsRequest(PublishedFileIDs, (uint)PublishedFileIDs.Length)")) {
 			PublishedFileId_t[] PublishedFileIDs = new PublishedFileId_t[] { TestConstants.Instance.k_PublishedFileId_Champions };
 			m_UGCQueryHandle = SteamUGC.CreateQueryUGCDetailsRequest(PublishedFileIDs, (uint)PublishedFileIDs.Length);
@@ -303,6 +308,11 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.SetItemPreview(" + m_UGCUpdateHandle + ", " + Application.dataPath + "/PreviewImage.jpg" + ") : " + ret);
 		}
 
+		if (GUILayout.Button("SetAllowLegacyUpload(m_UGCUpdateHandle, true)")) {
+			bool ret = SteamUGC.SetAllowLegacyUpload(m_UGCUpdateHandle, true);
+			print("SteamUGC.SetAllowLegacyUpload(" + m_UGCUpdateHandle + ", " + true + ") : " + ret);
+		}
+
 		if (GUILayout.Button("RemoveItemKeyValueTags(m_UGCUpdateHandle, \"TestKey\")")) {
 			bool ret = SteamUGC.RemoveItemKeyValueTags(m_UGCUpdateHandle, "TestKey");
 			print("SteamUGC.RemoveItemKeyValueTags(" + m_UGCUpdateHandle + ", " + "\"TestKey\"" + ") : " + ret);
@@ -490,7 +500,7 @@ public class SteamUGCTest : MonoBehaviour {
 	}
 
 	void OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t pCallback, bool bIOFailure) {
-		Debug.Log("[" + SteamUGCQueryCompleted_t.k_iCallback + " - SteamUGCQueryCompleted] - " + pCallback.m_handle + " -- " + pCallback.m_eResult + " -- " + pCallback.m_unNumResultsReturned + " -- " + pCallback.m_unTotalMatchingResults + " -- " + pCallback.m_bCachedData);
+		Debug.Log("[" + SteamUGCQueryCompleted_t.k_iCallback + " - SteamUGCQueryCompleted] - " + pCallback.m_handle + " -- " + pCallback.m_eResult + " -- " + pCallback.m_unNumResultsReturned + " -- " + pCallback.m_unTotalMatchingResults + " -- " + pCallback.m_bCachedData + " -- " + pCallback.m_rgchNextCursor);
 	}
 
 	void OnSteamUGCRequestUGCDetailsResult(SteamUGCRequestUGCDetailsResult_t pCallback, bool bIOFailure) {

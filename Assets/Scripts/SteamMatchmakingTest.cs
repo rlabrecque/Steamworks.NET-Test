@@ -16,6 +16,19 @@ public class SteamMatchmakingTest : MonoBehaviour {
 	protected Callback<LobbyKicked_t> m_LobbyKicked;
 	//protected Callback<PSNGameBootInviteResult_t> m_PSNGameBootInviteResult;
 	protected Callback<FavoritesListAccountsUpdated_t> m_FavoritesListAccountsUpdated;
+	protected Callback<SearchForGameProgressCallback_t> m_SearchForGameProgressCallback;
+	protected Callback<SearchForGameResultCallback_t> m_SearchForGameResultCallback;
+	protected Callback<RequestPlayersForGameProgressCallback_t> m_RequestPlayersForGameProgressCallback;
+	protected Callback<RequestPlayersForGameResultCallback_t> m_RequestPlayersForGameResultCallback;
+	protected Callback<RequestPlayersForGameFinalResultCallback_t> m_RequestPlayersForGameFinalResultCallback;
+	protected Callback<SubmitPlayerResultResultCallback_t> m_SubmitPlayerResultResultCallback;
+	protected Callback<EndGameResultCallback_t> m_EndGameResultCallback;
+	protected Callback<JoinPartyCallback_t> m_JoinPartyCallback;
+	protected Callback<CreateBeaconCallback_t> m_CreateBeaconCallback;
+	protected Callback<ReservationNotificationCallback_t> m_ReservationNotificationCallback;
+	protected Callback<ChangeNumOpenSlotsCallback_t> m_ChangeNumOpenSlotsCallback;
+	protected Callback<AvailableBeaconLocationsUpdated_t> m_AvailableBeaconLocationsUpdated;
+	protected Callback<ActiveBeaconsUpdated_t> m_ActiveBeaconsUpdated;
 
 	private CallResult<LobbyEnter_t> OnLobbyEnterCallResult;
 	private CallResult<LobbyMatchList_t> OnLobbyMatchListCallResult;
@@ -32,6 +45,19 @@ public class SteamMatchmakingTest : MonoBehaviour {
 		m_LobbyKicked = Callback<LobbyKicked_t>.Create(OnLobbyKicked);
 		//m_PSNGameBootInviteResult = Callback<PSNGameBootInviteResult_t>.Create(OnPSNGameBootInviteResult); // PS3 Only.
 		m_FavoritesListAccountsUpdated = Callback<FavoritesListAccountsUpdated_t>.Create(OnFavoritesListAccountsUpdated);
+		m_SearchForGameProgressCallback = Callback<SearchForGameProgressCallback_t>.Create(OnSearchForGameProgressCallback);
+		m_SearchForGameResultCallback = Callback<SearchForGameResultCallback_t>.Create(OnSearchForGameResultCallback);
+		m_RequestPlayersForGameProgressCallback = Callback<RequestPlayersForGameProgressCallback_t>.Create(OnRequestPlayersForGameProgressCallback);
+		m_RequestPlayersForGameResultCallback = Callback<RequestPlayersForGameResultCallback_t>.Create(OnRequestPlayersForGameResultCallback);
+		m_RequestPlayersForGameFinalResultCallback = Callback<RequestPlayersForGameFinalResultCallback_t>.Create(OnRequestPlayersForGameFinalResultCallback);
+		m_SubmitPlayerResultResultCallback = Callback<SubmitPlayerResultResultCallback_t>.Create(OnSubmitPlayerResultResultCallback);
+		m_EndGameResultCallback = Callback<EndGameResultCallback_t>.Create(OnEndGameResultCallback);
+		m_JoinPartyCallback = Callback<JoinPartyCallback_t>.Create(OnJoinPartyCallback);
+		m_CreateBeaconCallback = Callback<CreateBeaconCallback_t>.Create(OnCreateBeaconCallback);
+		m_ReservationNotificationCallback = Callback<ReservationNotificationCallback_t>.Create(OnReservationNotificationCallback);
+		m_ChangeNumOpenSlotsCallback = Callback<ChangeNumOpenSlotsCallback_t>.Create(OnChangeNumOpenSlotsCallback);
+		m_AvailableBeaconLocationsUpdated = Callback<AvailableBeaconLocationsUpdated_t>.Create(OnAvailableBeaconLocationsUpdated);
+		m_ActiveBeaconsUpdated = Callback<ActiveBeaconsUpdated_t>.Create(OnActiveBeaconsUpdated);
 
 		OnLobbyEnterCallResult = CallResult<LobbyEnter_t>.Create(OnLobbyEnter);
 		OnLobbyMatchListCallResult = CallResult<LobbyMatchList_t>.Create(OnLobbyMatchList);
@@ -298,5 +324,57 @@ public class SteamMatchmakingTest : MonoBehaviour {
 
 	void OnFavoritesListAccountsUpdated(FavoritesListAccountsUpdated_t pCallback) {
 		Debug.Log("[" + FavoritesListAccountsUpdated_t.k_iCallback + " - FavoritesListAccountsUpdated] - " + pCallback.m_eResult);
+	}
+
+	void OnSearchForGameProgressCallback(SearchForGameProgressCallback_t pCallback) {
+		Debug.Log("[" + SearchForGameProgressCallback_t.k_iCallback + " - SearchForGameProgressCallback] - " + pCallback.m_ullSearchID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_lobbyID + " -- " + pCallback.m_steamIDEndedSearch + " -- " + pCallback.m_nSecondsRemainingEstimate + " -- " + pCallback.m_cPlayersSearching);
+	}
+
+	void OnSearchForGameResultCallback(SearchForGameResultCallback_t pCallback) {
+		Debug.Log("[" + SearchForGameResultCallback_t.k_iCallback + " - SearchForGameResultCallback] - " + pCallback.m_ullSearchID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_nCountPlayersInGame + " -- " + pCallback.m_nCountAcceptedGame + " -- " + pCallback.m_steamIDHost + " -- " + pCallback.m_bFinalCallback);
+	}
+
+	void OnRequestPlayersForGameProgressCallback(RequestPlayersForGameProgressCallback_t pCallback) {
+		Debug.Log("[" + RequestPlayersForGameProgressCallback_t.k_iCallback + " - RequestPlayersForGameProgressCallback] - " + pCallback.m_eResult + " -- " + pCallback.m_ullSearchID);
+	}
+
+	void OnRequestPlayersForGameResultCallback(RequestPlayersForGameResultCallback_t pCallback) {
+		Debug.Log("[" + RequestPlayersForGameResultCallback_t.k_iCallback + " - RequestPlayersForGameResultCallback] - " + pCallback.m_eResult + " -- " + pCallback.m_ullSearchID + " -- " + pCallback.m_SteamIDPlayerFound + " -- " + pCallback.m_SteamIDLobby + " -- " + pCallback.m_ePlayerAcceptState + " -- " + pCallback.m_nPlayerIndex + " -- " + pCallback.m_nTotalPlayersFound + " -- " + pCallback.m_nTotalPlayersAcceptedGame + " -- " + pCallback.m_nSuggestedTeamIndex + " -- " + pCallback.m_ullUniqueGameID);
+	}
+
+	void OnRequestPlayersForGameFinalResultCallback(RequestPlayersForGameFinalResultCallback_t pCallback) {
+		Debug.Log("[" + RequestPlayersForGameFinalResultCallback_t.k_iCallback + " - RequestPlayersForGameFinalResultCallback] - " + pCallback.m_eResult + " -- " + pCallback.m_ullSearchID + " -- " + pCallback.m_ullUniqueGameID);
+	}
+
+	void OnSubmitPlayerResultResultCallback(SubmitPlayerResultResultCallback_t pCallback) {
+		Debug.Log("[" + SubmitPlayerResultResultCallback_t.k_iCallback + " - SubmitPlayerResultResultCallback] - " + pCallback.m_eResult + " -- " + pCallback.ullUniqueGameID + " -- " + pCallback.steamIDPlayer);
+	}
+
+	void OnEndGameResultCallback(EndGameResultCallback_t pCallback) {
+		Debug.Log("[" + EndGameResultCallback_t.k_iCallback + " - EndGameResultCallback] - " + pCallback.m_eResult + " -- " + pCallback.ullUniqueGameID);
+	}
+
+	void OnJoinPartyCallback(JoinPartyCallback_t pCallback) {
+		Debug.Log("[" + JoinPartyCallback_t.k_iCallback + " - JoinPartyCallback] - " + pCallback.m_eResult + " -- " + pCallback.m_ulBeaconID + " -- " + pCallback.m_SteamIDBeaconOwner + " -- " + pCallback.m_rgchConnectString);
+	}
+
+	void OnCreateBeaconCallback(CreateBeaconCallback_t pCallback) {
+		Debug.Log("[" + CreateBeaconCallback_t.k_iCallback + " - CreateBeaconCallback] - " + pCallback.m_eResult + " -- " + pCallback.m_ulBeaconID);
+	}
+
+	void OnReservationNotificationCallback(ReservationNotificationCallback_t pCallback) {
+		Debug.Log("[" + ReservationNotificationCallback_t.k_iCallback + " - ReservationNotificationCallback] - " + pCallback.m_ulBeaconID + " -- " + pCallback.m_steamIDJoiner);
+	}
+
+	void OnChangeNumOpenSlotsCallback(ChangeNumOpenSlotsCallback_t pCallback) {
+		Debug.Log("[" + ChangeNumOpenSlotsCallback_t.k_iCallback + " - ChangeNumOpenSlotsCallback] - " + pCallback.m_eResult);
+	}
+
+	void OnAvailableBeaconLocationsUpdated(AvailableBeaconLocationsUpdated_t pCallback) {
+		Debug.Log("[" + AvailableBeaconLocationsUpdated_t.k_iCallback + " - AvailableBeaconLocationsUpdated]");
+	}
+
+	void OnActiveBeaconsUpdated(ActiveBeaconsUpdated_t pCallback) {
+		Debug.Log("[" + ActiveBeaconsUpdated_t.k_iCallback + " - ActiveBeaconsUpdated]");
 	}
 }

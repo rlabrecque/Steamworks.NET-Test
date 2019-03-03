@@ -281,6 +281,11 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 			print("SteamHTMLSurface.SetDPIScalingFactor(" + m_HHTMLBrowser + ", " + 1.0f + ")");
 		}
 
+		if (GUILayout.Button("OpenDeveloperTools(m_HHTMLBrowser)")) {
+			SteamHTMLSurface.OpenDeveloperTools(m_HHTMLBrowser);
+			print("SteamHTMLSurface.OpenDeveloperTools(" + m_HHTMLBrowser + ")");
+		}
+
 		//SteamHTMLSurface.AllowStartRequest() // ['N/A - You MUST call this in response to a HTML_StartRequest_t callback']
 
 		//SteamHTMLSurface.JSDialogResponse() // [' N/A - You MUST call this in response to a HTML_JSAlert_t or HTML_JSConfirm_t callback']
@@ -466,7 +471,7 @@ public class SteamHTMLSurfaceTest : MonoBehaviour {
 	}
 
 	void OnHTML_NewWindow(HTML_NewWindow_t pCallback) {
-		Debug.Log("[" + HTML_NewWindow_t.k_iCallback + " - HTML_NewWindow] - " + pCallback.unBrowserHandle + " -- " + pCallback.pchURL + " -- " + pCallback.unX + " -- " + pCallback.unY + " -- " + pCallback.unWide + " -- " + pCallback.unTall + " -- " + pCallback.unNewWindow_BrowserHandle);
+		Debug.Log("[" + HTML_NewWindow_t.k_iCallback + " - HTML_NewWindow] - " + pCallback.unBrowserHandle + " -- " + pCallback.pchURL + " -- " + pCallback.unX + " -- " + pCallback.unY + " -- " + pCallback.unWide + " -- " + pCallback.unTall + " -- " + pCallback.unNewWindow_BrowserHandle_IGNORE);
 	}
 
 	void OnHTML_SetCursor(HTML_SetCursor_t pCallback) {

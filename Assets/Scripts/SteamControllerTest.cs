@@ -136,16 +136,11 @@ public class SteamControllerTest : MonoBehaviour {
 			GUILayout.Label("GetConnectedControllers(m_ControllerHandles) : " + m_nControllers);
 		}
 
+		//SteamController.GetActionSetHandle() // Called in Precache()
+
 		for (int i = 0; i < m_nControllers; ++i) {
 			GUILayout.Label("Controller " + i + " - " + m_ControllerHandles[i]);
-
-			if (GUILayout.Button("ShowBindingPanel(m_ControllerHandles[i])")) {
-				bool ret = SteamController.ShowBindingPanel(m_ControllerHandles[i]);
-				print("SteamController.ShowBindingPanel(" + m_ControllerHandles[i] + ") : " + ret);
-			}
-
-			//SteamController.GetActionSetHandle() // Called in Precache()
-
+		
 			for (int j = 0; j < m_nActionSets; ++j) {
 				if (GUILayout.Button("ActivateActionSet(m_ControllerHandles[i], m_ActionSets[j])")) {
 					SteamController.ActivateActionSet(m_ControllerHandles[i], m_ActionSets[j]);
@@ -204,12 +199,27 @@ public class SteamControllerTest : MonoBehaviour {
 				}
 			}
 
+			if (GUILayout.Button("GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A)")) {
+				string ret = SteamController.GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A);
+				print("SteamController.GetGlyphForActionOrigin(" + EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A + ") : " + ret);
+			}
+
+			if (GUILayout.Button("GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A)")) {
+				string ret = SteamController.GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A);
+				print("SteamController.GetStringForActionOrigin(" + EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A + ") : " + ret);
+			}
+
 			GUILayout.Label("InGameControls Analog Actions:");
 			for (int j = 0; j < m_nInGameControlsAnalogActions; ++j) {
 				if (GUILayout.Button("StopAnalogActionMomentum(m_ControllerHandles[i], m_InGameControlsAnalogActions[j])")) {
 					SteamController.StopAnalogActionMomentum(m_ControllerHandles[i], m_InGameControlsAnalogActions[j]);
 					print("SteamController.StopAnalogActionMomentum(" + m_ControllerHandles[i] + ", " + m_InGameControlsAnalogActions[j] + ")");
 				}
+			}
+
+			if (GUILayout.Button("GetMotionData(m_ControllerHandles[i])")) {
+				ControllerMotionData_t ret = SteamController.GetMotionData(m_ControllerHandles[i]);
+				print("SteamController.GetMotionData(" + m_ControllerHandles[i] + ") : " + ret);
 			}
 
 			if (GUILayout.Button("TriggerHapticPulse(m_ControllerHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000)")) {
@@ -232,29 +242,38 @@ public class SteamControllerTest : MonoBehaviour {
 				print("SteamController.SetLEDColor(" + m_ControllerHandles[i] + ", " + 0 + ", " + 0 + ", " + 255 + ", " + (int)ESteamControllerLEDFlag.k_ESteamControllerLEDFlag_SetColor + ")");
 			}
 
-			GUILayout.Label("GetGamepadIndexForController(m_ControllerHandles[i]) : " + SteamController.GetGamepadIndexForController(m_ControllerHandles[i]));
+			if (GUILayout.Button("ShowBindingPanel(m_ControllerHandles[i])")) {
+				bool ret = SteamController.ShowBindingPanel(m_ControllerHandles[i]);
+				print("SteamController.ShowBindingPanel(" + m_ControllerHandles[i] + ") : " + ret);
+			}
+
+			GUILayout.Label("GetInputTypeForHandle(m_ControllerHandles[i]) : " + SteamController.GetInputTypeForHandle(m_ControllerHandles[i]));
 
 			GUILayout.Label("GetControllerForGamepadIndex(0) : " + SteamController.GetControllerForGamepadIndex(0));
 
-			GUILayout.Label("GetMotionData(m_ControllerHandles[i]) : " + SteamController.GetMotionData(m_ControllerHandles[i]));
+			GUILayout.Label("GetGamepadIndexForController(m_ControllerHandles[i]) : " + SteamController.GetGamepadIndexForController(m_ControllerHandles[i]));
 
-			if (GUILayout.Button("ShowDigitalActionOrigins(m_ControllerHandles[i], m_InGameControlsDigitalActions[0], 1, 0, 0)")) {
-				bool ret = SteamController.ShowDigitalActionOrigins(m_ControllerHandles[i], m_InGameControlsDigitalActions[0], 1, 0, 0);
-				print("SteamController.ShowDigitalActionOrigins(" + m_ControllerHandles[i] + ", " + m_InGameControlsDigitalActions[0] + ", " + 1 + ", " + 0 + ", " + 0 + ") : " + ret);
+			if (GUILayout.Button("GetStringForXboxOrigin(EXboxOrigin.k_EXboxOrigin_A)")) {
+				string ret = SteamController.GetStringForXboxOrigin(EXboxOrigin.k_EXboxOrigin_A);
+				print("SteamController.GetStringForXboxOrigin(" + EXboxOrigin.k_EXboxOrigin_A + ") : " + ret);
 			}
 
-			if (GUILayout.Button("ShowAnalogActionOrigins(m_ControllerHandles[i], m_InGameControlsAnalogActions[0], 1, 0, 0)")) {
-				bool ret = SteamController.ShowAnalogActionOrigins(m_ControllerHandles[i], m_InGameControlsAnalogActions[0], 1, 0, 0);
-				print("SteamController.ShowAnalogActionOrigins(" + m_ControllerHandles[i] + ", " + m_InGameControlsAnalogActions[0] + ", " + 1 + ", " + 0 + ", " + 0 + ") : " + ret);
+			if (GUILayout.Button("GetGlyphForXboxOrigin(EXboxOrigin.k_EXboxOrigin_A)")) {
+				string ret = SteamController.GetGlyphForXboxOrigin(EXboxOrigin.k_EXboxOrigin_A);
+				print("SteamController.GetGlyphForXboxOrigin(" + EXboxOrigin.k_EXboxOrigin_A + ") : " + ret);
 			}
 
+			if (GUILayout.Button("GetActionOriginFromXboxOrigin(m_ControllerHandles[i], EXboxOrigin.k_EXboxOrigin_A)")) {
+				EControllerActionOrigin ret = SteamController.GetActionOriginFromXboxOrigin(m_ControllerHandles[i], EXboxOrigin.k_EXboxOrigin_A);
+				print("SteamController.GetActionOriginFromXboxOrigin(" + m_ControllerHandles[i] + ", " + EXboxOrigin.k_EXboxOrigin_A + ") : " + ret);
+			}
+			}
+
+
+		if (GUILayout.Button("TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A)")) {
+			EControllerActionOrigin ret = SteamController.TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A);
+			print("SteamController.TranslateActionOrigin(" + ESteamInputType.k_ESteamInputType_XBoxOneController + ", " + EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A + ") : " + ret);
 		}
-
-		GUILayout.Label("GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetStringForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
-
-		GUILayout.Label("GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A) : " + SteamController.GetGlyphForActionOrigin(EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A));
-
-		//SteamController.GetInputTypeForHandle() // TODO
 
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();

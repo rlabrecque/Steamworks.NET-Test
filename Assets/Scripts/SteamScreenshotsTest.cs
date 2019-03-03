@@ -66,7 +66,7 @@ public class SteamScreenshotsTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("AddScreenshotToLibrary(Application.dataPath + \"/screenshot.png\", \"\", Screen.width, Screen.height)")) {
-			ScreenCapture.CaptureScreenshot("screenshot.png");
+			Application.CaptureScreenshot("screenshot.png");
 			// Application.CaptureScreenshot is asyncronous, therefore we have to wait until the screenshot is created.
 			StartCoroutine(AddScreenshotToLibrary());
 		}

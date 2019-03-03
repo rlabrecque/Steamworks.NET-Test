@@ -22,6 +22,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	protected Callback<GameConnectedChatJoin_t> m_GameConnectedChatJoin;
 	protected Callback<GameConnectedChatLeave_t> m_GameConnectedChatLeave;
 	protected Callback<GameConnectedFriendChatMsg_t> m_GameConnectedFriendChatMsg;
+	protected Callback<UnreadChatMessagesChanged_t> m_UnreadChatMessagesChanged;
 
 	private CallResult<ClanOfficerListResponse_t> OnClanOfficerListResponseCallResult;
 	private CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
@@ -55,6 +56,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		m_GameConnectedChatJoin = Callback<GameConnectedChatJoin_t>.Create(OnGameConnectedChatJoin);
 		m_GameConnectedChatLeave = Callback<GameConnectedChatLeave_t>.Create(OnGameConnectedChatLeave);
 		m_GameConnectedFriendChatMsg = Callback<GameConnectedFriendChatMsg_t>.Create(OnGameConnectedFriendChatMsg);
+		m_UnreadChatMessagesChanged = Callback<UnreadChatMessagesChanged_t>.Create(OnUnreadChatMessagesChanged);
 
 		OnClanOfficerListResponseCallResult = CallResult<ClanOfficerListResponse_t>.Create(OnClanOfficerListResponse);
 		OnDownloadClanActivityCountsResultCallResult = CallResult<DownloadClanActivityCountsResult_t>.Create(OnDownloadClanActivityCountsResult);
@@ -354,6 +356,8 @@ public class SteamFriendsTest : MonoBehaviour {
 
 		GUILayout.Label("IsClanOfficialGameGroup(m_Clan) : " + SteamFriends.IsClanOfficialGameGroup(m_Clan));
 
+		GUILayout.Label("GetNumChatsWithUnreadPriorityMessages() : " + SteamFriends.GetNumChatsWithUnreadPriorityMessages());
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -439,5 +443,9 @@ public class SteamFriendsTest : MonoBehaviour {
 
 	void OnSetPersonaNameResponse(SetPersonaNameResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + SetPersonaNameResponse_t.k_iCallback + " - SetPersonaNameResponse] - " + pCallback.m_bSuccess + " -- " + pCallback.m_bLocalSuccess + " -- " + pCallback.m_result);
+	}
+
+	void OnUnreadChatMessagesChanged(UnreadChatMessagesChanged_t pCallback) {
+		Debug.Log("[" + UnreadChatMessagesChanged_t.k_iCallback + " - UnreadChatMessagesChanged]");
 	}
 }
