@@ -40,7 +40,7 @@ public class SteamUtilsTest : MonoBehaviour {
 				ret.Apply();
 			}
 		}
-
+		Destroy(ret,1);//memory leak prevention
 		return ret;
 	}
 
