@@ -1,6 +1,7 @@
 # Folders
 /.DS_Store/
 /.vs/
+/.vscode/
 /Library/
 /obj/
 /Temp/
@@ -9,9 +10,6 @@
 *.csproj
 *.sln
 *.VC.db
-
 /steam_appid.txt
-
-
-#VSCode
-/.vscode/
+/Assets/Editor/**/*.meta
+/Assets/Plugins/**/*.meta
