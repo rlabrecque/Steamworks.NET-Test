@@ -5,6 +5,7 @@ using Steamworks;
 public class SteamUtilsTest : MonoBehaviour {
 	private Vector2 m_ScrollPos;
 	private Texture2D m_Image;
+	private string m_FilterTextInputMessage;
 
 	protected Callback<IPCountry_t> m_IPCountry;
 	protected Callback<LowBatteryPower_t> m_LowBatteryPower;
@@ -15,6 +16,8 @@ public class SteamUtilsTest : MonoBehaviour {
 	private CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
 	public void OnEnable() {
+		m_FilterTextInputMessage = "test, fuck, sorry";
+
 		m_IPCountry = Callback<IPCountry_t>.Create(OnIPCountry);
 		m_LowBatteryPower = Callback<LowBatteryPower_t>.Create(OnLowBatteryPower);
 		//m_SteamAPICallCompleted = Callback<SteamAPICallCompleted_t>.Create(OnSteamAPICallCompleted); // N/A - Far too spammy to test like this!
@@ -49,6 +52,8 @@ public class SteamUtilsTest : MonoBehaviour {
 		GUILayout.Label("Variables:");
 		GUILayout.Label("m_Image:");
 		GUILayout.Label(m_Image);
+		GUILayout.Label("m_FilterTextInputMessage:");
+		m_FilterTextInputMessage = GUILayout.TextField(m_FilterTextInputMessage, 40);
 		GUILayout.EndArea();
 
 		GUILayout.BeginVertical("box");
@@ -155,6 +160,19 @@ public class SteamUtilsTest : MonoBehaviour {
 		if (GUILayout.Button("SetVRHeadsetStreamingEnabled(!SteamUtils.IsVRHeadsetStreamingEnabled())")) {
 			SteamUtils.SetVRHeadsetStreamingEnabled(!SteamUtils.IsVRHeadsetStreamingEnabled());
 			print("SteamUtils.SetVRHeadsetStreamingEnabled(" + !SteamUtils.IsVRHeadsetStreamingEnabled() + ")");
+		}
+
+		GUILayout.Label("IsSteamChinaLauncher() : " + SteamUtils.IsSteamChinaLauncher());
+
+		if (GUILayout.Button("InitFilterText()")) {
+			bool ret = SteamUtils.InitFilterText();
+			print("SteamUtils.InitFilterText() : " + ret);
+		}
+
+		if (GUILayout.Button("FilterText(out OutFilteredText, (uint)m_FilterTextInputMessage.Length, m_FilterTextInputMessage, false)")) {
+			string OutFilteredText;
+			int ret = SteamUtils.FilterText(out OutFilteredText, (uint)m_FilterTextInputMessage.Length, m_FilterTextInputMessage, false);
+			print("SteamUtils.FilterText(" + "out OutFilteredText" + ", " + (uint)m_FilterTextInputMessage.Length + ", " + m_FilterTextInputMessage + ", " + false + ") : " + ret + " -- " + OutFilteredText);
 		}
 
 		GUILayout.EndScrollView();

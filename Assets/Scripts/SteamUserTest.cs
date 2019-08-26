@@ -23,6 +23,7 @@ public class SteamUserTest : MonoBehaviour {
 	private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 	private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
 	private CallResult<MarketEligibilityResponse_t> OnMarketEligibilityResponseCallResult;
+	private CallResult<DurationControl_t> OnDurationControlCallResult;
 
 	public void OnEnable() {
 		m_SteamServersConnected = Callback<SteamServersConnected_t>.Create(OnSteamServersConnected);
@@ -39,6 +40,7 @@ public class SteamUserTest : MonoBehaviour {
 		OnEncryptedAppTicketResponseCallResult = CallResult<EncryptedAppTicketResponse_t>.Create(OnEncryptedAppTicketResponse);
 		OnStoreAuthURLResponseCallResult = CallResult<StoreAuthURLResponse_t>.Create(OnStoreAuthURLResponse);
 		OnMarketEligibilityResponseCallResult = CallResult<MarketEligibilityResponse_t>.Create(OnMarketEligibilityResponse);
+		OnDurationControlCallResult = CallResult<DurationControl_t>.Create(OnDurationControl);
 	}
 
 	public void RenderOnGUI() {
@@ -201,6 +203,12 @@ public class SteamUserTest : MonoBehaviour {
 			print("SteamUser.GetMarketEligibility() : " + handle);
 		}
 
+		if (GUILayout.Button("GetDurationControl()")) {
+			SteamAPICall_t handle = SteamUser.GetDurationControl();
+			OnDurationControlCallResult.Set(handle);
+			print("SteamUser.GetDurationControl() : " + handle);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -299,5 +307,9 @@ public class SteamUserTest : MonoBehaviour {
 
 	void OnMarketEligibilityResponse(MarketEligibilityResponse_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + MarketEligibilityResponse_t.k_iCallback + " - MarketEligibilityResponse] - " + pCallback.m_bAllowed + " -- " + pCallback.m_eNotAllowedReason + " -- " + pCallback.m_rtAllowedAtTime + " -- " + pCallback.m_cdaySteamGuardRequiredDays + " -- " + pCallback.m_cdayNewDeviceCooldown);
+	}
+
+	void OnDurationControl(DurationControl_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + DurationControl_t.k_iCallback + " - DurationControl] - " + pCallback.m_eResult + " -- " + pCallback.m_appid + " -- " + pCallback.m_bApplicable + " -- " + pCallback.m_csecsLast5h + " -- " + pCallback.m_progress + " -- " + pCallback.m_notification);
 	}
 }

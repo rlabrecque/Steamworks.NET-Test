@@ -267,13 +267,19 @@ public class SteamControllerTest : MonoBehaviour {
 				EControllerActionOrigin ret = SteamController.GetActionOriginFromXboxOrigin(m_ControllerHandles[i], EXboxOrigin.k_EXboxOrigin_A);
 				print("SteamController.GetActionOriginFromXboxOrigin(" + m_ControllerHandles[i] + ", " + EXboxOrigin.k_EXboxOrigin_A + ") : " + ret);
 			}
+
+			if (GUILayout.Button("TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A)")) {
+				EControllerActionOrigin ret = SteamController.TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A);
+				print("SteamController.TranslateActionOrigin(" + ESteamInputType.k_ESteamInputType_XBoxOneController + ", " + EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A + ") : " + ret);
 			}
 
-
-		if (GUILayout.Button("TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A)")) {
-			EControllerActionOrigin ret = SteamController.TranslateActionOrigin(ESteamInputType.k_ESteamInputType_XBoxOneController, EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A);
-			print("SteamController.TranslateActionOrigin(" + ESteamInputType.k_ESteamInputType_XBoxOneController + ", " + EControllerActionOrigin.k_EControllerActionOrigin_XBoxOne_A + ") : " + ret);
-		}
+			if (GUILayout.Button("GetControllerBindingRevision(m_ControllerHandles[i], out pMajor, out pMinor)")) {
+				int pMajor;
+				int pMinor;
+				bool ret = SteamController.GetControllerBindingRevision(m_ControllerHandles[i], out pMajor, out pMinor);
+				print("SteamController.GetControllerBindingRevision(" + m_ControllerHandles[i] + ", " + "out pMajor" + ", " + "out pMinor" + ") : " + ret + " -- " + pMajor + " -- " + pMinor);
+			}
+			}
 
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();

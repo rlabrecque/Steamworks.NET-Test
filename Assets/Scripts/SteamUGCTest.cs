@@ -161,6 +161,12 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.GetQueryUGCKeyValueTag(" + m_UGCQueryHandle + ", " + 0 + ", " + 0 + ", " + "out Key" + ", " + 260 + ", " + "out Value" + ", " + 260 + ") : " + ret + " -- " + Key + " -- " + Value);
 		}
 
+		if (GUILayout.Button("GetQueryUGCKeyValueTag(m_UGCQueryHandle, 0, \"TestKey\", out Value, 260)")) {
+			string Value;
+			bool ret = SteamUGC.GetQueryUGCKeyValueTag(m_UGCQueryHandle, 0, "TestKey", out Value, 260);
+			print("SteamUGC.GetQueryUGCKeyValueTag(" + m_UGCQueryHandle + ", " + 0 + ", " + "\"TestKey\"" + ", " + "out Value" + ", " + 260 + ") : " + ret + " -- " + Value);
+		}
+
 		if (GUILayout.Button("ReleaseQueryUGCRequest(m_UGCQueryHandle)")) {
 			bool ret = SteamUGC.ReleaseQueryUGCRequest(m_UGCQueryHandle);
 			print("SteamUGC.ReleaseQueryUGCRequest(" + m_UGCQueryHandle + ") : " + ret);
@@ -311,6 +317,11 @@ public class SteamUGCTest : MonoBehaviour {
 		if (GUILayout.Button("SetAllowLegacyUpload(m_UGCUpdateHandle, true)")) {
 			bool ret = SteamUGC.SetAllowLegacyUpload(m_UGCUpdateHandle, true);
 			print("SteamUGC.SetAllowLegacyUpload(" + m_UGCUpdateHandle + ", " + true + ") : " + ret);
+		}
+
+		if (GUILayout.Button("RemoveAllItemKeyValueTags(m_UGCUpdateHandle)")) {
+			bool ret = SteamUGC.RemoveAllItemKeyValueTags(m_UGCUpdateHandle);
+			print("SteamUGC.RemoveAllItemKeyValueTags(" + m_UGCUpdateHandle + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RemoveItemKeyValueTags(m_UGCUpdateHandle, \"TestKey\")")) {
