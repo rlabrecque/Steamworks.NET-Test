@@ -195,6 +195,11 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamParties(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMPARTIES_INTERFACE_VERSION + ") : " + ret);
 		}
 
+		if (GUILayout.Button("GetISteamRemotePlay(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMREMOTEPLAY_INTERFACE_VERSION)")) {
+			System.IntPtr ret = SteamClient.GetISteamRemotePlay(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMREMOTEPLAY_INTERFACE_VERSION);
+			print("SteamClient.GetISteamRemotePlay(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMREMOTEPLAY_INTERFACE_VERSION + ") : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
