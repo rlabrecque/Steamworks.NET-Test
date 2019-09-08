@@ -223,15 +223,15 @@ public class SteamInventoryTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("GetItemDefinitionIDs(ItemDefIDs, ref length)")) {
-			uint length;
-			bool ret = SteamInventory.GetItemDefinitionIDs(null, out length);
+			uint length = 0;
+			bool ret = SteamInventory.GetItemDefinitionIDs(null, ref length);
 			if (ret) {
 				m_SteamItemDef = new SteamItemDef_t[length];
-				ret = SteamInventory.GetItemDefinitionIDs(m_SteamItemDef, out length);
-				print("SteamInventory.GetItemDefinitionIDs(m_SteamItemDef, out length) - " + ret + " -- " + length);
+				ret = SteamInventory.GetItemDefinitionIDs(m_SteamItemDef, ref length);
+				print("SteamInventory.GetItemDefinitionIDs(m_SteamItemDef, ref length) - " + ret + " -- " + length);
 			}
 			else {
-				print("SteamInventory.GetItemDefinitionIDs(null, out length) - " + ret + " -- " + length);
+				print("SteamInventory.GetItemDefinitionIDs(null, ref length) - " + ret + " -- " + length);
 			}
 		}
 
