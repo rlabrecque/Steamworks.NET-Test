@@ -145,6 +145,12 @@ public class SteamPartiesTest : MonoBehaviour {
 
 	void OnAvailableBeaconLocationsUpdated(AvailableBeaconLocationsUpdated_t pCallback) {
 		Debug.Log("[" + AvailableBeaconLocationsUpdated_t.k_iCallback + " - AvailableBeaconLocationsUpdated]");
+
+		bool ret = SteamParties.GetNumAvailableBeaconLocations(out m_NumLocations);
+		print("SteamParties.GetNumAvailableBeaconLocations(" + "out m_NumLocations" + ") : " + ret + " -- " + m_NumLocations);
+		m_BeaconLocationList = new SteamPartyBeaconLocation_t[m_NumLocations];
+		bool ret2 = SteamParties.GetAvailableBeaconLocations(m_BeaconLocationList, m_NumLocations);
+		print("SteamParties.GetAvailableBeaconLocations(" + m_BeaconLocationList + ", " + m_NumLocations + ") : " + ret);
 	}
 
 	void OnActiveBeaconsUpdated(ActiveBeaconsUpdated_t pCallback) {
