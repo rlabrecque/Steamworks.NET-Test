@@ -156,9 +156,9 @@ public class SteamUserTest : MonoBehaviour {
 
 		GUILayout.Label("BIsBehindNAT() : " + SteamUser.BIsBehindNAT());
 
-		if (GUILayout.Button("AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015)")) {
-			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015);
-			print("SteamUser.AdvertiseGame(" + CSteamID.NonSteamGS + ", " + TestConstants.k_IpAdress127_0_0_1 + ", " + TestConstants.k_Port27015 + ")");
+		if (GUILayout.Button("AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAddress127_0_0_1_uint, TestConstants.k_Port27015)")) {
+			SteamUser.AdvertiseGame(CSteamID.NonSteamGS, TestConstants.k_IpAddress127_0_0_1_uint, TestConstants.k_Port27015);
+			print("SteamUser.AdvertiseGame(" + CSteamID.NonSteamGS + ", " + TestConstants.k_IpAddress127_0_0_1_uint + ", " + TestConstants.k_Port27015 + ")");
 		}
 
 		if (GUILayout.Button("RequestEncryptedAppTicket(k_unSecretData, sizeof(uint))")) {
@@ -310,6 +310,6 @@ public class SteamUserTest : MonoBehaviour {
 	}
 
 	void OnDurationControl(DurationControl_t pCallback, bool bIOFailure) {
-		Debug.Log("[" + DurationControl_t.k_iCallback + " - DurationControl] - " + pCallback.m_eResult + " -- " + pCallback.m_appid + " -- " + pCallback.m_bApplicable + " -- " + pCallback.m_csecsLast5h + " -- " + pCallback.m_progress + " -- " + pCallback.m_notification);
+		Debug.Log("[" + DurationControl_t.k_iCallback + " - DurationControl] - " + pCallback.m_eResult + " -- " + pCallback.m_appid + " -- " + pCallback.m_bApplicable + " -- " + pCallback.m_csecsLast5h + " -- " + pCallback.m_progress + " -- " + pCallback.m_notification + " -- " + pCallback.m_csecsToday + " -- " + pCallback.m_csecsRemaining);
 	}
 }

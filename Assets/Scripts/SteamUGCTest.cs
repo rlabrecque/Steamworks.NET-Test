@@ -177,6 +177,11 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.AddRequiredTag(" + m_UGCQueryHandle + ", " + "\"Co-op\"" + ") : " + ret);
 		}
 
+		if (GUILayout.Button("AddRequiredTagGroup(m_UGCQueryHandle, new string[] {\"Sorry\"})")) {
+			bool ret = SteamUGC.AddRequiredTagGroup(m_UGCQueryHandle, new string[] {"Sorry"});
+			print("SteamUGC.AddRequiredTagGroup(" + m_UGCQueryHandle + ", " + new string[] {"Sorry"} + ") : " + ret);
+		}
+
 		if (GUILayout.Button("AddExcludedTag(m_UGCQueryHandle, \"Co-op\")")) {
 			bool ret = SteamUGC.AddExcludedTag(m_UGCQueryHandle, "Co-op");
 			print("SteamUGC.AddExcludedTag(" + m_UGCQueryHandle + ", " + "\"Co-op\"" + ") : " + ret);

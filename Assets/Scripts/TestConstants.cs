@@ -7,8 +7,10 @@ public class TestConstants {
 	public readonly AppId_t k_AppId_PieterwTestDLC = new AppId_t(110902);
 	public readonly AppId_t k_AppId_FreeToPlay = new AppId_t(343450);
 	public readonly PublishedFileId_t k_PublishedFileId_Champions = new PublishedFileId_t(280762427);
-	public const uint k_IpAdress127_0_0_1 = 2130706433;
-	public const uint k_IpAddress208_78_165_233 = 3494815209; // Valve Matchmaking Server (Virginia iad-3/srcds150 #51) 
+	public readonly SteamIPAddress_t k_IpAddress127_0_0_1 = new SteamIPAddress_t(System.Net.IPAddress.Parse("127.0.0.1"));
+	public const uint k_IpAddress127_0_0_1_uint = 2130706433;
+	public readonly SteamIPAddress_t k_IpAddress208_78_165_233 = new SteamIPAddress_t(System.Net.IPAddress.Parse("208.78.165.233")); // Valve Matchmaking Server (Virginia iad-3/srcds150 #51) 
+	public const uint k_IpAddress208_78_165_233_uint = 3494815209; // Valve Matchmaking Server (Virginia iad-3/srcds150 #51) 
 	public const ushort k_Port27015 = 27015;
 
 	private static TestConstants _instance;

@@ -197,22 +197,22 @@ public class SteamMatchmakingServersTest : MonoBehaviour {
 			print("SteamMatchmakingServers.RefreshServer(" + m_ServerListRequest + ", " + 0 + ")");
 		}
 
-		if (GUILayout.Button("PingServer(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_PingResponse)")) {
+		if (GUILayout.Button("PingServer(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_PingResponse)")) {
 			CancelServerQuery();
-			m_ServerQuery = SteamMatchmakingServers.PingServer(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_PingResponse);
-			print("SteamMatchmakingServers.PingServer(" + TestConstants.k_IpAddress208_78_165_233 + ", " + TestConstants.k_Port27015 + ", " + m_PingResponse + ") : " + m_ServerQuery);
+			m_ServerQuery = SteamMatchmakingServers.PingServer(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_PingResponse);
+			print("SteamMatchmakingServers.PingServer(" + TestConstants.k_IpAddress208_78_165_233_uint + ", " + TestConstants.k_Port27015 + ", " + m_PingResponse + ") : " + m_ServerQuery);
 		}
 
-		if (GUILayout.Button("PlayerDetails(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_PlayersResponse)")) {
+		if (GUILayout.Button("PlayerDetails(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_PlayersResponse)")) {
 			CancelServerQuery();
-			m_ServerQuery = SteamMatchmakingServers.PlayerDetails(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_PlayersResponse);
-			print("SteamMatchmakingServers.PlayerDetails(" + TestConstants.k_IpAddress208_78_165_233 + ", " + TestConstants.k_Port27015 + ", " + m_PlayersResponse + ") : " + m_ServerQuery);
+			m_ServerQuery = SteamMatchmakingServers.PlayerDetails(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_PlayersResponse);
+			print("SteamMatchmakingServers.PlayerDetails(" + TestConstants.k_IpAddress208_78_165_233_uint + ", " + TestConstants.k_Port27015 + ", " + m_PlayersResponse + ") : " + m_ServerQuery);
 		}
 
-		if (GUILayout.Button("ServerRules(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_RulesResponse)")) {
+		if (GUILayout.Button("ServerRules(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_RulesResponse)")) {
 			CancelServerQuery();
-			m_ServerQuery = SteamMatchmakingServers.ServerRules(TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, m_RulesResponse);
-			print("SteamMatchmakingServers.ServerRules(" + TestConstants.k_IpAddress208_78_165_233 + ", " + TestConstants.k_Port27015 + ", " + m_RulesResponse + ") : " + m_ServerQuery);
+			m_ServerQuery = SteamMatchmakingServers.ServerRules(TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, m_RulesResponse);
+			print("SteamMatchmakingServers.ServerRules(" + TestConstants.k_IpAddress208_78_165_233_uint + ", " + TestConstants.k_Port27015 + ", " + m_RulesResponse + ") : " + m_ServerQuery);
 		}
 
 		if (GUILayout.Button("CancelServerQuery(m_ServerQuery)")) {

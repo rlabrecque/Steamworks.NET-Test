@@ -86,15 +86,15 @@ public class SteamMatchmakingTest : MonoBehaviour {
 			GUILayout.Label("GetFavoriteGame(0, out AppID, out IP, out ConnPort, out QueryPort, out Flags, out LastPlayedOnServer) : " + ret + " -- " + AppID + " -- " + IP + " -- " + ConnPort + " -- " + QueryPort + " -- " + Flags + " -- " + LastPlayedOnServer);
 		}
 
-		if (GUILayout.Button("AddFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime)")) {
+		if (GUILayout.Button("AddFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime)")) {
 			uint CurrentUnixTime = (uint)(System.DateTime.UtcNow.Subtract(new System.DateTime(1970, 1, 1))).TotalSeconds;
-			int ret = SteamMatchmaking.AddFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime);
-			print("SteamMatchmaking.AddFavoriteGame(" + TestConstants.Instance.k_AppId_TeamFortress2 + ", " + TestConstants.k_IpAddress208_78_165_233 + ", " + TestConstants.k_Port27015 + ", " + TestConstants.k_Port27015 + ", " + Constants.k_unFavoriteFlagFavorite + ", " + CurrentUnixTime + ") : " + ret);
+			int ret = SteamMatchmaking.AddFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite, CurrentUnixTime);
+			print("SteamMatchmaking.AddFavoriteGame(" + TestConstants.Instance.k_AppId_TeamFortress2 + ", " + TestConstants.k_IpAddress208_78_165_233_uint + ", " + TestConstants.k_Port27015 + ", " + TestConstants.k_Port27015 + ", " + Constants.k_unFavoriteFlagFavorite + ", " + CurrentUnixTime + ") : " + ret);
 		}
 
-		if (GUILayout.Button("RemoveFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite)")) {
-			bool ret = SteamMatchmaking.RemoveFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite);
-			print("SteamMatchmaking.RemoveFavoriteGame(" + TestConstants.Instance.k_AppId_TeamFortress2 + ", " + TestConstants.k_IpAddress208_78_165_233 + ", " + TestConstants.k_Port27015 + ", " + TestConstants.k_Port27015 + ", " + Constants.k_unFavoriteFlagFavorite + ") : " + ret);
+		if (GUILayout.Button("RemoveFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite)")) {
+			bool ret = SteamMatchmaking.RemoveFavoriteGame(TestConstants.Instance.k_AppId_TeamFortress2, TestConstants.k_IpAddress208_78_165_233_uint, TestConstants.k_Port27015, TestConstants.k_Port27015, Constants.k_unFavoriteFlagFavorite);
+			print("SteamMatchmaking.RemoveFavoriteGame(" + TestConstants.Instance.k_AppId_TeamFortress2 + ", " + TestConstants.k_IpAddress208_78_165_233_uint + ", " + TestConstants.k_Port27015 + ", " + TestConstants.k_Port27015 + ", " + Constants.k_unFavoriteFlagFavorite + ") : " + ret);
 		}
 
 		if (GUILayout.Button("RequestLobbyList()")) {
@@ -211,9 +211,9 @@ public class SteamMatchmakingTest : MonoBehaviour {
 			print("SteamMatchmaking.RequestLobbyData(" + m_Lobby + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetLobbyGameServer(m_Lobby, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015, CSteamID.NonSteamGS)")) {
-			SteamMatchmaking.SetLobbyGameServer(m_Lobby, TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015, CSteamID.NonSteamGS);
-			print("SteamMatchmaking.SetLobbyGameServer(" + m_Lobby + ", " + TestConstants.k_IpAdress127_0_0_1 + ", " + TestConstants.k_Port27015 + ", " + CSteamID.NonSteamGS + ")");
+		if (GUILayout.Button("SetLobbyGameServer(m_Lobby, TestConstants.k_IpAddress127_0_0_1_uint, TestConstants.k_Port27015, CSteamID.NonSteamGS)")) {
+			SteamMatchmaking.SetLobbyGameServer(m_Lobby, TestConstants.k_IpAddress127_0_0_1_uint, TestConstants.k_Port27015, CSteamID.NonSteamGS);
+			print("SteamMatchmaking.SetLobbyGameServer(" + m_Lobby + ", " + TestConstants.k_IpAddress127_0_0_1_uint + ", " + TestConstants.k_Port27015 + ", " + CSteamID.NonSteamGS + ")");
 		}
 
 		{

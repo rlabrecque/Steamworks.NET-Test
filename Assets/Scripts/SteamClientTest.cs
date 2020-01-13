@@ -61,9 +61,10 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamGameServer(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMGAMESERVER_INTERFACE_VERSION + ") : " + ret);
 		}
 
-		if (GUILayout.Button("SetLocalIPBinding(TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015)")) {
-			SteamClient.SetLocalIPBinding(TestConstants.k_IpAdress127_0_0_1, TestConstants.k_Port27015);
-			print("SteamClient.SetLocalIPBinding(" + TestConstants.k_IpAdress127_0_0_1 + ", " + TestConstants.k_Port27015 + ")");
+		if (GUILayout.Button("SetLocalIPBinding(ref IpAddress127_0_0_1, TestConstants.k_Port27015)")) {
+			SteamIPAddress_t IpAddress127_0_0_1 = TestConstants.Instance.k_IpAddress127_0_0_1;
+			SteamClient.SetLocalIPBinding(ref IpAddress127_0_0_1, TestConstants.k_Port27015);
+			print("SteamClient.SetLocalIPBinding(" + "ref IpAddress127_0_0_1" + ", " + TestConstants.k_Port27015 + ")" + " -- " + IpAddress127_0_0_1);
 		}
 
 		if (GUILayout.Button("GetISteamFriends(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMFRIENDS_INTERFACE_VERSION)")) {

@@ -175,6 +175,11 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.FilterText(" + "out OutFilteredText" + ", " + (uint)m_FilterTextInputMessage.Length + ", " + m_FilterTextInputMessage + ", " + false + ") : " + ret + " -- " + OutFilteredText);
 		}
 
+		if (GUILayout.Button("GetIPv6ConnectivityState(ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP)")) {
+			ESteamIPv6ConnectivityState ret = SteamUtils.GetIPv6ConnectivityState(ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP);
+			print("SteamUtils.GetIPv6ConnectivityState(" + ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP + ") : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
