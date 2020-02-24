@@ -89,7 +89,7 @@ public class SteamTest : MonoBehaviour {
 		if (!DllCheck.Test()) {
 			throw new System.Exception("DllCheck returned false.");
 		}
-		
+
 		try {
 			m_bInitialized = SteamAPI.Init();
 		}
@@ -109,7 +109,7 @@ public class SteamTest : MonoBehaviour {
 		// You must launch with "-debug_steamapi" in the launch args to recieve warnings.
 		SteamAPIWarningMessageHook = new SteamAPIWarningMessageHook_t(SteamAPIDebugTextHook);
 		SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
-		
+
 		// Register our Steam Callbacks
 		AppListTest = gameObject.AddComponent<SteamAppListTest>();
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
@@ -155,7 +155,7 @@ public class SteamTest : MonoBehaviour {
 		if (!m_bInitialized) {
 			return;
 		}
-		
+
 		SteamAPI.Shutdown();
 	}
 

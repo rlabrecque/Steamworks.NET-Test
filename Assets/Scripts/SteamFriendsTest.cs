@@ -163,6 +163,7 @@ public class SteamFriendsTest : MonoBehaviour {
 			CSteamID[] Clans = { m_Clan, TestConstants.Instance.k_SteamId_Group_SteamUniverse };
 			SteamAPICall_t handle = SteamFriends.DownloadClanActivityCounts(Clans, Clans.Length);
 			OnDownloadClanActivityCountsResultCallResult.Set(handle); // This call never seems to produce the CallResult.
+			OnDownloadClanActivityCountsResultCallResult.Set(handle);
 			print("SteamFriends.DownloadClanActivityCounts(" + Clans + ", " + Clans.Length + ") : " + handle);
 		}
 
@@ -357,6 +358,11 @@ public class SteamFriendsTest : MonoBehaviour {
 		GUILayout.Label("IsClanOfficialGameGroup(m_Clan) : " + SteamFriends.IsClanOfficialGameGroup(m_Clan));
 
 		GUILayout.Label("GetNumChatsWithUnreadPriorityMessages() : " + SteamFriends.GetNumChatsWithUnreadPriorityMessages());
+
+		if (GUILayout.Button("ActivateGameOverlayRemotePlayTogetherInviteDialog(m_Friend)")) {
+			SteamFriends.ActivateGameOverlayRemotePlayTogetherInviteDialog(m_Friend);
+			print("SteamFriends.ActivateGameOverlayRemotePlayTogetherInviteDialog(" + m_Friend + ")");
+		}
 
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();

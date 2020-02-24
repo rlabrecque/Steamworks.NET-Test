@@ -265,6 +265,7 @@ public class SteamUGCTest : MonoBehaviour {
 		if (GUILayout.Button("RequestUGCDetails(m_PublishedFileId, 5)")) {
 			SteamAPICall_t handle = SteamUGC.RequestUGCDetails(m_PublishedFileId, 5);
 			OnSteamUGCRequestUGCDetailsResultCallResult.Set(handle);
+			OnSteamUGCRequestUGCDetailsResultCallResult.Set(handle);
 			print("SteamUGC.RequestUGCDetails(" + m_PublishedFileId + ", " + 5 + ") : " + handle);
 		}
 

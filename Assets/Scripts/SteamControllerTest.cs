@@ -162,13 +162,13 @@ public class SteamControllerTest : MonoBehaviour {
 
 			GUILayout.Label("InGameControls Digital Actions:");
 			for (int j = 0; j < m_nInGameControlsDigitalActions; ++j) {
-				ControllerDigitalActionData_t ret = SteamController.GetDigitalActionData(m_ControllerHandles[i], m_InGameControlsDigitalActions[j]);
+				InputDigitalActionData_t ret = SteamController.GetDigitalActionData(m_ControllerHandles[i], m_InGameControlsDigitalActions[j]);
 				GUILayout.Label("GetDigitalActionData(" + m_ControllerHandles[i] + ", " + m_InGameControlsDigitalActions[j] + ") - " + ret.bState + " -- " + ret.bActive + " -- " + m_InGameControlsDigitalActionNames[j]);
 			}
 
 			GUILayout.Label("MenuControls Digital Actions:");
 			for (int j = 0; j < m_nMenuControlsDigitalActions; ++j) {
-				ControllerDigitalActionData_t ret = SteamController.GetDigitalActionData(m_ControllerHandles[i], m_MenuControlsDigitalActions[j]);
+				InputDigitalActionData_t ret = SteamController.GetDigitalActionData(m_ControllerHandles[i], m_MenuControlsDigitalActions[j]);
 				GUILayout.Label("GetDigitalActionData(" + m_ControllerHandles[i] + ", " + m_MenuControlsDigitalActions[j] + ") - " + ret.bState + " -- " + ret.bActive + " -- " + m_MenuControlsDigitalActionNames[j]);
 			}
 
@@ -218,7 +218,7 @@ public class SteamControllerTest : MonoBehaviour {
 			}
 
 			if (GUILayout.Button("GetMotionData(m_ControllerHandles[i])")) {
-				ControllerMotionData_t ret = SteamController.GetMotionData(m_ControllerHandles[i]);
+				InputMotionData_t ret = SteamController.GetMotionData(m_ControllerHandles[i]);
 				print("SteamController.GetMotionData(" + m_ControllerHandles[i] + ") : " + ret);
 			}
 
