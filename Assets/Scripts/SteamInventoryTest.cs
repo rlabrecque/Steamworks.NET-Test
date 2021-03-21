@@ -274,6 +274,8 @@ public class SteamInventoryTest : MonoBehaviour {
 
 		//SteamInventory.SubmitUpdateProperties() // TODO
 
+		//SteamInventory.InspectItem() // TODO
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}

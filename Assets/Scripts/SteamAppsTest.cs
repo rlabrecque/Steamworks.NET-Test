@@ -9,6 +9,7 @@ public class SteamAppsTest : MonoBehaviour {
 	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
 	protected Callback<NewUrlLaunchParameters_t> m_NewUrlLaunchParameters;
 	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
+	protected Callback<TimedTrialStatus_t> m_TimedTrialStatus;
 
 	private CallResult<FileDetailsResult_t> OnFileDetailsResultCallResult;
 
@@ -17,6 +18,7 @@ public class SteamAppsTest : MonoBehaviour {
 		m_RegisterActivationCodeResponse = Callback<RegisterActivationCodeResponse_t>.Create(OnRegisterActivationCodeResponse);
 		m_NewUrlLaunchParameters = Callback<NewUrlLaunchParameters_t>.Create(OnNewUrlLaunchParameters);
 		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
+		m_TimedTrialStatus = Callback<TimedTrialStatus_t>.Create(OnTimedTrialStatus);
 
 		OnFileDetailsResultCallResult = CallResult<FileDetailsResult_t>.Create(OnFileDetailsResult);
 	}
@@ -142,6 +144,13 @@ public class SteamAppsTest : MonoBehaviour {
 
 		GUILayout.Label("BIsSubscribedFromFamilySharing() : " + SteamApps.BIsSubscribedFromFamilySharing());
 
+		{
+			uint punSecondsAllowed;
+			uint punSecondsPlayed;
+			bool ret = SteamApps.BIsTimedTrial(out punSecondsAllowed, out punSecondsPlayed);
+			GUILayout.Label("BIsTimedTrial(out punSecondsAllowed, out punSecondsPlayed) : " + ret + " -- " + punSecondsAllowed + " -- " + punSecondsPlayed);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -164,5 +173,9 @@ public class SteamAppsTest : MonoBehaviour {
 
 	void OnFileDetailsResult(FileDetailsResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + FileDetailsResult_t.k_iCallback + " - FileDetailsResult] - " + pCallback.m_eResult + " -- " + pCallback.m_ulFileSize + " -- " + pCallback.m_FileSHA + " -- " + pCallback.m_unFlags);
+	}
+
+	void OnTimedTrialStatus(TimedTrialStatus_t pCallback) {
+		Debug.Log("[" + TimedTrialStatus_t.k_iCallback + " - TimedTrialStatus] - " + pCallback.m_unAppID + " -- " + pCallback.m_bIsOffline + " -- " + pCallback.m_unSecondsAllowed + " -- " + pCallback.m_unSecondsPlayed);
 	}
 }

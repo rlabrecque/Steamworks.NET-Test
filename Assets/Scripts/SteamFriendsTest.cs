@@ -23,6 +23,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	protected Callback<GameConnectedChatLeave_t> m_GameConnectedChatLeave;
 	protected Callback<GameConnectedFriendChatMsg_t> m_GameConnectedFriendChatMsg;
 	protected Callback<UnreadChatMessagesChanged_t> m_UnreadChatMessagesChanged;
+	protected Callback<OverlayBrowserProtocolNavigation_t> m_OverlayBrowserProtocolNavigation;
 
 	private CallResult<ClanOfficerListResponse_t> OnClanOfficerListResponseCallResult;
 	private CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
@@ -57,6 +58,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		m_GameConnectedChatLeave = Callback<GameConnectedChatLeave_t>.Create(OnGameConnectedChatLeave);
 		m_GameConnectedFriendChatMsg = Callback<GameConnectedFriendChatMsg_t>.Create(OnGameConnectedFriendChatMsg);
 		m_UnreadChatMessagesChanged = Callback<UnreadChatMessagesChanged_t>.Create(OnUnreadChatMessagesChanged);
+		m_OverlayBrowserProtocolNavigation = Callback<OverlayBrowserProtocolNavigation_t>.Create(OnOverlayBrowserProtocolNavigation);
 
 		OnClanOfficerListResponseCallResult = CallResult<ClanOfficerListResponse_t>.Create(OnClanOfficerListResponse);
 		OnDownloadClanActivityCountsResultCallResult = CallResult<DownloadClanActivityCountsResult_t>.Create(OnDownloadClanActivityCountsResult);
@@ -364,6 +366,16 @@ public class SteamFriendsTest : MonoBehaviour {
 			print("SteamFriends.ActivateGameOverlayRemotePlayTogetherInviteDialog(" + m_Friend + ")");
 		}
 
+		if (GUILayout.Button("RegisterProtocolInOverlayBrowser(\"test\")")) {
+			bool ret = SteamFriends.RegisterProtocolInOverlayBrowser("test");
+			print("SteamFriends.RegisterProtocolInOverlayBrowser(" + "\"test\"" + ") : " + ret);
+		}
+
+		if (GUILayout.Button("ActivateGameOverlayInviteDialogConnectString(\"test\")")) {
+			SteamFriends.ActivateGameOverlayInviteDialogConnectString("test");
+			print("SteamFriends.ActivateGameOverlayInviteDialogConnectString(" + "\"test\"" + ")");
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -453,5 +465,9 @@ public class SteamFriendsTest : MonoBehaviour {
 
 	void OnUnreadChatMessagesChanged(UnreadChatMessagesChanged_t pCallback) {
 		Debug.Log("[" + UnreadChatMessagesChanged_t.k_iCallback + " - UnreadChatMessagesChanged]");
+	}
+
+	void OnOverlayBrowserProtocolNavigation(OverlayBrowserProtocolNavigation_t pCallback) {
+		Debug.Log("[" + OverlayBrowserProtocolNavigation_t.k_iCallback + " - OverlayBrowserProtocolNavigation] - " + pCallback.rgchURI);
 	}
 }

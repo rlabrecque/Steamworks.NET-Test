@@ -12,10 +12,10 @@ public class SteamTest : MonoBehaviour {
 		SteamAppList,
 		SteamApps,
 		SteamClient,
-		SteamController,
 		SteamFriends,
 		SteamHTMLSurface,
 		SteamHTTP,
+		SteamInput,
 		SteamInventory,
 		SteamMatchmaking,
 		SteamMatchmakingServers,
@@ -23,7 +23,7 @@ public class SteamTest : MonoBehaviour {
 		SteamMusicRemote,
 		SteamNetworking,
 		SteamParentalSettings,
-        SteamParties,
+		SteamParties,
 		SteamRemoteStorage,
 		SteamScreenshots,
 		SteamUGC,
@@ -44,23 +44,23 @@ public class SteamTest : MonoBehaviour {
 	private SteamAppListTest AppListTest;
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
-	private SteamControllerTest ControllerTest;
 	private SteamFriendsTest FriendsTest;
 	private SteamHTMLSurfaceTest HTMLSurfaceTest;
 	private SteamHTTPTest HTTPTest;
+	private SteamInputTest InputTest;
 	private SteamInventoryTest InventoryTest;
-	private SteamMatchmakingTest MatchmakingTest;
 	private SteamMatchmakingServersTest MatchmakingServersTest;
-	private SteamMusicTest MusicTest;
+	private SteamMatchmakingTest MatchmakingTest;
 	private SteamMusicRemoteTest MusicRemoteTest;
+	private SteamMusicTest MusicTest;
 	private SteamNetworkingTest NetworkingTest;
 	private SteamParentalSettingsTest ParentalSettingsTest;
 	private SteamPartiesTest PartiesTest;
-    private SteamRemoteStorageTest RemoteStorageTest;
+	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
 	private SteamUGCTest UGCTest;
-	private SteamUserTest UserTest;
 	private SteamUserStatsTest UserStatsTest;
+	private SteamUserTest UserTest;
 	private SteamUtilsTest UtilsTest;
 	private SteamVideoTest VideoTest;
 
@@ -114,25 +114,26 @@ public class SteamTest : MonoBehaviour {
 		AppListTest = gameObject.AddComponent<SteamAppListTest>();
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
-		ControllerTest = gameObject.AddComponent<SteamControllerTest>();
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
 		HTMLSurfaceTest = gameObject.AddComponent<SteamHTMLSurfaceTest>();
 		HTTPTest = gameObject.AddComponent<SteamHTTPTest>();
+		InputTest = gameObject.AddComponent<SteamInputTest>();
 		InventoryTest = gameObject.AddComponent<SteamInventoryTest>();
-		MatchmakingTest = gameObject.AddComponent<SteamMatchmakingTest>();
 		MatchmakingServersTest = gameObject.AddComponent<SteamMatchmakingServersTest>();
-		MusicTest = gameObject.AddComponent<SteamMusicTest>();
+		MatchmakingTest = gameObject.AddComponent<SteamMatchmakingTest>();
 		MusicRemoteTest = gameObject.AddComponent<SteamMusicRemoteTest>();
+		MusicTest = gameObject.AddComponent<SteamMusicTest>();
 		NetworkingTest = gameObject.AddComponent<SteamNetworkingTest>();
 		ParentalSettingsTest = gameObject.AddComponent<SteamParentalSettingsTest>();
 		PartiesTest = gameObject.AddComponent<SteamPartiesTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
-        ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
 		UGCTest = gameObject.AddComponent<SteamUGCTest>();
-		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
+		UserTest = gameObject.AddComponent<SteamUserTest>();
 		UtilsTest = gameObject.AddComponent<SteamUtilsTest>();
 		VideoTest = gameObject.AddComponent<SteamVideoTest>();
+		ScreenshotsTest = gameObject.AddComponent<SteamScreenshotsTest>();
+
 	}
 
 	void OnEnable() {
@@ -171,13 +172,17 @@ public class SteamTest : MonoBehaviour {
 		}
 		else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.RightArrow)) {
 			++m_State;
-			if (m_State == EGUIState.MAX_STATES)
+
+			if (m_State == EGUIState.MAX_STATES) {
 				m_State = (EGUIState)0;
+			}
 		}
 		else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
 			--m_State;
-			if (m_State == (EGUIState)(-1))
+
+			if (m_State == (EGUIState)(-1)) {
 				m_State = EGUIState.MAX_STATES - 1;
+			}
 		}
 	}
 
@@ -199,9 +204,6 @@ public class SteamTest : MonoBehaviour {
 			case EGUIState.SteamClient:
 				ClientTest.RenderOnGUI();
 				break;
-			case EGUIState.SteamController:
-				ControllerTest.RenderOnGUI();
-				break;
 			case EGUIState.SteamFriends:
 				FriendsTest.RenderOnGUI();
 				break;
@@ -210,6 +212,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamHTTP:
 				HTTPTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamInput:
+				InputTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamInventory:
 				InventoryTest.RenderOnGUI();
@@ -232,10 +237,10 @@ public class SteamTest : MonoBehaviour {
 			case EGUIState.SteamParentalSettings:
 				ParentalSettingsTest.RenderOnGUI();
 				break;
-            case EGUIState.SteamParties:
-                PartiesTest.RenderOnGUI();
-                break;
-            case EGUIState.SteamRemoteStorage:
+			case EGUIState.SteamParties:
+				PartiesTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamRemoteStorage:
 				RemoteStorageTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamScreenshots:
@@ -261,9 +266,11 @@ public class SteamTest : MonoBehaviour {
 
 	public static void PrintArray(string name, IList arr) {
 		System.Text.StringBuilder strBuilder = new System.Text.StringBuilder(name + '\n');
+
 		for (int i = 0; i < arr.Count; ++i) {
 			strBuilder.AppendLine(arr[i].ToString());
 		}
+
 		print(strBuilder);
 	}
 }

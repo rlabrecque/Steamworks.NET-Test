@@ -209,6 +209,11 @@ public class SteamUserTest : MonoBehaviour {
 			print("SteamUser.GetDurationControl() : " + handle);
 		}
 
+		if (GUILayout.Button("BSetDurationControlOnlineState(EDurationControlOnlineState.k_EDurationControlOnlineState_Offline)")) {
+			bool ret = SteamUser.BSetDurationControlOnlineState(EDurationControlOnlineState.k_EDurationControlOnlineState_Offline);
+			print("SteamUser.BSetDurationControlOnlineState(" + EDurationControlOnlineState.k_EDurationControlOnlineState_Offline + ") : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}

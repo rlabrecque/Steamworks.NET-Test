@@ -141,10 +141,10 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamHTTP(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMHTTP_INTERFACE_VERSION + ") : " + ret);
 		}
 
-		if (GUILayout.Button("GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION)")) {
-			System.IntPtr ret = SteamClient.GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION);
-			print("SteamClient.GetISteamController(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMCONTROLLER_INTERFACE_VERSION + ") : " + ret);
-		}
+		//if (GUILayout.Button("GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION)")) {
+		//	System.IntPtr ret = SteamClient.GetISteamController(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMCONTROLLER_INTERFACE_VERSION);
+		//	print("SteamClient.GetISteamController(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMCONTROLLER_INTERFACE_VERSION + ") : " + ret);
+		//}
 
 		if (GUILayout.Button("GetISteamUGC(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUGC_INTERFACE_VERSION)")) {
 			System.IntPtr ret = SteamClient.GetISteamUGC(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMUGC_INTERFACE_VERSION);

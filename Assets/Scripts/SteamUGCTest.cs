@@ -111,6 +111,23 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.GetQueryUGCResult(" + m_UGCQueryHandle + ", " + 0 + ", " + "out Details" + ") : " + ret + " -- " + Details);
 		}
 
+		if (GUILayout.Button("GetQueryUGCNumTags(m_UGCQueryHandle, 0)")) {
+			uint ret = SteamUGC.GetQueryUGCNumTags(m_UGCQueryHandle, 0);
+			print("SteamUGC.GetQueryUGCNumTags(" + m_UGCQueryHandle + ", " + 0 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("GetQueryUGCTag(m_UGCQueryHandle, 0, 0, out Tag, 1024)")) {
+			string Tag;
+			bool ret = SteamUGC.GetQueryUGCTag(m_UGCQueryHandle, 0, 0, out Tag, 1024);
+			print("SteamUGC.GetQueryUGCTag(" + m_UGCQueryHandle + ", " + 0 + ", " + 0 + ", " + "out Tag" + ", " + 1024 + ") : " + ret + " -- " + Tag);
+		}
+
+		if (GUILayout.Button("GetQueryUGCTagDisplayName(m_UGCQueryHandle, 0, 0, out DisplayName, 1024)")) {
+			string DisplayName;
+			bool ret = SteamUGC.GetQueryUGCTagDisplayName(m_UGCQueryHandle, 0, 0, out DisplayName, 1024);
+			print("SteamUGC.GetQueryUGCTagDisplayName(" + m_UGCQueryHandle + ", " + 0 + ", " + 0 + ", " + "out DisplayName" + ", " + 1024 + ") : " + ret + " -- " + DisplayName);
+		}
+
 		if (GUILayout.Button("GetQueryUGCPreviewURL(m_UGCQueryHandle, 0, out URL, 1024)")) {
 			string URL;
 			bool ret = SteamUGC.GetQueryUGCPreviewURL(m_UGCQueryHandle, 0, out URL, 1024);

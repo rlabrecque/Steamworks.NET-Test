@@ -89,13 +89,6 @@ public class SteamUtilsTest : MonoBehaviour {
 			}
 		}
 
-		{
-			uint IP;
-			ushort Port;
-			bool ret = SteamUtils.GetCSERIPPort(out IP, out Port);
-			GUILayout.Label("GetCSERIPPort(out IP, out Port) : " + ret + " -- " + IP + " -- " + Port);
-		}
-
 		GUILayout.Label("GetCurrentBatteryPower() : " + SteamUtils.GetCurrentBatteryPower());
 
 		GUILayout.Label("GetAppID() : " + SteamUtils.GetAppID());
@@ -169,11 +162,7 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.InitFilterText() : " + ret);
 		}
 
-		if (GUILayout.Button("FilterText(out OutFilteredText, (uint)m_FilterTextInputMessage.Length, m_FilterTextInputMessage, false)")) {
-			string OutFilteredText;
-			int ret = SteamUtils.FilterText(out OutFilteredText, (uint)m_FilterTextInputMessage.Length, m_FilterTextInputMessage, false);
-			print("SteamUtils.FilterText(" + "out OutFilteredText" + ", " + (uint)m_FilterTextInputMessage.Length + ", " + m_FilterTextInputMessage + ", " + false + ") : " + ret + " -- " + OutFilteredText);
-		}
+		//SteamUtils.FilterText() // Should be called inside a chat callback!
 
 		if (GUILayout.Button("GetIPv6ConnectivityState(ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP)")) {
 			ESteamIPv6ConnectivityState ret = SteamUtils.GetIPv6ConnectivityState(ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP);

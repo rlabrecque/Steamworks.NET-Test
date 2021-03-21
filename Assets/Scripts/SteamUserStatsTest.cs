@@ -318,13 +318,19 @@ public class SteamUserStatsTest : MonoBehaviour {
 			}
 		}
 
-		//SteamUserStats.InstallPS3Trophies() // PS3 Only.
+		{
+			int MinProgress;
+			int MaxProgress;
+			bool ret = SteamUserStats.GetAchievementProgressLimits("ACH_WIN_100_GAMES", out MinProgress, out MaxProgress);
+			GUILayout.Label("GetAchievementProgressLimits(\"ACH_WIN_100_GAMES\", out MinProgress, out MaxProgress) : " + ret + " -- " + MinProgress + " -- " + MaxProgress);
+		}
 
-		//SteamUserStats.GetTrophySpaceRequiredBeforeInstall() // PS3 Only.
-
-		//SteamUserStats.SetUserStatsData() // PS3 Only.
-
-		//SteamUserStats.GetUserStatsData() // PS3 Only.
+		{
+			float MinProgress;
+			float MaxProgress;
+			bool ret = SteamUserStats.GetAchievementProgressLimits("ACH_TRAVEL_FAR_ACCUM", out MinProgress, out MaxProgress);
+			GUILayout.Label("GetAchievementProgressLimits(\"ACH_TRAVEL_FAR_ACCUM\", out MinProgress, out MaxProgress) : " + ret + " -- " + MinProgress + " -- " + MaxProgress);
+		}
 
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
