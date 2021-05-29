@@ -12,10 +12,10 @@ public class SteamInventoryTest : MonoBehaviour {
 	protected Callback<SteamInventoryResultReady_t> m_SteamInventoryResultReady;
 	protected Callback<SteamInventoryFullUpdate_t> m_SteamInventoryFullUpdate;
 	protected Callback<SteamInventoryDefinitionUpdate_t> m_SteamInventoryDefinitionUpdate;
-	protected Callback<SteamInventoryStartPurchaseResult_t> m_SteamInventoryStartPurchaseResult;
 	protected Callback<SteamInventoryRequestPricesResult_t> m_SteamInventoryRequestPricesResult;
 
 	private CallResult<SteamInventoryEligiblePromoItemDefIDs_t> OnSteamInventoryEligiblePromoItemDefIDsCallResult;
+	private CallResult<SteamInventoryStartPurchaseResult_t> OnSteamInventoryStartPurchaseResultCallResult;
 
 	public void OnEnable() {
 		m_SteamInventoryResult = SteamInventoryResult_t.Invalid;
@@ -26,10 +26,10 @@ public class SteamInventoryTest : MonoBehaviour {
 		m_SteamInventoryResultReady = Callback<SteamInventoryResultReady_t>.Create(OnSteamInventoryResultReady);
 		m_SteamInventoryFullUpdate = Callback<SteamInventoryFullUpdate_t>.Create(OnSteamInventoryFullUpdate);
 		m_SteamInventoryDefinitionUpdate = Callback<SteamInventoryDefinitionUpdate_t>.Create(OnSteamInventoryDefinitionUpdate);
-		m_SteamInventoryStartPurchaseResult = Callback<SteamInventoryStartPurchaseResult_t>.Create(OnSteamInventoryStartPurchaseResult);
 		m_SteamInventoryRequestPricesResult = Callback<SteamInventoryRequestPricesResult_t>.Create(OnSteamInventoryRequestPricesResult);
 
 		OnSteamInventoryEligiblePromoItemDefIDsCallResult = CallResult<SteamInventoryEligiblePromoItemDefIDs_t>.Create(OnSteamInventoryEligiblePromoItemDefIDs);
+		OnSteamInventoryStartPurchaseResultCallResult = CallResult<SteamInventoryStartPurchaseResult_t>.Create(OnSteamInventoryStartPurchaseResult);
 	}
 
 	public void OnDisable() {
@@ -305,7 +305,7 @@ public class SteamInventoryTest : MonoBehaviour {
 		print("SteamInventory.GetEligiblePromoItemDefinitionIDs(pCallback.m_steamID, ItemDefIDs, ref ItemDefIDsArraySize) - " + ret + " -- " + ItemDefIDsArraySize);
 	}
 
-	void OnSteamInventoryStartPurchaseResult(SteamInventoryStartPurchaseResult_t pCallback) {
+	void OnSteamInventoryStartPurchaseResult(SteamInventoryStartPurchaseResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + SteamInventoryStartPurchaseResult_t.k_iCallback + " - SteamInventoryStartPurchaseResult] - " + pCallback.m_result + " -- " + pCallback.m_ulOrderID + " -- " + pCallback.m_ulTransID);
 	}
 
