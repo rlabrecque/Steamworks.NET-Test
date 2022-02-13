@@ -10,6 +10,8 @@ public class SteamUGCTest : MonoBehaviour {
 
 	protected Callback<ItemInstalled_t> m_ItemInstalled;
 	protected Callback<DownloadItemResult_t> m_DownloadItemResult;
+	protected Callback<UserSubscribedItemsListChanged_t> m_UserSubscribedItemsListChanged;
+	protected Callback<WorkshopEULAStatus_t> m_WorkshopEULAStatus;
 
 	private CallResult<SteamUGCQueryCompleted_t> OnSteamUGCQueryCompletedCallResult;
 	private CallResult<SteamUGCRequestUGCDetailsResult_t> OnSteamUGCRequestUGCDetailsResultCallResult;
@@ -34,6 +36,8 @@ public class SteamUGCTest : MonoBehaviour {
 
 		m_ItemInstalled = Callback<ItemInstalled_t>.Create(OnItemInstalled);
 		m_DownloadItemResult = Callback<DownloadItemResult_t>.Create(OnDownloadItemResult);
+		m_UserSubscribedItemsListChanged = Callback<UserSubscribedItemsListChanged_t>.Create(OnUserSubscribedItemsListChanged);
+		m_WorkshopEULAStatus = Callback<WorkshopEULAStatus_t>.Create(OnWorkshopEULAStatus);
 
 		OnSteamUGCQueryCompletedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
 		OnSteamUGCRequestUGCDetailsResultCallResult = CallResult<SteamUGCRequestUGCDetailsResult_t>.Create(OnSteamUGCRequestUGCDetailsResult);
@@ -272,6 +276,16 @@ public class SteamUGCTest : MonoBehaviour {
 		if (GUILayout.Button("SetRankedByTrendDays(m_UGCQueryHandle, 7)")) {
 			bool ret = SteamUGC.SetRankedByTrendDays(m_UGCQueryHandle, 7);
 			print("SteamUGC.SetRankedByTrendDays(" + m_UGCQueryHandle + ", " + 7 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("SetTimeCreatedDateRange(m_UGCQueryHandle, RTime32(0), RTime32(0))")) {
+			bool ret = SteamUGC.SetTimeCreatedDateRange(m_UGCQueryHandle, RTime32(0), RTime32(0));
+			print("SteamUGC.SetTimeCreatedDateRange(" + m_UGCQueryHandle + ", " + RTime32(0) + ", " + RTime32(0) + ") : " + ret);
+		}
+
+		if (GUILayout.Button("SetTimeUpdatedDateRange(m_UGCQueryHandle, RTime32(0), RTime32(0))")) {
+			bool ret = SteamUGC.SetTimeUpdatedDateRange(m_UGCQueryHandle, RTime32(0), RTime32(0));
+			print("SteamUGC.SetTimeUpdatedDateRange(" + m_UGCQueryHandle + ", " + RTime32(0) + ", " + RTime32(0) + ") : " + ret);
 		}
 
 		if (GUILayout.Button("AddRequiredKeyValueTag(m_UGCQueryHandle, \"TestKey\", \"TestValue\")")) {
@@ -529,6 +543,17 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.DeleteItem(" + m_PublishedFileId + ") : " + handle);
 		}
 
+		if (GUILayout.Button("ShowWorkshopEULA()")) {
+			bool ret = SteamUGC.ShowWorkshopEULA();
+			print("SteamUGC.ShowWorkshopEULA() : " + ret);
+		}
+
+		if (GUILayout.Button("GetWorkshopEULAStatus()")) {
+			SteamAPICall_t handle = SteamUGC.GetWorkshopEULAStatus();
+			OnWorkshopEULAStatusCallResult.Set(handle);
+			print("SteamUGC.GetWorkshopEULAStatus() : " + handle);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -603,5 +628,13 @@ public class SteamUGCTest : MonoBehaviour {
 
 	void OnDeleteItemResult(DeleteItemResult_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + DeleteItemResult_t.k_iCallback + " - DeleteItemResult] - " + pCallback.m_eResult + " -- " + pCallback.m_nPublishedFileId);
+	}
+
+	void OnUserSubscribedItemsListChanged(UserSubscribedItemsListChanged_t pCallback) {
+		Debug.Log("[" + UserSubscribedItemsListChanged_t.k_iCallback + " - UserSubscribedItemsListChanged] - " + pCallback.m_nAppID);
+	}
+
+	void OnWorkshopEULAStatus(WorkshopEULAStatus_t pCallback) {
+		Debug.Log("[" + WorkshopEULAStatus_t.k_iCallback + " - WorkshopEULAStatus] - " + pCallback.m_eResult + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_unVersion + " -- " + pCallback.m_rtAction + " -- " + pCallback.m_bAccepted + " -- " + pCallback.m_bNeedsAction);
 	}
 }

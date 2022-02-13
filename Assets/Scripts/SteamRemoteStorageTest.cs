@@ -8,6 +8,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	private Vector2 m_ScrollPos;
 	private string m_Message;
 	private int m_FileCount;
+	private int m_FileChangeCount;
 	private int m_FileSize;
 	private ulong m_TotalBytes;
 	private int m_FileSizeInBytes;
@@ -18,14 +19,11 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	private PublishedFileUpdateHandle_t m_PublishedFileUpdateHandle;
 	private SteamAPICall_t m_FileReadAsyncHandle;
 
-	protected Callback<RemoteStorageAppSyncedClient_t> m_RemoteStorageAppSyncedClient;
-	protected Callback<RemoteStorageAppSyncedServer_t> m_RemoteStorageAppSyncedServer;
-	protected Callback<RemoteStorageAppSyncProgress_t> m_RemoteStorageAppSyncProgress;
-	protected Callback<RemoteStorageAppSyncStatusCheck_t> m_RemoteStorageAppSyncStatusCheck;
 	protected Callback<RemoteStoragePublishedFileSubscribed_t> m_RemoteStoragePublishedFileSubscribed;
 	protected Callback<RemoteStoragePublishedFileUnsubscribed_t> m_RemoteStoragePublishedFileUnsubscribed;
 	protected Callback<RemoteStoragePublishedFileDeleted_t> m_RemoteStoragePublishedFileDeleted;
 	protected Callback<RemoteStoragePublishedFileUpdated_t> m_RemoteStoragePublishedFileUpdated;
+	protected Callback<RemoteStorageLocalFileChange_t> m_RemoteStorageLocalFileChange;
 
 	private CallResult<RemoteStorageFileShareResult_t> OnRemoteStorageFileShareResultCallResult;
 	private CallResult<RemoteStoragePublishFileResult_t> OnRemoteStoragePublishFileResultCallResult;
@@ -51,14 +49,11 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 	public void OnEnable() {
 		m_Message = "";
 
-		m_RemoteStorageAppSyncedClient = Callback<RemoteStorageAppSyncedClient_t>.Create(OnRemoteStorageAppSyncedClient);
-		m_RemoteStorageAppSyncedServer = Callback<RemoteStorageAppSyncedServer_t>.Create(OnRemoteStorageAppSyncedServer);
-		m_RemoteStorageAppSyncProgress = Callback<RemoteStorageAppSyncProgress_t>.Create(OnRemoteStorageAppSyncProgress);
-		m_RemoteStorageAppSyncStatusCheck = Callback<RemoteStorageAppSyncStatusCheck_t>.Create(OnRemoteStorageAppSyncStatusCheck);
 		m_RemoteStoragePublishedFileSubscribed = Callback<RemoteStoragePublishedFileSubscribed_t>.Create(OnRemoteStoragePublishedFileSubscribed);
 		m_RemoteStoragePublishedFileUnsubscribed = Callback<RemoteStoragePublishedFileUnsubscribed_t>.Create(OnRemoteStoragePublishedFileUnsubscribed);
 		m_RemoteStoragePublishedFileDeleted = Callback<RemoteStoragePublishedFileDeleted_t>.Create(OnRemoteStoragePublishedFileDeleted);
 		m_RemoteStoragePublishedFileUpdated = Callback<RemoteStoragePublishedFileUpdated_t>.Create(OnRemoteStoragePublishedFileUpdated);
+		m_RemoteStorageLocalFileChange = Callback<RemoteStorageLocalFileChange_t>.Create(OnRemoteStorageLocalFileChange);
 
 		OnRemoteStorageFileShareResultCallResult = CallResult<RemoteStorageFileShareResult_t>.Create(OnRemoteStorageFileShareResult);
 		OnRemoteStoragePublishFileResultCallResult = CallResult<RemoteStoragePublishFileResult_t>.Create(OnRemoteStoragePublishFileResult);
@@ -88,6 +83,7 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 		GUILayout.Label("m_Message:");
 		m_Message = GUILayout.TextField(m_Message, 40);
 		GUILayout.Label("m_FileCount: " + m_FileCount);
+		GUILayout.Label("m_FileChangeCount: " + m_FileChangeCount);
 		GUILayout.Label("m_FileSize: " + m_FileSize);
 		GUILayout.Label("m_TotalBytes: " + m_TotalBytes);
 		GUILayout.Label("m_FileSizeInBytes: " + m_FileSizeInBytes);
@@ -277,18 +273,6 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 		GUILayout.Label("GetCachedUGCHandle(0) : " + SteamRemoteStorage.GetCachedUGCHandle(0));
 
-		//SteamRemoteStorage.GetFileListFromServer() // PS3 Only.
-
-		//SteamRemoteStorage.FileFetch() // PS3 Only.
-
-		//SteamRemoteStorage.FilePersist() // PS3 Only.
-
-		//SteamRemoteStorage.SynchronizeToClient() // PS3 Only.
-
-		//SteamRemoteStorage.SynchronizeToServer() // PS3 Only.
-
-		//SteamRemoteStorage.ResetFileRequestState() // PS3 Only.
-
 		if (GUILayout.Button("PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), \"Title!\", \"Description!\", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity)")) {
 			string[] Tags = { "Test1", "Test2", "Test3" };
 			SteamAPICall_t handle = SteamRemoteStorage.PublishWorkshopFile(MESSAGE_FILE_NAME, null, SteamUtils.GetAppID(), "Title!", "Description!", ERemoteStoragePublishedFileVisibility.k_ERemoteStoragePublishedFileVisibilityPublic, Tags, EWorkshopFileType.k_EWorkshopFileTypeCommunity);
@@ -428,24 +412,30 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 
 		//SteamRemoteStorage.UGCDownloadToLocation() // There is absolutely no documentation on how to use this function
 
+		{
+			m_FileChangeCount = SteamRemoteStorage.GetLocalFileChangeCount();
+			GUILayout.Label("GetLocalFileChangeCount() : " + m_FileChangeCount);
+		}
+
+		for (int i = 0; i < m_FileChangeCount; ++i) {
+			ERemoteStorageLocalFileChange ChangeType = ERemoteStorageLocalFileChange.k_ERemoteStorageLocalFileChange_Invalid;
+			ERemoteStorageFilePathType FilePathType = ERemoteStorageFilePathType.k_ERemoteStorageFilePathType_Invalid;
+			string FileName = SteamRemoteStorage.GetLocalFileChange(i, out ChangeType, out FilePathType);
+			GUILayout.Label("GetLocalFileChange(i, out ChangeType, out FilePathType) : " + FileName + " -- " + ChangeType + " -- " + FilePathType);
+		}
+
+		if (GUILayout.Button("BeginFileWriteBatch()")) {
+			bool ret = SteamRemoteStorage.BeginFileWriteBatch();
+			print("SteamRemoteStorage.BeginFileWriteBatch() : " + ret);
+		}
+
+		if (GUILayout.Button("EndFileWriteBatch()")) {
+			bool ret = SteamRemoteStorage.EndFileWriteBatch();
+			print("SteamRemoteStorage.EndFileWriteBatch() : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
-	}
-
-	void OnRemoteStorageAppSyncedClient(RemoteStorageAppSyncedClient_t pCallback) {
-		Debug.Log("[" + RemoteStorageAppSyncedClient_t.k_iCallback + " - RemoteStorageAppSyncedClient] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_unNumDownloads);
-	}
-
-	void OnRemoteStorageAppSyncedServer(RemoteStorageAppSyncedServer_t pCallback) {
-		Debug.Log("[" + RemoteStorageAppSyncedServer_t.k_iCallback + " - RemoteStorageAppSyncedServer] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult + " -- " + pCallback.m_unNumUploads);
-	}
-
-	void OnRemoteStorageAppSyncProgress(RemoteStorageAppSyncProgress_t pCallback) {
-		Debug.Log("[" + RemoteStorageAppSyncProgress_t.k_iCallback + " - RemoteStorageAppSyncProgress] - " + pCallback.m_rgchCurrentFile + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_uBytesTransferredThisChunk + " -- " + pCallback.m_dAppPercentComplete + " -- " + pCallback.m_bUploading);
-	}
-
-	void OnRemoteStorageAppSyncStatusCheck(RemoteStorageAppSyncStatusCheck_t pCallback) {
-		Debug.Log("[" + RemoteStorageAppSyncStatusCheck_t.k_iCallback + " - RemoteStorageAppSyncStatusCheck] - " + pCallback.m_nAppID + " -- " + pCallback.m_eResult);
 	}
 
 	void OnRemoteStorageFileShareResult(RemoteStorageFileShareResult_t pCallback, bool bIOFailure) {
@@ -571,5 +561,9 @@ public class SteamRemoteStorageTest : MonoBehaviour {
 				m_Message = System.Text.Encoding.UTF8.GetString(Data, (int)pCallback.m_nOffset, (int)pCallback.m_cubRead);
 			}
 		}
+	}
+
+	void OnRemoteStorageLocalFileChange(RemoteStorageLocalFileChange_t pCallback) {
+		Debug.Log("[" + RemoteStorageLocalFileChange_t.k_iCallback + " - RemoteStorageLocalFileChange]");
 	}
 }

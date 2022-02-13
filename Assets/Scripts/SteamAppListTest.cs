@@ -48,10 +48,10 @@ public class SteamAppListTest : MonoBehaviour {
 	}
 
 	void OnSteamAppInstalled(SteamAppInstalled_t pCallback) {
-		Debug.Log("[" + SteamAppInstalled_t.k_iCallback + " - SteamAppInstalled] - " + pCallback.m_nAppID);
+		Debug.Log("[" + SteamAppInstalled_t.k_iCallback + " - SteamAppInstalled] - " + pCallback.m_nAppID + " -- " + pCallback.m_iInstallFolderIndex);
 	}
 
 	void OnSteamAppUninstalled(SteamAppUninstalled_t pCallback) {
-		Debug.Log("[" + SteamAppUninstalled_t.k_iCallback + " - SteamAppUninstalled] - " + pCallback.m_nAppID);
+		Debug.Log("[" + SteamAppUninstalled_t.k_iCallback + " - SteamAppUninstalled] - " + pCallback.m_nAppID + " -- " + pCallback.m_iInstallFolderIndex);
 	}
 }

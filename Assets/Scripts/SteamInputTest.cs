@@ -7,17 +7,25 @@ public class SteamInputTest : MonoBehaviour {
 	private bool m_InputInitialized;
 	private int m_nInputs;
 
+	protected Callback<SteamInputDeviceConnected_t> m_SteamInputDeviceConnected;
+	protected Callback<SteamInputDeviceDisconnected_t> m_SteamInputDeviceDisconnected;
+	protected Callback<SteamInputConfigurationLoaded_t> m_SteamInputConfigurationLoaded;
+
 	public void OnEnable() {
-		m_InputInitialized = SteamInput.Init();
+		m_InputInitialized = SteamInput.Init(false);
 		print("SteamInput.Init() - " + m_InputInitialized);
 		m_InputHandles = new InputHandle_t[Constants.STEAM_INPUT_MAX_COUNT];
 
 		if (m_InputInitialized) {
+			SteamInput.EnableDeviceCallbacks();
 			Precache();
 		}
 
 		// TODO: Activate some default ActionSet?
 
+		m_SteamInputDeviceConnected = Callback<SteamInputDeviceConnected_t>.Create(OnSteamInputDeviceConnected);
+		m_SteamInputDeviceDisconnected = Callback<SteamInputDeviceDisconnected_t>.Create(OnSteamInputDeviceDisconnected);
+		m_SteamInputConfigurationLoaded = Callback<SteamInputConfigurationLoaded_t>.Create(OnSteamInputConfigurationLoaded);
 	}
 
 	void OnDisable() {
@@ -129,12 +137,25 @@ public class SteamInputTest : MonoBehaviour {
 
 		//SteamInput.Shutdown() // Called in OnDisable()
 
+		if (GUILayout.Button("SetInputActionManifestFilePath(\"\")")) {
+			bool ret = SteamInput.SetInputActionManifestFilePath("");
+			print("SteamInput.SetInputActionManifestFilePath(" + "\"\"" + ") : " + ret);
+		}
+
 		//SteamInput.RunFrame() // N/A - This is called automatically by SteamAPI.RunCallbacks()
+
+		//SteamInput.BWaitForData() // N/A - Only should be called when using a dedicated Input thread.
+
+		GUILayout.Label("BNewDataAvailable() : " + SteamInput.BNewDataAvailable());
 
 		{
 			m_nInputs = SteamInput.GetConnectedControllers(m_InputHandles);
 			GUILayout.Label("GetConnectedControllers(m_InputHandles) : " + m_nInputs);
 		}
+
+		//SteamInput.EnableDeviceCallbacks() // Called in OnEnable()
+
+		//SteamInput.EnableActionEventCallbacks() // TODO
 
 		//SteamInput.GetActionSetHandle() // Called in Precache()
 
@@ -182,6 +203,11 @@ public class SteamInputTest : MonoBehaviour {
 				}
 			}
 
+			if (GUILayout.Button("GetStringForDigitalActionName(m_InGameControlsDigitalActions[(int)EDigitalActions_InGameControls.fire])")) {
+				string ret = SteamInput.GetStringForDigitalActionName(m_InGameControlsDigitalActions[(int)EDigitalActions_InGameControls.fire]);
+				print("SteamInput.GetStringForDigitalActionName(" + m_InGameControlsDigitalActions[(int)EDigitalActions_InGameControls.fire] + ") : " + ret);
+			}
+
 			//SteamInput.GetAnalogActionHandle() // Called in Precache()
 
 			GUILayout.Label("InGameControls Analog Actions:");
@@ -199,15 +225,24 @@ public class SteamInputTest : MonoBehaviour {
 				}
 			}
 
-			if (GUILayout.Button("GetGlyphForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A)")) {
-				string ret = SteamInput.GetGlyphForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A);
-				print("SteamInput.GetGlyphForActionOrigin(" + EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A + ") : " + ret);
+			if (GUILayout.Button("GetGlyphPNGForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A, ESteamInputGlyphSize.k_ESteamInputGlyphSize_Small, 0)")) {
+				string ret = SteamInput.GetGlyphPNGForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A, ESteamInputGlyphSize.k_ESteamInputGlyphSize_Small, 0);
+				print("SteamInput.GetGlyphPNGForActionOrigin(" + EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A + ", " + ESteamInputGlyphSize.k_ESteamInputGlyphSize_Small + ", " + 0 + ") : " + ret);
 			}
 
-			if (GUILayout.Button("GetStringForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A)")) {
-				string ret = SteamInput.GetStringForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A);
-				print("SteamInput.GetStringForActionOrigin(" + EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A + ") : " + ret);
+			if (GUILayout.Button("GetGlyphSVGForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A, 0)")) {
+				string ret = SteamInput.GetGlyphSVGForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A, 0);
+				print("SteamInput.GetGlyphSVGForActionOrigin(" + EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A + ", " + 0 + ") : " + ret);
 			}
+
+			if (GUILayout.Button("GetGlyphForActionOrigin_Legacy(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A)")) {
+				string ret = SteamInput.GetGlyphForActionOrigin_Legacy(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A);
+				print("SteamInput.GetGlyphForActionOrigin_Legacy(" + EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A + ") : " + ret);
+			}
+
+			GUILayout.Label("GetStringForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A) : " + SteamInput.GetStringForActionOrigin(EInputActionOrigin.k_EInputActionOrigin_XBoxOne_A));
+
+			GUILayout.Label("GetStringForAnalogActionName(m_InGameControlsAnalogActions[(int)EAnalogActions_InGameControls.Throttle]) : " + SteamInput.GetStringForAnalogActionName(m_InGameControlsAnalogActions[(int)EAnalogActions_InGameControls.Throttle]));
 
 			GUILayout.Label("InGameControls Analog Actions:");
 			for (int j = 0; j < m_nInGameControlsAnalogActions; ++j) {
@@ -227,19 +262,26 @@ public class SteamInputTest : MonoBehaviour {
 				print("SteamInput.TriggerVibration(" + m_InputHandles[i] + ", " + ushort.MaxValue + ", " + ushort.MaxValue + ")");
 			}
 
+			if (GUILayout.Button("TriggerVibrationExtended(m_InputHandles[i], ushort.MaxValue, ushort.MaxValue, ushort.MaxValue, ushort.MaxValue)")) {
+				SteamInput.TriggerVibrationExtended(m_InputHandles[i], ushort.MaxValue, ushort.MaxValue, ushort.MaxValue, ushort.MaxValue);
+				print("SteamInput.TriggerVibrationExtended(" + m_InputHandles[i] + ", " + ushort.MaxValue + ", " + ushort.MaxValue + ", " + ushort.MaxValue + ", " + ushort.MaxValue + ")");
+			}
+
+			//SteamInput.TriggerSimpleHapticEvent() // TODO
+
 			if (GUILayout.Button("SetLEDColor(m_InputHandles[i], 0, 0, 255, (int)ESteamInputLEDFlag.k_ESteamInputLEDFlag_SetColor)")) {
 				SteamInput.SetLEDColor(m_InputHandles[i], 0, 0, 255, (int)ESteamInputLEDFlag.k_ESteamInputLEDFlag_SetColor);
 				print("SteamInput.SetLEDColor(" + m_InputHandles[i] + ", " + 0 + ", " + 0 + ", " + 255 + ", " + (int)ESteamInputLEDFlag.k_ESteamInputLEDFlag_SetColor + ")");
 			}
 
-			if (GUILayout.Button("TriggerHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000)")) {
-				SteamInput.TriggerHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000);
-				print("SteamInput.TriggerHapticPulse(" + m_InputHandles[i] + ", " + ESteamControllerPad.k_ESteamControllerPad_Right + ", " + 5000 + ")");
+			if (GUILayout.Button("Legacy_TriggerHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000)")) {
+				SteamInput.Legacy_TriggerHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000);
+				print("SteamInput.Legacy_TriggerHapticPulse(" + m_InputHandles[i] + ", " + ESteamControllerPad.k_ESteamControllerPad_Right + ", " + 5000 + ")");
 			}
 
-			if (GUILayout.Button("TriggerRepeatedHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000, 0, 0, 0)")) {
-				SteamInput.TriggerRepeatedHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000, 0, 0, 0);
-				print("SteamInput.TriggerRepeatedHapticPulse(" + m_InputHandles[i] + ", " + ESteamControllerPad.k_ESteamControllerPad_Right + ", " + 5000 + ", " + 0 + ", " + 0 + ", " + 0 + ")");
+			if (GUILayout.Button("Legacy_TriggerRepeatedHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000, 0, 0, 0)")) {
+				SteamInput.Legacy_TriggerRepeatedHapticPulse(m_InputHandles[i], ESteamControllerPad.k_ESteamControllerPad_Right, 5000, 0, 0, 0);
+				print("SteamInput.Legacy_TriggerRepeatedHapticPulse(" + m_InputHandles[i] + ", " + ESteamControllerPad.k_ESteamControllerPad_Right + ", " + 5000 + ", " + 0 + ", " + 0 + ", " + 0 + ")");
 			}
 
 			if (GUILayout.Button("ShowBindingPanel(m_InputHandles[i])")) {
@@ -286,8 +328,21 @@ public class SteamInputTest : MonoBehaviour {
 			}
 			}
 
+			GUILayout.Label("GetSessionInputConfigurationSettings() : " + SteamInput.GetSessionInputConfigurationSettings());
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
 
+	void OnSteamInputDeviceConnected(SteamInputDeviceConnected_t pCallback) {
+		Debug.Log("[" + SteamInputDeviceConnected_t.k_iCallback + " - SteamInputDeviceConnected] - " + pCallback.m_ulConnectedDeviceHandle);
+	}
+
+	void OnSteamInputDeviceDisconnected(SteamInputDeviceDisconnected_t pCallback) {
+		Debug.Log("[" + SteamInputDeviceDisconnected_t.k_iCallback + " - SteamInputDeviceDisconnected] - " + pCallback.m_ulDisconnectedDeviceHandle);
+	}
+
+	void OnSteamInputConfigurationLoaded(SteamInputConfigurationLoaded_t pCallback) {
+		Debug.Log("[" + SteamInputConfigurationLoaded_t.k_iCallback + " - SteamInputConfigurationLoaded] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulDeviceHandle + " -- " + pCallback.m_ulMappingCreator + " -- " + pCallback.m_unMajorRevision + " -- " + pCallback.m_unMinorRevision + " -- " + pCallback.m_bUsesSteamInputAPI + " -- " + pCallback.m_bUsesGamepadAPI);
+	}
 }

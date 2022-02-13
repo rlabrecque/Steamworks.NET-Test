@@ -6,12 +6,15 @@ public class SteamUtilsTest : MonoBehaviour {
 	private Vector2 m_ScrollPos;
 	private Texture2D m_Image;
 	private string m_FilterTextInputMessage;
+	private bool m_GameLauncherMode;
 
 	protected Callback<IPCountry_t> m_IPCountry;
 	protected Callback<LowBatteryPower_t> m_LowBatteryPower;
 	//protected Callback<SteamAPICallCompleted_t> m_SteamAPICallCompleted;
 	protected Callback<SteamShutdown_t> m_SteamShutdown;
 	protected Callback<GamepadTextInputDismissed_t> m_GamepadTextInputDismissed;
+	protected Callback<AppResumingFromSuspend_t> m_AppResumingFromSuspend;
+	protected Callback<FloatingGamepadTextInputDismissed_t> m_FloatingGamepadTextInputDismissed;
 
 	private CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
@@ -23,6 +26,8 @@ public class SteamUtilsTest : MonoBehaviour {
 		//m_SteamAPICallCompleted = Callback<SteamAPICallCompleted_t>.Create(OnSteamAPICallCompleted); // N/A - Far too spammy to test like this!
 		m_SteamShutdown = Callback<SteamShutdown_t>.Create(OnSteamShutdown);
 		m_GamepadTextInputDismissed = Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed);
+		m_AppResumingFromSuspend = Callback<AppResumingFromSuspend_t>.Create(OnAppResumingFromSuspend);
+		m_FloatingGamepadTextInputDismissed = Callback<FloatingGamepadTextInputDismissed_t>.Create(OnFloatingGamepadTextInputDismissed);
 
 		OnCheckFileSignatureCallResult = CallResult<CheckFileSignature_t>.Create(OnCheckFileSignature);
 	}
@@ -54,6 +59,8 @@ public class SteamUtilsTest : MonoBehaviour {
 		GUILayout.Label(m_Image);
 		GUILayout.Label("m_FilterTextInputMessage:");
 		m_FilterTextInputMessage = GUILayout.TextField(m_FilterTextInputMessage, 40);
+		GUILayout.Label("m_GameLauncherMode:");
+		m_GameLauncherMode = false;
 		GUILayout.EndArea();
 
 		GUILayout.BeginVertical("box");
@@ -169,6 +176,24 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.GetIPv6ConnectivityState(" + ESteamIPv6ConnectivityProtocol.k_ESteamIPv6ConnectivityProtocol_HTTP + ") : " + ret);
 		}
 
+		GUILayout.Label("IsSteamRunningOnSteamDeck() : " + SteamUtils.IsSteamRunningOnSteamDeck());
+
+		if (GUILayout.Button("ShowFloatingGamepadTextInput(EFloatingGamepadTextInputMode.k_EFloatingGamepadTextInputModeModeSingleLine, 0, 0, 0, 0)")) {
+			bool ret = SteamUtils.ShowFloatingGamepadTextInput(EFloatingGamepadTextInputMode.k_EFloatingGamepadTextInputModeModeSingleLine, 0, 0, 0, 0);
+			print("SteamUtils.ShowFloatingGamepadTextInput(" + EFloatingGamepadTextInputMode.k_EFloatingGamepadTextInputModeModeSingleLine + ", " + 0 + ", " + 0 + ", " + 0 + ", " + 0 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("SetGameLauncherMode(!m_GameLauncherMode)")) {
+			SteamUtils.SetGameLauncherMode(!m_GameLauncherMode);
+			print("SteamUtils.SetGameLauncherMode(" + !m_GameLauncherMode + ")");
+			m_GameLauncherMode = !m_GameLauncherMode;
+		}
+
+		if (GUILayout.Button("DismissFloatingGamepadTextInput()")) {
+			bool ret = SteamUtils.DismissFloatingGamepadTextInput();
+			print("SteamUtils.DismissFloatingGamepadTextInput() : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -204,5 +229,13 @@ public class SteamUtilsTest : MonoBehaviour {
 			bool ret = SteamUtils.GetEnteredGamepadTextInput(out Text, pCallback.m_unSubmittedText + 1);
 			Debug.Log("SteamUtils.GetEnteredGamepadTextInput(out Text, pCallback.m_unSubmittedText + 1) - " + ret + " -- " + Text);
 		}
+	}
+
+	void OnAppResumingFromSuspend(AppResumingFromSuspend_t pCallback) {
+		Debug.Log("[" + AppResumingFromSuspend_t.k_iCallback + " - AppResumingFromSuspend]");
+	}
+
+	void OnFloatingGamepadTextInputDismissed(FloatingGamepadTextInputDismissed_t pCallback) {
+		Debug.Log("[" + FloatingGamepadTextInputDismissed_t.k_iCallback + " - FloatingGamepadTextInputDismissed]");
 	}
 }

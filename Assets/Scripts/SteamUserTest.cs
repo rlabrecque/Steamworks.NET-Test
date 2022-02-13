@@ -61,9 +61,9 @@ public class SteamUserTest : MonoBehaviour {
 
 		GUILayout.Label("GetSteamID() : " + SteamUser.GetSteamID());
 
-		//SteamUser.InitiateGameConnection() // N/A - Too Hard to test like this.
+		//SteamUser.InitiateGameConnection_DEPRECATED() // N/A - DEPRECATED
 
-		//SteamUser.TerminateGameConnection() // ^
+		//SteamUser.TerminateGameConnection_DEPRECATED() // N/A - DEPRECATED
 
 		//SteamUser.TrackAppUsageEvent() // Legacy function with no documentation
 
