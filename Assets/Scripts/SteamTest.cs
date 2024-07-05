@@ -9,7 +9,6 @@ internal class MonoPInvokeCallbackAttribute : System.Attribute
 
 public class SteamTest : MonoBehaviour {
 	public enum EGUIState {
-		SteamAppList,
 		SteamApps,
 		SteamClient,
 		SteamFriends,
@@ -41,7 +40,6 @@ public class SteamTest : MonoBehaviour {
 
 	private static SteamTest m_SteamTest = null;
 
-	private SteamAppListTest AppListTest;
 	private SteamAppsTest AppsTest;
 	private SteamClientTest ClientTest;
 	private SteamFriendsTest FriendsTest;
@@ -111,7 +109,6 @@ public class SteamTest : MonoBehaviour {
 		SteamClient.SetWarningMessageHook(SteamAPIWarningMessageHook);
 
 		// Register our Steam Callbacks
-		AppListTest = gameObject.AddComponent<SteamAppListTest>();
 		AppsTest = gameObject.AddComponent<SteamAppsTest>();
 		ClientTest = gameObject.AddComponent<SteamClientTest>();
 		FriendsTest = gameObject.AddComponent<SteamFriendsTest>();
@@ -195,9 +192,6 @@ public class SteamTest : MonoBehaviour {
 		GUILayout.Label("[" + ((int)m_State + 1) + " / " + (int)EGUIState.MAX_STATES + "] " + m_State.ToString());
 
 		switch (m_State) {
-			case EGUIState.SteamAppList:
-				AppListTest.RenderOnGUI();
-				break;
 			case EGUIState.SteamApps:
 				AppsTest.RenderOnGUI();
 				break;
