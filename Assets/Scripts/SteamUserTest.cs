@@ -19,6 +19,7 @@ public class SteamUserTest : MonoBehaviour {
 	protected Callback<MicroTxnAuthorizationResponse_t> m_MicroTxnAuthorizationResponse;
 	protected Callback<GetAuthSessionTicketResponse_t> m_GetAuthSessionTicketResponse;
 	protected Callback<GameWebCallback_t> m_GameWebCallback;
+	protected Callback<GetTicketForWebApiResponse_t> m_GetTicketForWebApiResponse;
 
 	private CallResult<EncryptedAppTicketResponse_t> OnEncryptedAppTicketResponseCallResult;
 	private CallResult<StoreAuthURLResponse_t> OnStoreAuthURLResponseCallResult;
@@ -36,6 +37,7 @@ public class SteamUserTest : MonoBehaviour {
 		m_MicroTxnAuthorizationResponse = Callback<MicroTxnAuthorizationResponse_t>.Create(OnMicroTxnAuthorizationResponse);
 		m_GetAuthSessionTicketResponse = Callback<GetAuthSessionTicketResponse_t>.Create(OnGetAuthSessionTicketResponse);
 		m_GameWebCallback = Callback<GameWebCallback_t>.Create(OnGameWebCallback);
+		m_GetTicketForWebApiResponse = Callback<GetTicketForWebApiResponse_t>.Create(OnGetTicketForWebApiResponse);
 
 		OnEncryptedAppTicketResponseCallResult = CallResult<EncryptedAppTicketResponse_t>.Create(OnEncryptedAppTicketResponse);
 		OnStoreAuthURLResponseCallResult = CallResult<StoreAuthURLResponse_t>.Create(OnStoreAuthURLResponse);
@@ -124,21 +126,25 @@ public class SteamUserTest : MonoBehaviour {
 
 		GUILayout.Label("GetVoiceOptimalSampleRate() : " + SteamUser.GetVoiceOptimalSampleRate());
 
-		{
-			if (GUILayout.Button("GetAuthSessionTicket(Ticket, 1024, out pcbTicket)")) {
-				m_Ticket = new byte[1024];
-				m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket);
-				print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket) - " + m_HAuthTicket + " -- " + m_pcbTicket);
-			}
+		if (GUILayout.Button("GetAuthSessionTicket(Ticket, 1024, out pcbTicket)")) {
+			SteamNetworkingIdentity pSteamNetworkingIdentity = new SteamNetworkingIdentity();
+			m_Ticket = new byte[1024];
+			m_HAuthTicket = SteamUser.GetAuthSessionTicket(m_Ticket, 1024, out m_pcbTicket, ref pSteamNetworkingIdentity);
+			print("SteamUser.GetAuthSessionTicket(Ticket, 1024, out pcbTicket, ref pSteamNetworkingIdentity) - " + m_HAuthTicket + " -- " + m_pcbTicket);
+		}
 
-			if (GUILayout.Button("BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID())")) {
-				if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
-					EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
-					print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
-				}
-				else {
-					print("Call GetAuthSessionTicket first!");
-				}
+		if (GUILayout.Button("GetAuthTicketForWebApi(null)")) {
+			HAuthTicket ret = SteamUser.GetAuthTicketForWebApi(null);
+			print("SteamUser.GetAuthTicketForWebApi(" + null + ") : " + ret);
+		}
+
+		if (GUILayout.Button("BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID())")) {
+			if (m_HAuthTicket != HAuthTicket.Invalid && m_pcbTicket != 0) {
+				EBeginAuthSessionResult ret = SteamUser.BeginAuthSession(m_Ticket, (int)m_pcbTicket, SteamUser.GetSteamID());
+				print("SteamUser.BeginAuthSession(m_Ticket, " + (int)m_pcbTicket + ", " + SteamUser.GetSteamID() + ") - " + ret);
+			}
+			else {
+				print("Call GetAuthSessionTicket first!");
 			}
 		}
 
@@ -316,5 +322,9 @@ public class SteamUserTest : MonoBehaviour {
 
 	void OnDurationControl(DurationControl_t pCallback, bool bIOFailure) {
 		Debug.Log("[" + DurationControl_t.k_iCallback + " - DurationControl] - " + pCallback.m_eResult + " -- " + pCallback.m_appid + " -- " + pCallback.m_bApplicable + " -- " + pCallback.m_csecsLast5h + " -- " + pCallback.m_progress + " -- " + pCallback.m_notification + " -- " + pCallback.m_csecsToday + " -- " + pCallback.m_csecsRemaining);
+	}
+
+	void OnGetTicketForWebApiResponse(GetTicketForWebApiResponse_t pCallback) {
+		Debug.Log("[" + GetTicketForWebApiResponse_t.k_iCallback + " - GetTicketForWebApiResponse] - " + pCallback.m_hAuthTicket + " -- " + pCallback.m_eResult + " -- " + pCallback.m_cubTicket + " -- " + pCallback.m_rgubTicket);
 	}
 }

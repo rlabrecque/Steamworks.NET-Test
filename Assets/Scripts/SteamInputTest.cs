@@ -10,6 +10,7 @@ public class SteamInputTest : MonoBehaviour {
 	protected Callback<SteamInputDeviceConnected_t> m_SteamInputDeviceConnected;
 	protected Callback<SteamInputDeviceDisconnected_t> m_SteamInputDeviceDisconnected;
 	protected Callback<SteamInputConfigurationLoaded_t> m_SteamInputConfigurationLoaded;
+	protected Callback<SteamInputGamepadSlotChange_t> m_SteamInputGamepadSlotChange;
 
 	public void OnEnable() {
 		m_InputInitialized = SteamInput.Init(false);
@@ -26,6 +27,7 @@ public class SteamInputTest : MonoBehaviour {
 		m_SteamInputDeviceConnected = Callback<SteamInputDeviceConnected_t>.Create(OnSteamInputDeviceConnected);
 		m_SteamInputDeviceDisconnected = Callback<SteamInputDeviceDisconnected_t>.Create(OnSteamInputDeviceDisconnected);
 		m_SteamInputConfigurationLoaded = Callback<SteamInputConfigurationLoaded_t>.Create(OnSteamInputConfigurationLoaded);
+		m_SteamInputGamepadSlotChange = Callback<SteamInputGamepadSlotChange_t>.Create(OnSteamInputGamepadSlotChange);
 	}
 
 	void OnDisable() {
@@ -330,6 +332,8 @@ public class SteamInputTest : MonoBehaviour {
 
 			GUILayout.Label("GetSessionInputConfigurationSettings() : " + SteamInput.GetSessionInputConfigurationSettings());
 
+			//SteamInput.SetDualSenseTriggerEffect() // Nearly unsupported as it relies on proprietary code.
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -344,5 +348,9 @@ public class SteamInputTest : MonoBehaviour {
 
 	void OnSteamInputConfigurationLoaded(SteamInputConfigurationLoaded_t pCallback) {
 		Debug.Log("[" + SteamInputConfigurationLoaded_t.k_iCallback + " - SteamInputConfigurationLoaded] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulDeviceHandle + " -- " + pCallback.m_ulMappingCreator + " -- " + pCallback.m_unMajorRevision + " -- " + pCallback.m_unMinorRevision + " -- " + pCallback.m_bUsesSteamInputAPI + " -- " + pCallback.m_bUsesGamepadAPI);
+	}
+
+	void OnSteamInputGamepadSlotChange(SteamInputGamepadSlotChange_t pCallback) {
+		Debug.Log("[" + SteamInputGamepadSlotChange_t.k_iCallback + " - SteamInputGamepadSlotChange] - " + pCallback.m_unAppID + " -- " + pCallback.m_ulDeviceHandle + " -- " + pCallback.m_eDeviceType + " -- " + pCallback.m_nOldGamepadSlot + " -- " + pCallback.m_nNewGamepadSlot);
 	}
 }

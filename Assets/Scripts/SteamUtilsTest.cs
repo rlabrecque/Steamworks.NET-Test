@@ -15,6 +15,7 @@ public class SteamUtilsTest : MonoBehaviour {
 	protected Callback<GamepadTextInputDismissed_t> m_GamepadTextInputDismissed;
 	protected Callback<AppResumingFromSuspend_t> m_AppResumingFromSuspend;
 	protected Callback<FloatingGamepadTextInputDismissed_t> m_FloatingGamepadTextInputDismissed;
+	protected Callback<FilterTextDictionaryChanged_t> m_FilterTextDictionaryChanged;
 
 	private CallResult<CheckFileSignature_t> OnCheckFileSignatureCallResult;
 
@@ -28,6 +29,7 @@ public class SteamUtilsTest : MonoBehaviour {
 		m_GamepadTextInputDismissed = Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed);
 		m_AppResumingFromSuspend = Callback<AppResumingFromSuspend_t>.Create(OnAppResumingFromSuspend);
 		m_FloatingGamepadTextInputDismissed = Callback<FloatingGamepadTextInputDismissed_t>.Create(OnFloatingGamepadTextInputDismissed);
+		m_FilterTextDictionaryChanged = Callback<FilterTextDictionaryChanged_t>.Create(OnFilterTextDictionaryChanged);
 
 		OnCheckFileSignatureCallResult = CallResult<CheckFileSignature_t>.Create(OnCheckFileSignature);
 	}
@@ -194,6 +196,11 @@ public class SteamUtilsTest : MonoBehaviour {
 			print("SteamUtils.DismissFloatingGamepadTextInput() : " + ret);
 		}
 
+		if (GUILayout.Button("DismissGamepadTextInput()")) {
+			bool ret = SteamUtils.DismissGamepadTextInput();
+			print("SteamUtils.DismissGamepadTextInput() : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -219,7 +226,7 @@ public class SteamUtilsTest : MonoBehaviour {
 	}
 
 	void OnGamepadTextInputDismissed(GamepadTextInputDismissed_t pCallback) {
-		Debug.Log("[" + GamepadTextInputDismissed_t.k_iCallback + " - GamepadTextInputDismissed] - " + pCallback.m_bSubmitted + " -- " + pCallback.m_unSubmittedText);
+		Debug.Log("[" + GamepadTextInputDismissed_t.k_iCallback + " - GamepadTextInputDismissed] - " + pCallback.m_bSubmitted + " -- " + pCallback.m_unSubmittedText + " -- " + pCallback.m_unAppID);
 
 		if(pCallback.m_bSubmitted) {
 			uint Length = SteamUtils.GetEnteredGamepadTextLength();
@@ -237,5 +244,9 @@ public class SteamUtilsTest : MonoBehaviour {
 
 	void OnFloatingGamepadTextInputDismissed(FloatingGamepadTextInputDismissed_t pCallback) {
 		Debug.Log("[" + FloatingGamepadTextInputDismissed_t.k_iCallback + " - FloatingGamepadTextInputDismissed]");
+	}
+
+	void OnFilterTextDictionaryChanged(FilterTextDictionaryChanged_t pCallback) {
+		Debug.Log("[" + FilterTextDictionaryChanged_t.k_iCallback + " - FilterTextDictionaryChanged] - " + pCallback.m_eLanguage);
 	}
 }

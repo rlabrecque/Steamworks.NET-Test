@@ -6,7 +6,6 @@ public class SteamAppsTest : MonoBehaviour {
 	private Vector2 m_ScrollPos;
 
 	protected Callback<DlcInstalled_t> m_DlcInstalled;
-	protected Callback<RegisterActivationCodeResponse_t> m_RegisterActivationCodeResponse;
 	protected Callback<NewUrlLaunchParameters_t> m_NewUrlLaunchParameters;
 	protected Callback<AppProofOfPurchaseKeyResponse_t> m_AppProofOfPurchaseKeyResponse;
 	protected Callback<TimedTrialStatus_t> m_TimedTrialStatus;
@@ -15,7 +14,6 @@ public class SteamAppsTest : MonoBehaviour {
 
 	public void OnEnable() {
 		m_DlcInstalled = Callback<DlcInstalled_t>.Create(OnDlcInstalled);
-		m_RegisterActivationCodeResponse = Callback<RegisterActivationCodeResponse_t>.Create(OnRegisterActivationCodeResponse);
 		m_NewUrlLaunchParameters = Callback<NewUrlLaunchParameters_t>.Create(OnNewUrlLaunchParameters);
 		m_AppProofOfPurchaseKeyResponse = Callback<AppProofOfPurchaseKeyResponse_t>.Create(OnAppProofOfPurchaseKeyResponse);
 		m_TimedTrialStatus = Callback<TimedTrialStatus_t>.Create(OnTimedTrialStatus);
@@ -151,16 +149,23 @@ public class SteamAppsTest : MonoBehaviour {
 			GUILayout.Label("BIsTimedTrial(out punSecondsAllowed, out punSecondsPlayed) : " + ret + " -- " + punSecondsAllowed + " -- " + punSecondsPlayed);
 		}
 
+		if (GUILayout.Button("SetDlcContext((AppId_t)0)")) {
+			bool ret = SteamApps.SetDlcContext((AppId_t)0);
+			print("SteamApps.SetDlcContext(" + (AppId_t)0 + ") : " + ret);
+		}
+
+		//SteamApps.GetNumBetas() // Crashes the Steam client.
+
+		//SteamApps.GetBetaInfo() // [Probably] Crashes the Steam client.
+
+		//SteamApps.SetActiveBeta() // [Probably] Crashes the Steam client.
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
 
 	void OnDlcInstalled(DlcInstalled_t pCallback) {
 		Debug.Log("[" + DlcInstalled_t.k_iCallback + " - DlcInstalled] - " + pCallback.m_nAppID);
-	}
-
-	void OnRegisterActivationCodeResponse(RegisterActivationCodeResponse_t pCallback) {
-		Debug.Log("[" + RegisterActivationCodeResponse_t.k_iCallback + " - RegisterActivationCodeResponse] - " + pCallback.m_eResult + " -- " + pCallback.m_unPackageRegistered);
 	}
 
 	void OnNewUrlLaunchParameters(NewUrlLaunchParameters_t pCallback) {

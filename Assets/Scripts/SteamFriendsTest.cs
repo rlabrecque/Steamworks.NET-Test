@@ -24,6 +24,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	protected Callback<GameConnectedFriendChatMsg_t> m_GameConnectedFriendChatMsg;
 	protected Callback<UnreadChatMessagesChanged_t> m_UnreadChatMessagesChanged;
 	protected Callback<OverlayBrowserProtocolNavigation_t> m_OverlayBrowserProtocolNavigation;
+	protected Callback<EquippedProfileItemsChanged_t> m_EquippedProfileItemsChanged;
 
 	private CallResult<ClanOfficerListResponse_t> OnClanOfficerListResponseCallResult;
 	private CallResult<DownloadClanActivityCountsResult_t> OnDownloadClanActivityCountsResultCallResult;
@@ -32,6 +33,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	private CallResult<FriendsIsFollowing_t> OnFriendsIsFollowingCallResult;
 	private CallResult<FriendsEnumerateFollowingList_t> OnFriendsEnumerateFollowingListCallResult;
 	private CallResult<SetPersonaNameResponse_t> OnSetPersonaNameResponseCallResult;
+	private CallResult<EquippedProfileItems_t> OnEquippedProfileItemsCallResult;
 
 	public void OnEnable() {
 		if (SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagImmediate) == 0) {
@@ -59,6 +61,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		m_GameConnectedFriendChatMsg = Callback<GameConnectedFriendChatMsg_t>.Create(OnGameConnectedFriendChatMsg);
 		m_UnreadChatMessagesChanged = Callback<UnreadChatMessagesChanged_t>.Create(OnUnreadChatMessagesChanged);
 		m_OverlayBrowserProtocolNavigation = Callback<OverlayBrowserProtocolNavigation_t>.Create(OnOverlayBrowserProtocolNavigation);
+		m_EquippedProfileItemsChanged = Callback<EquippedProfileItemsChanged_t>.Create(OnEquippedProfileItemsChanged);
 
 		OnClanOfficerListResponseCallResult = CallResult<ClanOfficerListResponse_t>.Create(OnClanOfficerListResponse);
 		OnDownloadClanActivityCountsResultCallResult = CallResult<DownloadClanActivityCountsResult_t>.Create(OnDownloadClanActivityCountsResult);
@@ -67,6 +70,7 @@ public class SteamFriendsTest : MonoBehaviour {
 		OnFriendsIsFollowingCallResult = CallResult<FriendsIsFollowing_t>.Create(OnFriendsIsFollowing);
 		OnFriendsEnumerateFollowingListCallResult = CallResult<FriendsEnumerateFollowingList_t>.Create(OnFriendsEnumerateFollowingList);
 		OnSetPersonaNameResponseCallResult = CallResult<SetPersonaNameResponse_t>.Create(OnSetPersonaNameResponse);
+		OnEquippedProfileItemsCallResult = CallResult<EquippedProfileItems_t>.Create(OnEquippedProfileItems);
 	}
 
 	public void RenderOnGUI() {
@@ -376,6 +380,18 @@ public class SteamFriendsTest : MonoBehaviour {
 			print("SteamFriends.ActivateGameOverlayInviteDialogConnectString(" + "\"test\"" + ")");
 		}
 
+		if (GUILayout.Button("RequestEquippedProfileItems(SteamUser.GetSteamID())")) {
+			SteamAPICall_t handle = SteamFriends.RequestEquippedProfileItems(SteamUser.GetSteamID());
+			OnEquippedProfileItemsCallResult.Set(handle);
+			print("SteamFriends.RequestEquippedProfileItems(" + SteamUser.GetSteamID() + ") : " + handle);
+		}
+
+		GUILayout.Label("BHasEquippedProfileItem(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame) : " + SteamFriends.BHasEquippedProfileItem(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame));
+
+		GUILayout.Label("GetProfileItemPropertyString(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame, ECommunityProfileItemProperty.k_ECommunityProfileItemProperty_Title) : " + SteamFriends.GetProfileItemPropertyString(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame, ECommunityProfileItemProperty.k_ECommunityProfileItemProperty_Title));
+
+		GUILayout.Label("GetProfileItemPropertyUint(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame, ECommunityProfileItemProperty.k_ECommunityProfileItemProperty_AppID) : " + SteamFriends.GetProfileItemPropertyUint(SteamUser.GetSteamID(), ECommunityProfileItemType.k_ECommunityProfileItemType_AvatarFrame, ECommunityProfileItemProperty.k_ECommunityProfileItemProperty_AppID));
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -385,7 +401,7 @@ public class SteamFriendsTest : MonoBehaviour {
 	}
 
 	void OnGameOverlayActivated(GameOverlayActivated_t pCallback) {
-		Debug.Log("[" + GameOverlayActivated_t.k_iCallback + " - GameOverlayActivated] - " + pCallback.m_bActive);
+		Debug.Log("[" + GameOverlayActivated_t.k_iCallback + " - GameOverlayActivated] - " + pCallback.m_bActive + " -- " + pCallback.m_bUserInitiated + " -- " + pCallback.m_nAppID + " -- " + pCallback.m_dwOverlayPID);
 	}
 
 	void OnGameServerChangeRequested(GameServerChangeRequested_t pCallback) {
@@ -469,5 +485,13 @@ public class SteamFriendsTest : MonoBehaviour {
 
 	void OnOverlayBrowserProtocolNavigation(OverlayBrowserProtocolNavigation_t pCallback) {
 		Debug.Log("[" + OverlayBrowserProtocolNavigation_t.k_iCallback + " - OverlayBrowserProtocolNavigation] - " + pCallback.rgchURI);
+	}
+
+	void OnEquippedProfileItemsChanged(EquippedProfileItemsChanged_t pCallback) {
+		Debug.Log("[" + EquippedProfileItemsChanged_t.k_iCallback + " - EquippedProfileItemsChanged] - " + pCallback.m_steamID);
+	}
+
+	void OnEquippedProfileItems(EquippedProfileItems_t pCallback, bool bIOFailure) {
+		Debug.Log("[" + EquippedProfileItems_t.k_iCallback + " - EquippedProfileItems] - " + pCallback.m_eResult + " -- " + pCallback.m_steamID + " -- " + pCallback.m_bHasAnimatedAvatar + " -- " + pCallback.m_bHasAvatarFrame + " -- " + pCallback.m_bHasProfileModifier + " -- " + pCallback.m_bHasProfileBackground + " -- " + pCallback.m_bHasMiniProfileBackground);
 	}
 }

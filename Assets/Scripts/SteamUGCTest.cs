@@ -162,7 +162,7 @@ public class SteamUGCTest : MonoBehaviour {
 		}
 
 		if (GUILayout.Button("GetQueryUGCAdditionalPreview(m_UGCQueryHandle, 0, 0, out pchURLOrVideoID, 1024, out pchOriginalFileName, 260, out pPreviewType)")) {
-			// Should check GetQueryUGCNumAdditionalPreviews first.
+			// Should check GetQueryUGCNumAdditionalPreviews first. Expect this to fail if that returns 0.
 			string pchURLOrVideoID;
 			string pchOriginalFileName;
 			EItemPreviewType pPreviewType;
@@ -186,6 +186,25 @@ public class SteamUGCTest : MonoBehaviour {
 			string Value;
 			bool ret = SteamUGC.GetQueryUGCKeyValueTag(m_UGCQueryHandle, 0, "TestKey", out Value, 260);
 			print("SteamUGC.GetQueryUGCKeyValueTag(" + m_UGCQueryHandle + ", " + 0 + ", " + "\"TestKey\"" + ", " + "out Value" + ", " + 260 + ") : " + ret + " -- " + Value);
+		}
+
+		if (GUILayout.Button("GetNumSupportedGameVersions(m_UGCQueryHandle, 0)")) {
+			uint ret = SteamUGC.GetNumSupportedGameVersions(m_UGCQueryHandle, 0);
+			print("SteamUGC.GetNumSupportedGameVersions(" + m_UGCQueryHandle + ", " + 0 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("GetSupportedGameVersionData(m_UGCQueryHandle, 0, 0, out pchGameBranchMin, out pchGameBranchMax, 128)")) {
+			// Should check GetNumSupportedGameVersions first. Expect this to fail if that returns 0.
+			string pchGameBranchMin;
+			string pchGameBranchMax;
+			bool ret = SteamUGC.GetSupportedGameVersionData(m_UGCQueryHandle, 0, 0, out pchGameBranchMin, out pchGameBranchMax, 128);
+			print("SteamUGC.GetSupportedGameVersionData(" + m_UGCQueryHandle + ", " + 0 + ", " + 0 + ", " + "out pchGameBranchMin" + ", " + "out pchGameBranchMax" + ", " + 128 + ") : " + ret + " -- " + pchGameBranchMin + " -- " + pchGameBranchMax);
+		}
+
+		if (GUILayout.Button("GetQueryUGCContentDescriptors(m_UGCQueryHandle, 0, pvecDescriptors, (uint)pvecDescriptors.Length)")) {
+			EUGCContentDescriptorID[] pvecDescriptors = new EUGCContentDescriptorID[100];
+			uint ret = SteamUGC.GetQueryUGCContentDescriptors(m_UGCQueryHandle, 0, pvecDescriptors, (uint)pvecDescriptors.Length);
+			print("SteamUGC.GetQueryUGCContentDescriptors(" + m_UGCQueryHandle + ", " + 0 + ", " + pvecDescriptors + ", " + (uint)pvecDescriptors.Length + ") : " + ret);
 		}
 
 		if (GUILayout.Button("ReleaseQueryUGCRequest(m_UGCQueryHandle)")) {
@@ -256,6 +275,11 @@ public class SteamUGCTest : MonoBehaviour {
 		if (GUILayout.Button("SetAllowCachedResponse(m_UGCQueryHandle, 5)")) {
 			bool ret = SteamUGC.SetAllowCachedResponse(m_UGCQueryHandle, 5);
 			print("SteamUGC.SetAllowCachedResponse(" + m_UGCQueryHandle + ", " + 5 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("SetAdminQuery(m_UGCUpdateHandle, true)")) {
+			bool ret = SteamUGC.SetAdminQuery(m_UGCUpdateHandle, true);
+			print("SteamUGC.SetAdminQuery(" + m_UGCUpdateHandle + ", " + true + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SetCloudFileNameFilter(m_UGCQueryHandle, \"\")")) {
@@ -394,6 +418,21 @@ public class SteamUGCTest : MonoBehaviour {
 		if (GUILayout.Button("RemoveItemPreview(m_UGCUpdateHandle, 0)")) {
 			bool ret = SteamUGC.RemoveItemPreview(m_UGCUpdateHandle, 0);
 			print("SteamUGC.RemoveItemPreview(" + m_UGCUpdateHandle + ", " + 0 + ") : " + ret);
+		}
+
+		if (GUILayout.Button("AddContentDescriptor(m_UGCUpdateHandle, EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent)")) {
+			bool ret = SteamUGC.AddContentDescriptor(m_UGCUpdateHandle, EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent);
+			print("SteamUGC.AddContentDescriptor(" + m_UGCUpdateHandle + ", " + EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent + ") : " + ret);
+		}
+
+		if (GUILayout.Button("RemoveContentDescriptor(m_UGCUpdateHandle, EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent)")) {
+			bool ret = SteamUGC.RemoveContentDescriptor(m_UGCUpdateHandle, EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent);
+			print("SteamUGC.RemoveContentDescriptor(" + m_UGCUpdateHandle + ", " + EUGCContentDescriptorID.k_EUGCContentDescriptor_AnyMatureContent + ") : " + ret);
+		}
+
+		if (GUILayout.Button("SetRequiredGameVersions(m_UGCUpdateHandle, \"\", \"\")")) {
+			bool ret = SteamUGC.SetRequiredGameVersions(m_UGCUpdateHandle, "", "");
+			print("SteamUGC.SetRequiredGameVersions(" + m_UGCUpdateHandle + ", " + "\"\"" + ", " + "\"\"" + ") : " + ret);
 		}
 
 		if (GUILayout.Button("SubmitItemUpdate(m_UGCUpdateHandle, \"Test Changenote\")")) {
@@ -554,6 +593,12 @@ public class SteamUGCTest : MonoBehaviour {
 			print("SteamUGC.GetWorkshopEULAStatus() : " + handle);
 		}
 
+		if (GUILayout.Button("GetUserContentDescriptorPreferences(pvecDescriptors, (uint)pvecDescriptors.Length)")) {
+			EUGCContentDescriptorID[] pvecDescriptors = new EUGCContentDescriptorID[100];
+			uint ret = SteamUGC.GetUserContentDescriptorPreferences(pvecDescriptors, (uint)pvecDescriptors.Length);
+			print("SteamUGC.GetUserContentDescriptorPreferences(" + pvecDescriptors + ", " + (uint)pvecDescriptors.Length + ") : " + ret);
+		}
+
 		GUILayout.EndScrollView();
 		GUILayout.EndVertical();
 	}
@@ -579,7 +624,7 @@ public class SteamUGCTest : MonoBehaviour {
 	}
 
 	void OnItemInstalled(ItemInstalled_t pCallback) {
-		Debug.Log("[" + ItemInstalled_t.k_iCallback + " - ItemInstalled] - " + pCallback.m_unAppID + " -- " + pCallback.m_nPublishedFileId);
+		Debug.Log("[" + ItemInstalled_t.k_iCallback + " - ItemInstalled] - " + pCallback.m_unAppID + " -- " + pCallback.m_nPublishedFileId + " -- " + pCallback.m_hLegacyContent + " -- " + pCallback.m_unManifestID);
 	}
 
 	void OnDownloadItemResult(DownloadItemResult_t pCallback) {

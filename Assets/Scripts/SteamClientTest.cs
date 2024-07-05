@@ -151,11 +151,6 @@ public class SteamClientTest : MonoBehaviour {
 			print("SteamClient.GetISteamUGC(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMUGC_INTERFACE_VERSION + ") : " + ret);
 		}
 
-		if (GUILayout.Button("GetISteamAppList(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMAPPLIST_INTERFACE_VERSION)")) {
-			System.IntPtr ret = SteamClient.GetISteamAppList(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMAPPLIST_INTERFACE_VERSION);
-			print("SteamClient.GetISteamAppList(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMAPPLIST_INTERFACE_VERSION + ") : " + ret);
-		}
-
 		if (GUILayout.Button("GetISteamMusic(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMMUSIC_INTERFACE_VERSION)")) {
 			System.IntPtr ret = SteamClient.GetISteamMusic(SteamAPI.GetHSteamUser(), SteamAPI.GetHSteamPipe(), Constants.STEAMMUSIC_INTERFACE_VERSION);
 			print("SteamClient.GetISteamMusic(" + SteamAPI.GetHSteamUser() + ", " + SteamAPI.GetHSteamPipe() + ", " + Constants.STEAMMUSIC_INTERFACE_VERSION + ") : " + ret);
