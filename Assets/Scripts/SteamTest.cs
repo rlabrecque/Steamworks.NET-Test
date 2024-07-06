@@ -25,6 +25,7 @@ public class SteamTest : MonoBehaviour {
 		SteamParties,
 		SteamRemoteStorage,
 		SteamScreenshots,
+		SteamTimeline,
 		SteamUGC,
 		SteamUser,
 		SteamUserStatsTest,
@@ -56,6 +57,7 @@ public class SteamTest : MonoBehaviour {
 	private SteamPartiesTest PartiesTest;
 	private SteamRemoteStorageTest RemoteStorageTest;
 	private SteamScreenshotsTest ScreenshotsTest;
+	private SteamTimelineTest TimelineTest;
 	private SteamUGCTest UGCTest;
 	private SteamUserStatsTest UserStatsTest;
 	private SteamUserTest UserTest;
@@ -123,6 +125,7 @@ public class SteamTest : MonoBehaviour {
 		NetworkingTest = gameObject.AddComponent<SteamNetworkingTest>();
 		ParentalSettingsTest = gameObject.AddComponent<SteamParentalSettingsTest>();
 		PartiesTest = gameObject.AddComponent<SteamPartiesTest>();
+		TimelineTest = gameObject.AddComponent<SteamTimelineTest>();
 		RemoteStorageTest = gameObject.AddComponent<SteamRemoteStorageTest>();
 		UGCTest = gameObject.AddComponent<SteamUGCTest>();
 		UserStatsTest = gameObject.AddComponent<SteamUserStatsTest>();
@@ -239,6 +242,9 @@ public class SteamTest : MonoBehaviour {
 				break;
 			case EGUIState.SteamScreenshots:
 				ScreenshotsTest.RenderOnGUI();
+				break;
+			case EGUIState.SteamTimeline:
+				TimelineTest.RenderOnGUI();
 				break;
 			case EGUIState.SteamUGC:
 				UGCTest.RenderOnGUI();
